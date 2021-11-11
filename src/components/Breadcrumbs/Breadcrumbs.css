@@ -1,0 +1,14 @@
+.crumb:hover {
+
+	transition: background 200ms;
+	background-color: #4931AB;
+	color: white;
+
+}
+
+.crumb {
+	padding: 4px 12px;
+	margin: 0 12px;
+	border-radius: 12px;
+	cursor: pointer;
+}

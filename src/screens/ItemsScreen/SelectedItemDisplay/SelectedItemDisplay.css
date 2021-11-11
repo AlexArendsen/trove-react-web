@@ -1,0 +1,27 @@
+.selected-item-display {
+	flex: 1;
+}
+
+.selected-item-display-content-wrapper {
+	max-height: calc(100vh - 112px);
+	overflow-y: scroll;
+	width: 100%;
+}
+
+.selected-item-display-content {
+	margin: 60px 0;
+	width: 100%;
+	max-width: 800px;
+}
+
+.selected-item-title {
+	transition: opacity 400ms;
+	cursor: pointer;
+}
+
+.selected-item-title:hover {
+	opacity: 0.6;
+}
+
+.selected-item-children { transition: opacity 200ms; }
+.selected-item-children-disabled { opacity: 0.25; }

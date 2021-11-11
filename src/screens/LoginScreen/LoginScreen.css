@@ -1,0 +1,16 @@
+.login-screen {
+	padding: 60px 180px;
+	height: 100vh;
+	width: 100vw;
+	box-sizing: border-box;
+	background: rgb(35,0,177);
+	background: linear-gradient(135deg, rgba(35,0,177,0.68) 0%, rgba(156,34,158,0.68) 50%, rgba(0,194,255,0.68) 100%);
+}
+
+.login-card {
+	background: white;
+	border-radius: 12px;
+	padding: 55px;
+	height: 380px;
+	width: 520px;
+}

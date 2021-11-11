@@ -1,0 +1,21 @@
+.checkbox {
+	margin-top: 4px;
+	width: 20px;
+	height: 20px;
+	box-sizing: border-box;
+	border-style: solid;
+	border: solid 2px;
+	border-color: #ADADAD;
+	border-radius: 5px;
+	transition: opacity 100ms;
+	opacity: 1;
+}
+
+.checkbox:hover {
+	opacity: 0.4;
+}
+
+.checkbox-checked {
+	background-color: #4931AB;
+	border-color: #4931AB;
+}

@@ -1,0 +1,10 @@
+*::-webkit-scrollbar {
+  display: none
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+p { margin: 0 0 12px 0; }

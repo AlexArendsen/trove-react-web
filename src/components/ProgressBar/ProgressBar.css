@@ -1,0 +1,16 @@
+.progress-bar-background {
+	background-color: #c9c9c9;
+	height: 7px;
+	width: 100%;
+}
+
+.progress-bar-contents {
+	transition: width 500ms;
+	transition-timing-function: cubic-bezier(.63,0,0,1.4);
+	background-color: #4931ab;
+	height: 7px;
+}
+
+.progress-bar-floating {
+	border-radius: 4px;
+}

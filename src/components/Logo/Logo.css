@@ -1,0 +1,26 @@
+.trove-logo {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.trove-logo-small {
+	font-size: 24px !important;
+	letter-spacing: 2px;
+}
+
+.trove-logo-large {
+	font-size: 72px !important;
+	letter-spacing: 10px;
+}
+
+.trove-logo-white { color: white; }
+.trove-logo-black { color: black; }
+
+.trove-logo-gradient {
+	background: #2300B1;
+	background: -webkit-linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
+	background: -moz-linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
+	background: linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
