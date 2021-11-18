@@ -7,13 +7,11 @@ import { FlatListItem } from "./FlatList/FlatListItem";
 import { GalleryListItem } from "./GalleryList/GalleryListItem";
 
 interface ItemListProps {
-	display?: 'list' | 'grouped-list' | 'gallery' | 'planner'
+	display?: 'list' | 'grouped-list' | 'gallery' | 'planner' | 'compact-list'
 	items?: Item[],
 	selected?: string,
 	onClick?: (item: Item) => void
 	navOnClick?: boolean
-	hideFigures?: boolean
-	hideDate?: boolean
 }
 
 export const ItemList = React.memo((props: ItemListProps) => {
@@ -35,10 +33,18 @@ export const ItemList = React.memo((props: ItemListProps) => {
 			</Flex>
 		)
 
+		case 'compact-list': return (
+			<Flex column style={{ width: '100%' }}>
+				{ (props.items || []).map(i => (
+					<FlatListItem figures='on-end' selected={ props.selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
+				)) }
+			</Flex>
+		)
+
 		default: return (
 			<Flex column style={{ width: '100%' }}>
 				{ (props.items || []).map(i => (
-					<FlatListItem hideFigures={ props.hideFigures } hideDate={ props.hideDate } selected={ props.selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
+					<FlatListItem selected={ props.selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
 				)) }
 			</Flex>
 		)

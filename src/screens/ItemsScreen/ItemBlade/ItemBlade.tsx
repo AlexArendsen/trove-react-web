@@ -23,10 +23,6 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 	const history = useHistory();
 	const { item, children } = useItem(props.itemId);
 
-	useEffect(() => {
-		console.info({ me: 'margin left', marginLeft: props.style?.marginLeft })
-	}, [props.style?.marginLeft])
-
 	const handleTitleClick = useCallback(() => {
 		if (item) history.push(Routes.item(item._id))
 	}, [ item ])
@@ -49,7 +45,7 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 					{ item.description ? <ReactMarkdown>{ item.description }</ReactMarkdown> : null }
 					<ItemInputForm darker itemId={ item._id } style={{ margin: '20px 0' }} />
 				</div>
-				<ItemList hideFigures hideDate selected={ props.selected } items={ children } display='list' navOnClick />
+				<ItemList selected={ props.selected } items={ children } display='compact-list' navOnClick />
 			</Flex>
 
 		</Flex>

@@ -3,6 +3,7 @@ import ReactTooltip from "react-tooltip";
 import { Flex } from "../components/Flex/Flex";
 import { Header } from "../components/Header/Header";
 import { useQueryParams } from "../hooks/UseQueryParams";
+import { useSelectedItem } from "../hooks/UseSelectedItem";
 import { useStore } from "../hooks/UseStore";
 import { GetStoredToken } from "../redux/actions/AuthenticationActions";
 import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
@@ -18,6 +19,11 @@ export const BaseScreen = React.memo(() => {
 	useEffect(() => {
 		if(!login.loading) setLoggedIn(!!GetStoredToken())
 	}, [ login ])
+
+	const { item } = useSelectedItem();
+	useEffect(() => {
+		document.title = item ? `${ item.title } | Trove` : 'Trove'
+	}, [ item ])
 
 	const itemsLoading = useStore(s => s.items.all.loading);
 	const showHeader = useMemo(() => !itemsLoading && loggedIn, [ itemsLoading, loggedIn ])

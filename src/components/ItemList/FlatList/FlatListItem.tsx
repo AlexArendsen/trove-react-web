@@ -17,8 +17,7 @@ import './FlatListItem.css';
 interface FlatListItemProps {
 	itemId: string
 	selected?: boolean
-	hideFigures?: boolean
-	hideDate?: boolean
+	figures?: 'visible' | 'on-end' | 'hidden'
 	onClick?: () => void
 }
 
@@ -77,44 +76,29 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 							<Text medium bold className='flat-list-item-title'>{ item?.title }</Text>
 						</Flex>
 
-						{ isNaN(pct) ? null : (<Flex column style={{ margin: '0 15px', flex: 1 }} align='flex-end'>
+						{ (isNaN(pct) || rightClicked) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
 							<ProgressBar floating item={ item } />
-							{ props.hideFigures ? null : (<Flex row>
-								<Text small accent>{ FormatNumber.withCommas(item?.completed || 0) }</Text>
-								<Text small faded style={{ marginLeft: 5, marginRight: 20 }}> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
-								<Text small accent bold>{ FormatNumber.toPercent(pct) }</Text>
-							</Flex>) }
+							{
+								((props.figures || 'visible') === 'visible') ? (<Flex row>
+									<Text small accent>{ FormatNumber.withCommas(item?.completed || 0) }</Text>
+									<Text small faded style={{ marginLeft: 5, marginRight: 20 }}> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
+									<Text small accent bold>{ FormatNumber.toPercent(pct) }</Text>
+								</Flex>) : null
+							}
 						</Flex>) }
+
+						{ (props.figures === 'on-end' && item?.descendants) ? (
+							<Flex row justify='flex-end' align='center' style={{ width: 40 }}>
+								<Text small faded style={{ opacity: 0.8 }}>{ FormatNumber.withCommas(item?.descendants || 0) }</Text>
+							</Flex>
+						) : null }
 
 						{/* TODO -- Image */}
 
-						{ (rightClicked || props.hideDate) ? null : <TimeDisplay style={{ width: 50 }} time={ item?.created_at } /> }
-						{ rightClicked ? <Button onClick={ handleDelete } style={{ background: '#C32986', color: 'white' }}>Delete</Button> : null }
+						{ rightClicked ? <Button onClick={ handleDelete } style={{ background: '#C32986', color: 'white', marginLeft: 10 }}>Delete</Button> : null }
 
 
 					</Flex>
-
-					{/* { isNaN(pct) ? null : (
-						<Flex row align='center' style={{ marginTop: 10 }}>
-							<Flex row style={{ minWidth: 160 }}>
-								<Flex row justify='center' style={{ width: 50, marginRight: 15 }}>
-									<Text small accent bold>{ FormatNumber.toPercent(pct) }</Text>
-								</Flex>
-								<Text small accent style={{ marginRight: 5 }}>{ FormatNumber.withCommas(item?.completed || 0) }</Text>
-								<Text small faded> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
-							</Flex>
-							<ProgressBar floating percent={ pct } />
-						</Flex>
-					) } */}
-
-					{/* { isNaN(pct) ? null : (
-						<Flex row align='center' style={{ marginTop: 8 }}>
-							<Flex row justify='center' style={{ width: 50, marginRight: 17, marginLeft: 7 }}>
-								<Text small faded>{ FormatNumber.toPercent(pct) }</Text>
-							</Flex>
-							<ProgressBar floating percent={ pct } />
-						</Flex>
-					) } */}
 
 					{ item?.description ? (<div style={{ maxHeight: 40, marginLeft: 65, overflow: 'hidden' }}>
 						<Text small faded>{ item?.description }</Text>
