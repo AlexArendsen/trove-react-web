@@ -1,17 +1,19 @@
 .selected-item-display {
 	flex: 1;
+	max-width: calc(100vw - 600px); /* TODO -- This will definitely have to change when we go full responsive */
 }
 
 .selected-item-display-content-wrapper {
 	max-height: calc(100vh - 112px);
 	overflow-y: scroll;
 	width: 100%;
+	margin: 60px 0;
 }
 
 .selected-item-display-content {
-	margin: 60px 0;
 	width: 100%;
 	max-width: 800px;
+	margin-bottom: 40px;
 }
 
 .selected-item-title {

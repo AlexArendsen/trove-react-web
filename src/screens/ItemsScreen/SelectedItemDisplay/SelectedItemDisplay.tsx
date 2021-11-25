@@ -6,6 +6,7 @@ import { Flex } from "../../../components/Flex/Flex";
 import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
 import { ItemList } from "../../../components/ItemList/ItemList";
 import { Markdown } from "../../../components/Markdown/Markdown";
+import { PlannerView } from "../../../components/PlannerView/PlannerView";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 import { Text } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
@@ -26,7 +27,33 @@ export const SelectedItemDisplay = React.memo((props: SelectedItemDisplayProps) 
 
 	const [ editing, setEditing ] = useState(false);
 
+	const display = useMemo(() => {
+		if (/#planner/.test(item?.description || '')) return 'planner';
+		if (/#gallery/.test(item?.description || '')) return 'gallery';
+		else return 'list';
+	}, [ item ])
+
 	if (!item) return null;
+
+	if (display === 'planner') {
+
+		return (
+			<Flex column align='center' className='selected-item-display'>
+
+				<ProgressBar item={ item } />
+
+				<div style={{ overflowY: 'scroll', maxWidth: '100%', paddingBottom: 80 }}>
+					<div style={{ margin: '50px 60px' }}>
+						<SelectedItemEditor itemId={ props.itemId } onEditing={ setEditing } />
+					</div>
+
+					<PlannerView itemId={ item._id } />
+				</div>
+
+			</Flex>
+		)
+
+	}
 
 	return (
 		<Flex column align='center' className='selected-item-display'>
@@ -41,7 +68,7 @@ export const SelectedItemDisplay = React.memo((props: SelectedItemDisplayProps) 
 						'selected-item-children': true,
 						'selected-item-children-disabled': editing
 					}) }>
-						<ItemList items={ children } navOnClick={ !editing } />
+						<ItemList items={ children } navOnClick={ !editing } display={ display } />
 					</div>
 				</Flex>
 			</Flex>

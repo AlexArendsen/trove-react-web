@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Colors } from "../../constants/Colors";
 import { useStore } from "../../hooks/UseStore";
@@ -10,14 +10,18 @@ interface CheckboxProps {
 	checked?: boolean
 	onClick?: () => void,
 	className?: string,
-	itemId?: string // Convenience prop, when passed will check / uncheck item accordingly
+	itemId?: string, // Convenience prop, when passed will check / uncheck item accordingly
+	small?: boolean
 }
 
 export const Checkbox = React.memo((props: CheckboxProps) => {
 
-	const checked = props.checked;
 	const dispatch = useDispatch();
 	const item = useStore(s => props.itemId ? s.items.byId[props.itemId] : null);
+
+	const checked = useMemo(() => {
+		return item ? item.checked : props.checked;
+	}, [ props.checked, item ])
 
 	const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.preventDefault();
@@ -29,6 +33,7 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 	return (
 		<div onClick={ handleClick } className={classNames({
 			'checkbox': true,
+			'checkbox-small': props.small,
 			'checkbox-checked': checked
 		})}>
 		</div>

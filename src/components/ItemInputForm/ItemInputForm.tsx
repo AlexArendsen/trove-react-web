@@ -8,8 +8,7 @@ import { TextInput } from "../TextInput/TextInput";
 interface ItemInputFormProps {
 	itemId?: string,
 	style?: React.CSSProperties,
-	darker?: boolean,
-	allButton?: boolean
+	darker?: boolean
 }
 
 export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
