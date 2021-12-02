@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useHistory } from "react-router";
 import { Flex } from "../../../components/Flex/Flex";
+import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
 import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
 import { ItemList } from "../../../components/ItemList/ItemList";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
@@ -41,7 +42,9 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 
 			<Flex column className='item-blade-content'>
 				<div style={{ padding: 20 }}>
-					<Text bold mediumLarge onClick={ handleTitleClick } style={{ cursor: 'pointer' }}> { item.title } </Text>
+					<ItemDropZone itemId={ item._id }>
+						<Text bold mediumLarge onClick={ handleTitleClick } style={{ cursor: 'pointer' }}> { item.title } </Text>
+					</ItemDropZone>
 					{ item.description ? <ReactMarkdown>{ item.description }</ReactMarkdown> : null }
 					<ItemInputForm darker itemId={ item._id } style={{ margin: '20px 0' }} />
 				</div>

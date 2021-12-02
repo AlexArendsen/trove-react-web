@@ -1,0 +1,7 @@
+.drop-zone {
+	transition: opacity 200ms;
+}
+
+.drop-zone-dangle {
+	opacity: 0.4;
+}

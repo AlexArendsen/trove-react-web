@@ -13,8 +13,8 @@
 }
 
 .text-input-large { padding: 12px; }
-.text-input-small { padding: 6px; }
-.text-input-normal { padding: 9px; }
+.text-input-small { padding: 6px 12px; font-size: 13px; }
+.text-input-normal { padding: 9px 12px; }
 
 .text-input-darker { background-color: #c9c9c9; }
 

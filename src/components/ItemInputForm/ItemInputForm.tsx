@@ -8,7 +8,8 @@ import { TextInput } from "../TextInput/TextInput";
 interface ItemInputFormProps {
 	itemId?: string,
 	style?: React.CSSProperties,
-	darker?: boolean
+	darker?: boolean,
+	smaller?: boolean
 }
 
 export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
@@ -26,7 +27,7 @@ export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
 	return (
 		<form onSubmit={ handleSubmit } style={{ width: '100%', ...props.style }}>
 			<Flex row>
-				<TextInput key='title-input' darker={ props.darker } onChange={ setTitle } value={ title } />
+				<TextInput small={ props.smaller } key='title-input' darker={ props.darker } onChange={ setTitle } value={ title } />
 				<Button variant='submit' style={{ marginLeft: 15 }} submitForm>Add</Button>
 			</Flex>
 		</form>

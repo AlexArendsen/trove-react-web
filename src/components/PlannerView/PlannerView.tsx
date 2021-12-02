@@ -20,29 +20,28 @@ interface PlannerViewProps {
 export const PlannerView = React.memo((props: PlannerViewProps) => {
 
 	const { children, item } = useItem(props.itemId)
-	const cardChildren = useMemo(() => children.filter(c => !!c.descendants), [ children ])
-	const flatChildren = useMemo(() => children.filter(c =>  !c.descendants), [ children ])
+	const cardChildren = useMemo(() => children?.filter(c => !!c.descendants) || [], [ children ])
+	const flatChildren = useMemo(() => children?.filter(c =>  !c.descendants) || [], [ children ])
 
 	if(!item) return null;
 
 	return (
 
-		<Flex column className='planner-view-children'>
+		<Flex row className='planner-view-children'>
+
+			<div className='planner-view-sidebar-wrapper'>
+				<Flex column align='center' className='planner-view-sidebar'>
+					<ItemInputForm smaller itemId={ item._id } />
+					<div style={{ maxWidth: '100%', width: '100%' }}>
+						<ItemList items={ flatChildren } navOnClick display='list' />
+					</div>
+				</Flex>
+			</div>
 
 			<Flex row className='planner-view-carousel'>
 				{ cardChildren.map(c => (
 					<PlannerCard key={ c._id } itemId={ c._id } />
 				)) }
-			</Flex>
-
-			<Flex center style={{ marginTop: 40 }}>
-				<ItemInputForm style={{ maxWidth: 700 }} itemId={ item._id } />
-			</Flex>
-
-			<Flex column align='center' style={{ marginTop: 20 }}>
-				<div style={{ maxWidth: 700, width: 700 }}>
-					<ItemList items={ flatChildren } navOnClick display='list' />
-				</div>
 			</Flex>
 
 		</Flex>
@@ -69,6 +68,8 @@ const PlannerCard = React.memo((props: { itemId: string }) => {
 				<Text faded>{ item.description }</Text>
 			</Flex>
 
+			<ItemInputForm smaller itemId={ item._id } />
+
 			<Flex column className='planner-view-card-sublist'>
 			{ children.map(c => (
 				<PlannerCardSubItem key={ c._id } itemId={ c._id } />
@@ -88,13 +89,13 @@ const PlannerCardSubItem = React.memo((props: { itemId: string }) => {
 
 	return (
 		<div className='planner-card-subitem'>
-			<SimpleItem small itemId={ item._id } />
+			<SimpleItem small itemId={ item._id } showProgressInCheckbox />
 		</div>
 	)
 
 })
 
-const SimpleItem = React.memo((props: { itemId: string, small?: boolean }) => {
+const SimpleItem = React.memo((props: { itemId: string, small?: boolean, showProgressInCheckbox?: boolean }) => {
 
 	const history = useHistory();
 	const { item } = useItem(props.itemId);
@@ -109,7 +110,7 @@ const SimpleItem = React.memo((props: { itemId: string, small?: boolean }) => {
 	return (
 		<ItemDropZone itemId={ item._id }>
 			<Flex row className={ classes } align='flex-start' onClick={ () => history.push(Routes.item(item._id)) }>
-				<Checkbox small={ props.small } itemId={ item._id } />
+				<Checkbox showProgress={ props.showProgressInCheckbox } small={ props.small } itemId={ item._id } />
 				<Text small={ props.small } medium={ !props.small } bold={ !props.small } style={{ marginLeft: 10 }}>{ item.title }</Text>
 			</Flex>
 		</ItemDropZone>

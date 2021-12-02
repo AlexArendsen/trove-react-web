@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React, { useEffect, useMemo } from "react";
+import { useItemProgress } from "../../hooks/UseItemProgress";
 import { Item } from "../../redux/models/Items/Item";
 import './ProgressBar.css';
 
@@ -13,11 +14,12 @@ export const ProgressBar = React.memo((props: ProgressBarProps) => {
 
 	const { floating, percent, item } = props;
 
-	const pct = useMemo(() => {
-		if (item) return item.checked ? 1 : (item.completed || 0) / (item.descendants || 1)
-		else if (percent) return (percent > 1) ? percent / 100 : percent;
+	const itemPct = useItemProgress(item);
+	const propPct = useMemo(() => {
+		if (percent) return (percent > 1) ? percent / 100 : percent;
 		return 0;
-	}, [ item, percent, item?.completed, item?.descendants ])
+	}, [ percent ])
+	const pct = itemPct || propPct;
 
 	return (
 		<div className={ classNames({ 'progress-bar-background': true, 'progress-bar-floating': floating }) }>

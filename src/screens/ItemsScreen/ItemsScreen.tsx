@@ -21,8 +21,8 @@ export const ItemsScreen = React.memo(() => {
 			<Flex row style={{ height: 'calc(100vh - 112px)', maxHeight: 'calc(100vh - 115px)', overflow: 'hidden' }}>
 
 				{ grandparent ? <ItemBlade darken itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} /> : null }
-				{ parent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: grandparent ? -200 : 0, zIndex: 200 }} /> : null }
-				<SelectedItemDisplay itemId={ item?._id } />
+				{ parent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: grandparent ? -250 : 0, zIndex: 200 }} /> : null }
+				<SelectedItemDisplay />
 
 
 			</Flex>

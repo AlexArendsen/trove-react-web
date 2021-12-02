@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "../../../components/Button/Button";
 import { Flex } from "../../../components/Flex/Flex";
+import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
 import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
 import { ItemList } from "../../../components/ItemList/ItemList";
 import { Markdown } from "../../../components/Markdown/Markdown";
@@ -12,18 +13,15 @@ import { Text } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
+import { useSelectedItem } from "../../../hooks/UseSelectedItem";
 import { useStore } from "../../../hooks/UseStore";
 import { UpdateOneItemAction } from "../../../redux/actions/ItemActions";
 import { Item } from "../../../redux/models/Items/Item";
 import './SelectedItemDisplay.css'
 
-interface SelectedItemDisplayProps {
-	itemId: string
-}
+export const SelectedItemDisplay = React.memo(() => {
 
-export const SelectedItemDisplay = React.memo((props: SelectedItemDisplayProps) => {
-
-	const { item, children } = useItem(props.itemId);
+	const { item, children, parent, grandparent } = useSelectedItem();
 
 	const [ editing, setEditing ] = useState(false);
 
@@ -35,17 +33,26 @@ export const SelectedItemDisplay = React.memo((props: SelectedItemDisplayProps) 
 
 	if (!item) return null;
 
+	const classes = classNames({
+		'selected-item-display': true,
+		'selected-item-display-no-parent': !parent && !grandparent,
+		'selected-item-display-with-parent': !!parent && !grandparent,
+		'selected-item-display-with-grandparent': !!grandparent,
+	})
+
 	if (display === 'planner') {
 
 		return (
-			<Flex column align='center' className='selected-item-display'>
+			<Flex column align='center' className={ classes }>
 
 				<ProgressBar item={ item } />
 
-				<div style={{ overflowY: 'scroll', maxWidth: '100%', paddingBottom: 80 }}>
-					<div style={{ margin: '50px 60px' }}>
-						<SelectedItemEditor itemId={ props.itemId } onEditing={ setEditing } />
-					</div>
+				<div style={{ overflowY: 'scroll', maxWidth: '100%', minWidth: '100%', paddingBottom: 80 }}>
+					<ItemDropZone itemId={ item._id } noDrag>
+						<div style={{ margin: '50px 60px' }}>
+							<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
+						</div>
+					</ItemDropZone>
 
 					<PlannerView itemId={ item._id } />
 				</div>
@@ -56,13 +63,13 @@ export const SelectedItemDisplay = React.memo((props: SelectedItemDisplayProps) 
 	}
 
 	return (
-		<Flex column align='center' className='selected-item-display'>
+		<Flex column align='center' className={ classes }>
 
 			<ProgressBar item={ item } />
 
 			<Flex column align='center' className='selected-item-display-content-wrapper'>
 				<Flex column className='selected-item-display-content'>
-					<SelectedItemEditor itemId={ props.itemId } onEditing={ setEditing } />
+					<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
 					<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: 60, opacity: editing ? 0 : 1 }} />
 					<div className={ classNames({
 						'selected-item-children': true,
