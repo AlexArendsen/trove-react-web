@@ -15,6 +15,7 @@ import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
 import { useSelectedItem } from "../../../hooks/UseSelectedItem";
 import { useStore } from "../../../hooks/UseStore";
+import { useWindowSize } from "../../../hooks/UseWindowSize";
 import { UpdateOneItemAction } from "../../../redux/actions/ItemActions";
 import { Item } from "../../../redux/models/Items/Item";
 import './SelectedItemDisplay.css'
@@ -22,22 +23,24 @@ import './SelectedItemDisplay.css'
 export const SelectedItemDisplay = React.memo(() => {
 
 	const { item, children, parent, grandparent } = useSelectedItem();
+	const { isMobile } = useWindowSize()
 
 	const [ editing, setEditing ] = useState(false);
 
 	const display = useMemo(() => {
+		if (isMobile) return 'list'
 		if (/#planner/.test(item?.description || '')) return 'planner';
 		if (/#gallery/.test(item?.description || '')) return 'gallery';
 		else return 'list';
-	}, [ item ])
+	}, [ item, isMobile ])
 
 	if (!item) return null;
 
 	const classes = classNames({
 		'selected-item-display': true,
-		'selected-item-display-no-parent': !parent && !grandparent,
-		'selected-item-display-with-parent': !!parent && !grandparent,
-		'selected-item-display-with-grandparent': !!grandparent,
+		'selected-item-display-no-parent': (!parent && !grandparent) || isMobile,
+		'selected-item-display-with-parent': !!parent && !grandparent && !isMobile,
+		'selected-item-display-with-grandparent': !!grandparent && !isMobile,
 	})
 
 	if (display === 'planner') {
@@ -69,8 +72,10 @@ export const SelectedItemDisplay = React.memo(() => {
 
 			<Flex column align='center' className='selected-item-display-content-wrapper'>
 				<Flex column className='selected-item-display-content'>
-					<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
-					<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: 60, opacity: editing ? 0 : 1 }} />
+					<div style={{ margin: '0 20px' }}>
+						<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
+						<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: 60, opacity: editing ? 0 : 1 }} />
+					</div>
 					<div className={ classNames({
 						'selected-item-children': true,
 						'selected-item-children-disabled': editing
