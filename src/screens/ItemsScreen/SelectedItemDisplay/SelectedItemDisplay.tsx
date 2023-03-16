@@ -70,11 +70,11 @@ export const SelectedItemDisplay = React.memo(() => {
 
 			<ProgressBar item={ item } />
 
-			<Flex column align='center' className='selected-item-display-content-wrapper'>
+			<Flex column align='center' className='selected-item-display-content-wrapper' style={{ paddingTop: isMobile ? 20 : 60 }}>
 				<Flex column className='selected-item-display-content'>
 					<div style={{ margin: '0 20px' }}>
 						<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
-						<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: 60, opacity: editing ? 0 : 1 }} />
+						<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: isMobile ? 20 : 60, opacity: editing ? 0 : 1 }} />
 					</div>
 					<div className={ classNames({
 						'selected-item-children': true,

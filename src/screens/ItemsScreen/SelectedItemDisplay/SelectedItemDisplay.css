@@ -18,7 +18,7 @@
 	max-height: calc(100vh - 112px);
 	overflow-y: scroll;
 	width: 100%;
-	padding: 60px 0 300px 0;
+	padding: 20px 0 300px 0;
 }
 
 .selected-item-display-content {

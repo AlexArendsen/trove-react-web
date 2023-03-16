@@ -75,7 +75,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 						{
 							((props.figures || 'visible') === 'visible') ? (<Flex row>
 								<Text small accent>{ FormatNumber.withCommas(item?.completed || 0) }</Text>
-								<Text small faded style={{ marginLeft: 5, marginRight: 20 }}> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
+								<Text small faded style={{ marginLeft: 5, marginRight: 20, whiteSpace: 'nowrap' }}> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
 								<Text small accent bold>{ FormatNumber.toPercent(pct) }</Text>
 							</Flex>) : null
 						}
