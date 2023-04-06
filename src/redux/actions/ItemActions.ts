@@ -48,7 +48,7 @@ export const UpdateOneItemAction = (item: Item) => new DataPlan('items:update-on
     .withSubject({ new: item, old: GetConfig().Store?.getState().items.byId[item._id] })
     .withReduxActions(Actions.Items.UpdateOne).do(() => Legacy.put('/item', item)).run()
 
-export const AddItemAction = (title: string, parent_id: string) => new DataPlan('items:add-one')
+export const AddItemAction = (title: string, parent_id: string | null) => new DataPlan('items:add-one')
     .withSubject({ title, parent_id, _id: uuid() })
     .withReduxActions(Actions.Items.Add).do(() => Legacy.post('/item', { title, parent_id })).run()
 

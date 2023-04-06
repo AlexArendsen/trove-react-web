@@ -3,6 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Colors } from "../../constants/Colors";
 import { useItemProgress } from "../../hooks/UseItemProgress";
+import { useLens } from "../../hooks/UseLens";
 import { useStore } from "../../hooks/UseStore";
 import { CheckItemAction, UncheckItemAction } from "../../redux/actions/ItemActions";
 import './Checkbox.css';
@@ -20,6 +21,7 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 
 	const dispatch = useDispatch();
 	const item = useStore(s => props.itemId ? s.items.byId[props.itemId] : null);
+	const lens = useLens()
 
 	const checked = useMemo(() => {
 		return item ? item.checked : props.checked;
@@ -28,9 +30,11 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 	const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.preventDefault();
 		e.stopPropagation();
-		if (item && props.itemId) item.checked ? dispatch(UncheckItemAction(props.itemId)) : dispatch(CheckItemAction(props.itemId))
+		if (item && props.itemId) {
+			item.checked ? dispatch(UncheckItemAction(props.itemId)) : dispatch(CheckItemAction(props.itemId))
+		}
 		if (props.onClick) props.onClick()
-	}, [ props.onClick, checked ])
+	}, [ props.onClick, checked, lens.current ])
 
 	const progress = useItemProgress(item);
 

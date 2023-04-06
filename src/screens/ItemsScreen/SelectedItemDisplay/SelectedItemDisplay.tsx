@@ -13,6 +13,7 @@ import { Text } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
+import { useLens } from "../../../hooks/UseLens";
 import { useSelectedItem } from "../../../hooks/UseSelectedItem";
 import { useStore } from "../../../hooks/UseStore";
 import { useWindowSize } from "../../../hooks/UseWindowSize";
@@ -24,6 +25,7 @@ export const SelectedItemDisplay = React.memo(() => {
 
 	const { item, children, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
+	const lens = useLens()
 
 	const [ editing, setEditing ] = useState(false);
 
@@ -53,7 +55,7 @@ export const SelectedItemDisplay = React.memo(() => {
 				<div style={{ overflowY: 'scroll', maxWidth: '100%', minWidth: '100%', paddingBottom: 80 }}>
 					<ItemDropZone itemId={ item._id } noDrag>
 						<div style={{ margin: '50px 60px' }}>
-							<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
+							<lens.current.renderItemEditor itemId={ item._id } onEditing={ setEditing } />
 						</div>
 					</ItemDropZone>
 
@@ -73,7 +75,7 @@ export const SelectedItemDisplay = React.memo(() => {
 			<Flex column align='center' className='selected-item-display-content-wrapper' style={{ paddingTop: isMobile ? 20 : 60 }}>
 				<Flex column className='selected-item-display-content'>
 					<div style={{ margin: '0 20px' }}>
-						<SelectedItemEditor itemId={ item._id } onEditing={ setEditing } />
+						<lens.current.renderItemEditor itemId={ item._id } onEditing={ setEditing } />
 						<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: isMobile ? 20 : 60, opacity: editing ? 0 : 1 }} />
 					</div>
 					<div className={ classNames({
@@ -96,7 +98,7 @@ interface SelectedItemEditorProps {
 	onEditing?: (editing: boolean) => void
 }
 
-const SelectedItemEditor = React.memo((props: SelectedItemEditorProps) => {
+export const DefaultItemEditor = React.memo((props: SelectedItemEditorProps) => {
 
 	const { item } = useItem(props.itemId);
 
