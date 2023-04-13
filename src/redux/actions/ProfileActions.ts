@@ -1,6 +1,6 @@
 import { DataPlan } from "../../utils/DataPlan/DataPlan";
-import { Legacy } from "../LegacyApi";
+import { Api } from "../Api";
 import { Actions } from "./Actions";
 
 export const GetCurrentUserProfileAction = () => new DataPlan('user:profile')
-    .withReduxActions(Actions.User.GetProfile).do(() => Legacy.get('/me')).run();
+    .withReduxActions(Actions.User.GetProfile).do(() => Api.get('/me')).run();
