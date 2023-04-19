@@ -1,5 +1,5 @@
 import axios, { AxiosError, Method } from 'axios';
-import { StorageKeys } from '../constants/StorageKeys';
+import { GetToken } from './GetToken';
 
 type StringObject = { [key: string]: string }
 
@@ -20,7 +20,7 @@ export class ApiClient {
     async send<TResult>(method: Method, url: string, body?: any, extraHeaders: StringObject = {}, queryParams: StringObject = {}) : Promise<TResult> {
         const queryString = Object.entries({ ...this.queryParams, ...queryParams }).map(([key, value]) => `${ key }=${ encodeURIComponent(value) }`).join('&')
         const fullUrl = `${ this.baseUrl }/${ url.trim().replace(/^\//, '') }?${ queryString }`;
-        let headers = { ...this.headers, ...extraHeaders, 'Authorization': localStorage.getItem(StorageKeys.LoginToken) || 'none' }
+        let headers = { ...this.headers, ...extraHeaders, 'Authorization': (await GetToken()) || 'none' }
         try {
             //console.log(`${ this.serviceName }: > ${ method } [...] ${ fullUrl }`, body || '<no body>')
             const response = await axios.request({ url: fullUrl, method, headers, data: body })

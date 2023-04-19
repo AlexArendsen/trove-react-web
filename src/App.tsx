@@ -8,14 +8,18 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Initialize } from './Startup';
+import { useAsyncEffect } from './hooks/UseAsyncEffect';
 
 export const App = React.memo(() => {
 
   const store = useMemo(() => CreateStore(), [])
+  const auth0 = useAuth0();
 
-  useEffect(() => {
+  useAsyncEffect(async () => {
+    await Initialize({ auth0, store })
     store.dispatch(GetAllItemsAction())
-    SetConfig({ Store: store })
   }, [])
 
   return (

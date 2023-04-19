@@ -9,15 +9,19 @@ import { Flex } from "../Flex/Flex";
 import { Logo } from "../Logo/Logo";
 import { Text } from "../Text/Text";
 import { TextInput } from "../TextInput/TextInput";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Header = React.memo(() => {
 
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const handleSearch = useCallback((value: string) => history.push(Routes.search(value)), [ history ])
+	const auth = useAuth0()
 	const handleAvatarClick = useCallback(() => {
-		dispatch(LogOutAction())
+		auth.logout()
+		//dispatch(LogOutAction())
 	}, [ history ])
+
 
 	return (
 		<Flex row style={{ padding: '15px 20px' }} align='center' justify='space-between'>

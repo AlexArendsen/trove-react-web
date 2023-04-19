@@ -10,15 +10,13 @@ import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
 import { LoadingScreen } from "./LoadingScreen/LoadingScreen";
 import { LoginScreen } from "./LoginScreen/LoginScreen";
 import { SearchScreen } from "./SearchScreen/SearchScreen";
+import { useAuth0 } from "@auth0/auth0-react";
+import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
 
 export const BaseScreen = React.memo(() => {
 
-	const [ loggedIn, setLoggedIn ] = useState(false);
-	const login = useStore(s => s.authentication.token);
-	useEffect(() => setLoggedIn(!!GetStoredToken()), []);
-	useEffect(() => {
-		if(!login.loading) setLoggedIn(!!GetStoredToken())
-	}, [ login ])
+	const auth = useAuth0()
+	const loggedIn = auth.isAuthenticated
 
 	const { item } = useSelectedItem();
 	useEffect(() => {
@@ -31,7 +29,7 @@ export const BaseScreen = React.memo(() => {
 	const { view } = useQueryParams();
 	const screen = useMemo(() => {
 
-		if (!loggedIn) return <LoginScreen />
+		if (!loggedIn) return <OauthLoginScreen />
 		if (itemsLoading) return <LoadingScreen />
 
 		switch (view) {

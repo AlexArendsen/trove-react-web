@@ -9,6 +9,7 @@ interface ButtonProps {
 	fullWidth?: boolean
 	onClick?: (e: React.MouseEvent) => void
 	children: string
+	large?: boolean
 	style?: React.CSSProperties
 	textStyle?: React.CSSProperties
 	disabled?: boolean
@@ -24,10 +25,11 @@ export const Button = React.memo((props: ButtonProps) => {
 			className={classNames({
 				'button': true,
 				'button-submit': props.variant === 'submit',
-				'button-full-width': props.fullWidth
+				'button-full-width': props.fullWidth,
+				'button-large': props.large
 			})}
 			style={ props.style }>
-			<Text style={{ fontSize: 12 }}>{ props.children }</Text>
+			<Text style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.children }</Text>
 		</button>
 	)
 
