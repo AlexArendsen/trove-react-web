@@ -20,7 +20,7 @@ ReactDOM.render(
       authorizationParams={{
         redirect_uri: getRedirectUrl(),
         audience: 'https://nulist.app/api',
-        scope: 'openid'
+        scope: 'read:items write:items'
       }}
       >
       <App />

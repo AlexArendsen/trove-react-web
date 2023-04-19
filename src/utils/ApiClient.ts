@@ -20,7 +20,8 @@ export class ApiClient {
     async send<TResult>(method: Method, url: string, body?: any, extraHeaders: StringObject = {}, queryParams: StringObject = {}) : Promise<TResult> {
         const queryString = Object.entries({ ...this.queryParams, ...queryParams }).map(([key, value]) => `${ key }=${ encodeURIComponent(value) }`).join('&')
         const fullUrl = `${ this.baseUrl }/${ url.trim().replace(/^\//, '') }?${ queryString }`;
-        let headers = { ...this.headers, ...extraHeaders, 'Authorization': (await GetToken()) || 'none' }
+        const token = (await GetToken()) || 'none'
+        let headers = { ...this.headers, ...extraHeaders, 'Authorization': 'Bearer ' + token }
         try {
             //console.log(`${ this.serviceName }: > ${ method } [...] ${ fullUrl }`, body || '<no body>')
             const response = await axios.request({ url: fullUrl, method, headers, data: body })
