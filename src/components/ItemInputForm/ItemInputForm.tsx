@@ -30,7 +30,7 @@ export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
 	}, [ title, history, dispatch, onSubmitOverride ])
 
 	return (
-		<form onSubmit={ handleSubmit } style={{ width: '100%', ...style }}>
+		<form onSubmit={ handleSubmit } style={{ width: '100%', maxWidth: 800, ...style }}>
 			<Flex row>
 				<TextInput small={ smaller } key='title-input' darker={ darker } onChange={ setTitle } value={ title } />
 				<Button variant='submit' style={{ marginLeft: 15 }} submitForm>Add</Button>

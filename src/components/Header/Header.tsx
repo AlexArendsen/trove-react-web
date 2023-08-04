@@ -10,6 +10,7 @@ import { Logo } from "../Logo/Logo";
 import { Text } from "../Text/Text";
 import { TextInput } from "../TextInput/TextInput";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Button } from "../Button/Button";
 
 export const Header = React.memo(() => {
 
@@ -24,7 +25,7 @@ export const Header = React.memo(() => {
 
 
 	return (
-		<Flex row style={{ padding: '15px 20px' }} align='center' justify='space-between'>
+		<Flex row style={{ padding: '15px 20px' }} align='stretch' justify='space-between'>
 			<div style={{ cursor: 'pointer'}} onClick={ () => history.push(Routes.item('')) }>
 				<Logo variant='gradient' />
 			</div>
@@ -33,7 +34,7 @@ export const Header = React.memo(() => {
 				<TextInput placeholder='Search' large onEnter={ handleSearch } />
 			</div>
 			<Bump w={ 10 } />
-			<Avatar onClick={ handleAvatarClick } />
+			<Button onClick={ handleAvatarClick }>Log Out</Button>
 		</Flex>
 	)
 

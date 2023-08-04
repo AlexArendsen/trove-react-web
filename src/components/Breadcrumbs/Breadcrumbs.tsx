@@ -29,7 +29,7 @@ export const Breadcrumbs = React.memo(() => {
 		<div style={{ overflow: 'scroll' }}>
 			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }}>
 				<Crumb title='Home' />
-				{ lineage.map((l, idx) => <Crumb title={ l.title } item={ l } last={ (idx + 1) === lineage.length } />) }
+				{ lineage.map((l, idx) => <Crumb title={ l?.title || 'UNKNOWN' } item={ l } last={ (idx + 1) === lineage.length } />) }
 			</Flex>
 		</div>
 	)

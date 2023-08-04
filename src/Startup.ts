@@ -22,8 +22,6 @@ export const Initialize = async (config: {
                 }
             })
 
-            console.log(`Got token!! ${ token }`)
-
             return token
         } catch (e) {
             console.log('ERROR GETTING TOKEN!!', e)

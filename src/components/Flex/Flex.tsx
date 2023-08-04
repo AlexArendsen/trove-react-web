@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 interface FlexProps {
 	justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around',
-	align?: 'flex-start' | 'flex-end' | 'center',
+	align?: 'flex-start' | 'flex-end' | 'center' | 'stretch',
 	className?: string
 	style?: React.CSSProperties
 	wrap?: boolean

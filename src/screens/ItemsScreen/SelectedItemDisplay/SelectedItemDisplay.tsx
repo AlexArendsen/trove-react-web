@@ -1,88 +1,62 @@
 import classNames from "classnames";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "../../../components/Button/Button";
 import { Flex } from "../../../components/Flex/Flex";
-import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
-import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
-import { ItemList } from "../../../components/ItemList/ItemList";
 import { Markdown } from "../../../components/Markdown/Markdown";
-import { PlannerView } from "../../../components/PlannerView/PlannerView";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 import { Text } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
-import { useLens } from "../../../hooks/UseLens";
 import { useSelectedItem } from "../../../hooks/UseSelectedItem";
-import { useStore } from "../../../hooks/UseStore";
 import { useWindowSize } from "../../../hooks/UseWindowSize";
+import { LensedComponent } from "../../../lenses/LensedComponent";
 import { UpdateOneItemAction } from "../../../redux/actions/ItemActions";
-import { Item } from "../../../redux/models/Items/Item";
-import './SelectedItemDisplay.css'
+import './SelectedItemDisplay.css';
+import { useLenses } from "../../../hooks/UseItemLens";
 
 export const SelectedItemDisplay = React.memo(() => {
 
-	const { item, children, parent, grandparent } = useSelectedItem();
+	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
-	const lens = useLens()
 
 	const [ editing, setEditing ] = useState(false);
-
-	const display = useMemo(() => {
-		if (isMobile) return 'list'
-		if (/#planner/.test(item?.description || '')) return 'planner';
-		if (/#gallery/.test(item?.description || '')) return 'gallery';
-		else return 'list';
-	}, [ item, isMobile ])
+	const lens = useLenses(item?._id)
+	const narrow = !lens.some(l => l.FullWidthSelected)
 
 	if (!item) return null;
 
-	const classes = classNames({
+	const displayClasses = classNames({
 		'selected-item-display': true,
 		'selected-item-display-no-parent': (!parent && !grandparent) || isMobile,
 		'selected-item-display-with-parent': !!parent && !grandparent && !isMobile,
 		'selected-item-display-with-grandparent': !!grandparent && !isMobile,
 	})
 
-	if (display === 'planner') {
-
-		return (
-			<Flex column align='center' className={ classes }>
-
-				<ProgressBar item={ item } />
-
-				<div style={{ overflowY: 'scroll', maxWidth: '100%', minWidth: '100%', paddingBottom: 80 }}>
-					<ItemDropZone itemId={ item._id } noDrag>
-						<div style={{ margin: '50px 60px' }}>
-							<lens.current.renderItemEditor itemId={ item._id } onEditing={ setEditing } />
-						</div>
-					</ItemDropZone>
-
-					<PlannerView itemId={ item._id } />
-				</div>
-
-			</Flex>
-		)
-
-	}
+	const contentClasses = classNames({
+		'selected-item-display-content': true,
+		'selected-item-display-content-narrow': narrow
+	})
 
 	return (
-		<Flex column align='center' className={ classes }>
+		<Flex column align='center' className={ displayClasses }>
 
 			<ProgressBar item={ item } />
 
 			<Flex column align='center' className='selected-item-display-content-wrapper' style={{ paddingTop: isMobile ? 20 : 60 }}>
-				<Flex column className='selected-item-display-content'>
+				<Flex column className={ contentClasses }>
 					<div style={{ margin: '0 20px' }}>
-						<lens.current.renderItemEditor itemId={ item._id } onEditing={ setEditing } />
-						<ItemInputForm itemId={ item._id } style={{ marginTop: 20, marginBottom: isMobile ? 20 : 60, opacity: editing ? 0 : 1 }} />
+						<LensedComponent itemId={ item?._id }
+							selector={ l => editing ? l.AsSelected?.RenderEditor : l.AsSelected?.RenderHeader }
+							props={{ itemId: item?._id, onDone: () => setEditing(false), onClick: () => setEditing(true) }} />
+						<LensedComponent itemId={ item?._id } selector={ l => l.AsSelected?.RenderNewItemInputForm } props={{ itemId: item?._id }} />
 					</div>
 					<div className={ classNames({
 						'selected-item-children': true,
 						'selected-item-children-disabled': editing
 					}) }>
-						<ItemList items={ children } navOnClick={ !editing } display={ display } />
+						<LensedComponent itemId={ item?._id } selector={ l => l.AsSelected?.RenderChildList } props={{ itemId: item?._id }} />
 					</div>
 				</Flex>
 			</Flex>
@@ -101,36 +75,42 @@ interface SelectedItemEditorProps {
 export const DefaultItemEditor = React.memo((props: SelectedItemEditorProps) => {
 
 	const { item } = useItem(props.itemId);
+	const [ editing, setEditing ] = useState(false);
+
+	if (!item) return null;
+	if (editing) return <DefaultItemEditorControls itemId={ props.itemId } onDone={ () => setEditing(false) } />
+	return <DefaultItemEditorDisplay itemId={ props.itemId } onClick={ () => setEditing(true) } />
+
+
+})
+
+export const DefaultItemEditorControls = React.memo((props: { itemId: string, onDone: () => void }) => {
 
 	const dispatch = useDispatch();
+	const { itemId, onDone } = props
+	const { item } = useItem(itemId)
+
 	const [ title, setTitle ] = useState(item?.title);
 	const [ description, setDescription ] = useState(item?.description);
-	const [ editing, setEditing ] = useState(false);
+
+	const canSubmit = !!title;
 
 	const handleSubmit = () => {
 		if (item && title) {
 			dispatch(UpdateOneItemAction({ ...item, title, description }))
-			setEditing(false);
+			onDone()
 		}
 	}
 
-	const canSubmit = !!title;
+	useEffect(() => { setTitle(item?.title); setDescription(item?.description); }, [ item ])
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.ctrlKey && e.key === 'Enter') handleSubmit();
-		if (e.key === 'Escape') setEditing(false);
+		if (e.key === 'Escape') onDone();
 	}
 
-	useEffect(() => {
-		if(props.onEditing) props.onEditing(editing)
-		setTitle(item?.title); setDescription(item?.description);
-	}, [ editing ])
-	useEffect(() => { setEditing(false); setTitle(item?.title); setDescription(item?.description) }, [ item ])
-
-	if (!item) return null;
-
-	if (editing) return (
-		<Flex column>
+	return (
+		<Flex column style={{ maxWidth: 800 }}>
 			<TextInput value={ title } transparent style={{ fontSize: 36, fontWeight: 700 }} key='title' onKeyDown={ handleKeyDown } onChange={ setTitle } />
 			<TextInput value={ description } transparent multiline key='description' onKeyDown={ handleKeyDown } onChange={ setDescription } 
 				style={{ margin: '10px 0 30px 0', height: 500, padding: 15, background: 'rgba(0,0,0,0.04)', borderRadius: 18, maxWidth: 800 }} />
@@ -138,20 +118,25 @@ export const DefaultItemEditor = React.memo((props: SelectedItemEditorProps) => 
 				<Button fullWidth variant='submit' disabled={ !canSubmit } onClick={ handleSubmit }>
 					Save Changes
 				</Button>
-				<Button onClick={ () => setEditing(false) } style={{ width: 100, marginLeft: 15 }}>
+				<Button onClick={ onDone } style={{ width: 100, marginLeft: 15 }}>
 					Cancel
 				</Button>
 			</Flex>
 		</Flex>
 	)
+})
+
+export const DefaultItemEditorDisplay = React.memo((props: { itemId: string, onClick: () => void }) => {
+
+	const { item } = useItem(props.itemId)
 
 	return (
-		<Flex column>
-			<Text bold large className='selected-item-title' onClick={ () => setEditing(true) }>{ item.title }</Text>
-			<Markdown src={ item.description } />
+		<Flex column style={{ maxWidth: 800 }}>
+			<Text bold large className='selected-item-title' onClick={ props.onClick }>{ item?.title }</Text>
+			<Markdown src={ item?.description } />
 			<Flex row>
 				<Text faded style={{ marginRight: 5 }}>Created</Text>
-				<TimeDisplay time={ item.created_at } long />
+				<TimeDisplay time={ item?.created_at } long />
 			</Flex>
 		</Flex>
 	)

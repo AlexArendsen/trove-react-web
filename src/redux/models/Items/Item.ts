@@ -2,6 +2,7 @@ export interface Item {
 	_id: string
 	title: string
 	description?: string
+	data?: any
 	parent_id?: string
 	user_id: string
 	checked: boolean
@@ -10,5 +11,4 @@ export interface Item {
 	completed_at?: string
 	descendants?: number
 	completed?: number
-	props?: { [key: string]: string }
 }

@@ -23,8 +23,11 @@
 
 .selected-item-display-content {
 	width: 100%;
-	max-width: 800px;
 	margin-bottom: 40px;
+}
+
+.selected-item-display-content-narrow {
+	max-width: 800px;
 }
 
 .selected-item-title {

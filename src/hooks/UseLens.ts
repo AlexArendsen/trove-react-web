@@ -8,6 +8,7 @@ export type LensStore = {
     set: (lens: Lens) => void
 }
 
+/**@deprecated use useLenses please */
 export const useLens = create<LensStore>((set, get) => {
 
     return {

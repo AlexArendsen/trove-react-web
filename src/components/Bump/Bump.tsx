@@ -8,7 +8,7 @@ export const Bump = React.memo((props: {
     const { w, h } = props
 
     return (
-        <div style={{ width: w, height: h }}>
+        <div style={{ width: w, minWidth: w, height: h, minHeight: h }}>
         </div>
     )
 

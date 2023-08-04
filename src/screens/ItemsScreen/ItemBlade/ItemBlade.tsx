@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import { useHistory } from "react-router";
 import { Flex } from "../../../components/Flex/Flex";
@@ -7,10 +7,12 @@ import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
 import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
 import { ItemList } from "../../../components/ItemList/ItemList";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
-import { Text } from "../../../components/Text/Text";
 import { Routes } from "../../../constants/Routes";
 import { useItem } from "../../../hooks/UseItem";
+import { useLenses } from "../../../hooks/UseItemLens";
+import { ItemLens, ItemLensItemSpec } from "../../../lenses/ItemLens";
 import './ItemBlade.css';
+import { LensedComponent } from "../../../lenses/LensedComponent";
 
 interface ItemBladeProps {
 	itemId: string
@@ -43,12 +45,12 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 			<Flex column className='item-blade-content'>
 				<div style={{ padding: 20 }}>
 					<ItemDropZone itemId={ item._id }>
-						<Text bold mediumLarge onClick={ handleTitleClick } style={{ cursor: 'pointer' }}> { item.title } </Text>
+						<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderHeader } props={{ itemId: item._id, onClick: handleTitleClick }} />
 					</ItemDropZone>
 					{ item.description ? <ReactMarkdown>{ item.description }</ReactMarkdown> : null }
-					<ItemInputForm darker itemId={ item._id } style={{ margin: '20px 0' }} />
+					<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderNewItemInputForm } props={{ itemId: item._id }} />
 				</div>
-				<ItemList selected={ props.selected } items={ children } display='compact-list' navOnClick />
+				<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderChildList } props={{ itemId: item._id, selectedItemId: props.selected }} />
 			</Flex>
 
 		</Flex>

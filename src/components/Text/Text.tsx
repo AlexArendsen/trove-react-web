@@ -31,6 +31,7 @@ interface TextProps {
 	children?: any
 }
 
+/**@deprecated Please use TrText */
 export const Text = React.memo((props: TextProps) => {
 
 	const {
@@ -101,3 +102,5 @@ export const Text = React.memo((props: TextProps) => {
 
 
 })
+
+export const TrText = Text
