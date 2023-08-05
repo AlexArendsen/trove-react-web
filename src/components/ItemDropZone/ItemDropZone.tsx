@@ -9,30 +9,31 @@ import { Item } from "../../redux/models/Items/Item";
 import './ItemDropZone.css';
 
 interface ItemDropZoneProps {
-	itemId: string | null
+	itemId?: string | null
 	children: any
 	noDrag?: boolean
 	noDrop?: boolean
+	onDrop?: (dropped: Item) => void
 }
 
 export const ItemDropZone = React.memo((props: ItemDropZoneProps) => {
 
 	const dispatch = useDispatch();
-	const { item } = useItem(props.itemId);
+	const { itemId, children, noDrag, noDrop, onDrop } = props
+	const { item } = useItem(itemId);
 
 	const [ , drag ] = useDrag(() => ({ type: DndItemTypes.Item, item: item }))
 	const [ { dangling }, drop ] = useDrop(() => ({
 		accept: DndItemTypes.Item,
 		drop: (dragged: any) => {
-			dispatch(MoveOneItemAction(dragged._id, item?._id || ''))
+			if (onDrop) onDrop(dragged)
+			else if (item?._id) dispatch(MoveOneItemAction(dragged._id, item?._id || ''))
 		},
-		canDrop: (dragging: Item) => dragging._id !== item?._id,
+		canDrop: (dragging: Item) => !item?._id || dragging._id !== item?._id,
 		collect: (monitor) => {
 			return { dangling: monitor.isOver() && monitor.canDrop() }
 		}
 	}))
-
-	if (!item) return props.children;
 
 	const classes = classNames({
 		'drop-zone': true,
@@ -40,9 +41,9 @@ export const ItemDropZone = React.memo((props: ItemDropZoneProps) => {
 	})
 
 	return (
-		<div ref={ props.noDrop ? undefined : drop } className={ classes }>
-			<div ref={ props.noDrag ? undefined : drag }>
-				{ props.children }
+		<div ref={ noDrop ? undefined : drop } className={ classes }>
+			<div ref={ noDrag ? undefined : drag }>
+				{ children }
 			</div>
 		</div>
 	)

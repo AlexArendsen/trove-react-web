@@ -16,7 +16,8 @@ export const PopoverOverlay = React.memo((props: {
             height: '100%',
             background: 'linear-gradient(125deg, rgba(74,50,172,1) 0%, rgba(156,34,158,1) 50%, rgba(0,194,255,1) 100%)',
             backdropFilter: 'blur(10px)',
-            opacity: opacity || 0.2
+            zIndex: 1000,
+            opacity: opacity || 0.3
         }} onClick={ onClick }>
         </div>
     )
