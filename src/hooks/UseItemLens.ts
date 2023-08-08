@@ -6,12 +6,14 @@ import { TaskItemLens } from '../lenses/TaskItemLens'
 import { useItem } from './UseItem'
 import { GridLens } from '../lenses/GridLens'
 import { OrphansLens } from '../lenses/OrphansLens'
+import { DebugItemLens } from '../lenses/DebugItemLens'
 
 const lenses = [
     TaskItemLens,
     PlannerItemLens,
     GridLens,
-    OrphansLens
+    OrphansLens,
+    DebugItemLens
 ]
 const defaultLens = DefaultItemLens
 

@@ -5,7 +5,7 @@ import { ItemLensItemSpec } from "./ItemLens"
 const noop = (props: any) => null
 export const LensedComponent = React.memo((props: {
 	itemId: string,
-	selector: (l: ItemLensItemSpec) => ((props: any) => JSX.Element) | undefined
+	selector: (l: ItemLensItemSpec) => ((props: any) => JSX.Element | null) | undefined
 	props: any
 }) => {
 

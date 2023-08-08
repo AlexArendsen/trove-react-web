@@ -12,7 +12,7 @@ export class ItemQuery {
         const candidates = (!this.match)
             ? GetConfig().Store?.getState().items.topLevel
             : GetConfig().Store?.getState().items.byParent[this.match._id]
-        
+
         this.match = candidates?.find(c => {
             if (typeof name === 'string') return c.title === name
             return name.test(c.title)
@@ -24,6 +24,10 @@ export class ItemQuery {
     getChildren() {
         if (!this.match) return []
         return GetConfig().Store?.getState().items.byParent[this.match?._id] || []
+    }
+
+    static fromTql: (tql: string) => {
+
     }
 
     constructor() {

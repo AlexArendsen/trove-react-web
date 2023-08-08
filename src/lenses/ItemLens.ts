@@ -1,5 +1,7 @@
 import { Item } from "../redux/models/Items/Item"
 
+type El = JSX.Element | null
+
 export interface ItemLens {
 
     Name: string
@@ -23,8 +25,8 @@ export interface ItemLensItemSpec {
 }
 
 export interface ItemLensDisplaySpec {
-    RenderHeader?: (props: { itemId: string, onClick: () => void }) => JSX.Element,
-    RenderEditor?: (props: { itemId: string, onDone: () => void }) => JSX.Element,
-    RenderNewItemInputForm?: (props: { itemId: string }) => JSX.Element,
-    RenderChildList?: (props: { itemId: string, selectedItemId: string }) => JSX.Element,
+    RenderHeader?: (props: { itemId: string, onClick: () => void }) => El,
+    RenderEditor?: (props: { itemId: string, onDone: () => void }) => El,
+    RenderNewItemInputForm?: (props: { itemId: string }) => El,
+    RenderChildList?: (props: { itemId: string, selectedItemId: string }) => El,
 }
