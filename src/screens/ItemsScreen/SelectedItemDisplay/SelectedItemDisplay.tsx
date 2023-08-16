@@ -5,7 +5,7 @@ import { Button } from "../../../components/Button/Button";
 import { Flex } from "../../../components/Flex/Flex";
 import { Markdown } from "../../../components/Markdown/Markdown";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
-import { Text } from "../../../components/Text/Text";
+import { Text, TrText } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
@@ -15,6 +15,10 @@ import { LensedComponent } from "../../../lenses/LensedComponent";
 import { UpdateOneItemAction } from "../../../redux/actions/ItemActions";
 import './SelectedItemDisplay.css';
 import { useLenses } from "../../../hooks/UseItemLens";
+import { ModalPopover } from "../../../components/Popover/ModalPopover";
+import { useItemEditor } from "../../../stores/useItemEditor";
+import { ItemEditorFrame } from "../../../components/ItemEditor/ItemEditorFrame";
+import { Bump } from "../../../components/Bump/Bump";
 
 export const SelectedItemDisplay = React.memo(() => {
 
@@ -24,6 +28,8 @@ export const SelectedItemDisplay = React.memo(() => {
 	const [ editing, setEditing ] = useState(false);
 	const lens = useLenses(item?._id)
 	const narrow = !lens.some(l => l.FullWidthSelected)
+
+	const ed = useItemEditor()
 
 	if (!item) return null;
 
@@ -48,8 +54,8 @@ export const SelectedItemDisplay = React.memo(() => {
 				<Flex column className={ contentClasses }>
 					<div style={{ margin: '0 20px' }}>
 						<LensedComponent itemId={ item?._id }
-							selector={ l => editing ? l.AsSelected?.RenderEditor : l.AsSelected?.RenderHeader }
-							props={{ itemId: item?._id, onDone: () => setEditing(false), onClick: () => setEditing(true) }} />
+							selector={ l => l.AsSelected?.RenderHeader }
+							props={{ itemId: item?._id, onClick: () => ed.open(item?._id) }} />
 						<LensedComponent itemId={ item?._id } selector={ l => l.AsSelected?.RenderNewItemInputForm } props={{ itemId: item?._id }} />
 					</div>
 					<div className={ classNames({
@@ -86,45 +92,27 @@ export const DefaultItemEditor = React.memo((props: SelectedItemEditorProps) => 
 
 export const DefaultItemEditorControls = React.memo((props: { itemId: string, onDone: () => void }) => {
 
-	const dispatch = useDispatch();
-	const { itemId, onDone } = props
-	const { item } = useItem(itemId)
-
-	const [ title, setTitle ] = useState(item?.title);
-	const [ description, setDescription ] = useState(item?.description);
-
-	const canSubmit = !!title;
-
-	const handleSubmit = () => {
-		if (item && title) {
-			dispatch(UpdateOneItemAction({ ...item, title, description }))
-			onDone()
-		}
-	}
-
-	useEffect(() => { setTitle(item?.title); setDescription(item?.description); }, [ item ])
-
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.ctrlKey && e.key === 'Enter') handleSubmit();
-		if (e.key === 'Escape') onDone();
-	}
+	const ed = useItemEditor()
 
 	return (
-		<Flex column style={{ maxWidth: 800 }}>
-			<TextInput value={ title } transparent style={{ fontSize: 36, fontWeight: 700 }} key='title' onKeyDown={ handleKeyDown } onChange={ setTitle } />
-			<TextInput value={ description } transparent multiline key='description' onKeyDown={ handleKeyDown } onChange={ setDescription } 
-				style={{ margin: '10px 0 30px 0', height: 500, padding: 15, background: 'rgba(0,0,0,0.04)', borderRadius: 18, maxWidth: 800 }} />
-			<Flex row>
-				<Button fullWidth variant='submit' disabled={ !canSubmit } onClick={ handleSubmit }>
-					Save Changes
-				</Button>
-				<Button onClick={ onDone } style={{ width: 100, marginLeft: 15 }}>
-					Cancel
-				</Button>
-			</Flex>
-		</Flex>
+		<ItemEditorFrame canSave={ !!ed.item?.title } onDone={ props.onDone }>
+			<>
+				<TrText small faded>Description</TrText>
+				<Bump h={ 5 } />
+				<TextInput
+					value={ ed.item?.description }
+					multiline
+					key='description'
+					onKeyDown={ ed.handleKeyDown }
+					onChange={ v => ed.updateItem({ description: v }) } 
+					style={{ height: 500, padding: 15, borderRadius: 18, maxWidth: 800, fontWeight: 'normal' }}
+					/>
+			</>
+		</ItemEditorFrame>
 	)
+
 })
+
 
 export const DefaultItemEditorDisplay = React.memo((props: { itemId: string, onClick: () => void }) => {
 

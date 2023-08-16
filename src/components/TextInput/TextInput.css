@@ -1,12 +1,11 @@
 .text-input {
 
 	font-family: unset;
-	background-color: #eaeaea;
-	background-color: #eaeaea;
+	background-color: rgba(0,0,0,0.04);
 	box-sizing: border-box;
 	font-size: 15px;
 	font-weight: 700;
-	border-radius: 12px;
+	border-radius: 30px;
 	width: 100%;
 	border: 0;
 
@@ -22,6 +21,11 @@
 	background-color: transparent;
 	font-weight: unset;
 	padding: 0;
+}
+
+.text-input:focus-visible {
+	outline-width: 1px;
+	outline-color: rgb(156, 34, 158);
 }
 
 .text-input-transparent:focus-visible {

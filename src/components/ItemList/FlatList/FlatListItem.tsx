@@ -14,6 +14,7 @@ import { ProgressBar } from "../../ProgressBar/ProgressBar";
 import { Text } from "../../Text/Text";
 import { TimeDisplay } from "../../TimeDisplay/TimeDisplay";
 import './FlatListItem.css';
+import { useItemEditor } from "../../../stores/useItemEditor";
 
 interface FlatListItemProps {
 	itemId: string
@@ -24,24 +25,16 @@ interface FlatListItemProps {
 
 export const FlatListItem = React.memo((props: FlatListItemProps) => {
 
+	//const ed = useItemEditor()
 	const dispatch = useDispatch();
 	const { item, children } = useItem(props.itemId)
 	const checked = useMemo(() => item?.checked, [ item ])
 
-	// TODO -- Use some kind of global relay to figure out if you're the one single context menu'd item
 	const handleRightClick = (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
-		setRightClicked(!rightClicked);
+		if (!!item) useItemEditor.getState().open(item._id)
 	}
-
-	const handleDelete = (e: React.MouseEvent) => {
-		e.preventDefault();
-		e.stopPropagation();
-		if (item) dispatch(DeleteOneItemAction(item._id))
-	}
-
-	const [ rightClicked, setRightClicked ] = useState(false);
 
 	const pct = useMemo(() => {
 		if (!item?.descendants) return NaN;
@@ -57,7 +50,6 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 					'flat-list-item': true,
 					'flat-list-item-checked': checked,
 					'flat-list-item-selected': props.selected,
-					'flat-list-item-right-clicked': rightClicked,
 				})} onClick={ props.onClick } onContextMenu={ handleRightClick }>
 
 				<Flex row align='center'>
@@ -70,7 +62,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 						<Text medium bold className='flat-list-item-title'>{ item?.title }</Text>
 					</Flex>
 
-					{ (isNaN(pct) || rightClicked) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
+					{ isNaN(pct) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
 						<ProgressBar floating item={ item } />
 						{
 							((props.figures || 'visible') === 'visible') ? (<Flex row>
@@ -88,9 +80,6 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 					) : null }
 
 					{/* TODO -- Image */}
-
-					{ rightClicked ? <Button onClick={ handleDelete } style={{ background: '#C32986', color: 'white', marginLeft: 10 }}>Delete</Button> : null }
-
 
 				</Flex>
 

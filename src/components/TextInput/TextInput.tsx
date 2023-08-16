@@ -14,15 +14,18 @@ interface TextInputProps {
 	darker?: boolean
 	onChange?: (value: string) => void
 	onEnter?: (value: string) => void
+	onBlur?: (value: string) => void
 	onKeyDown?: (event: InputEvent) => void
 	clearOnEnter?: boolean
 	style?: React.CSSProperties
 	multiline?: boolean
+	rows?: number
 	secret?: boolean
 }
 
 export const TextInput = React.memo((props: TextInputProps) => {
 
+	const { onBlur, onChange, onKeyDown, onEnter, clearOnEnter, large, small, darker, transparent, multiline, secret, style, rows } = props;
 	const [ value, setValue ] = useState('')
 
 	useEffect(() => {
@@ -31,33 +34,35 @@ export const TextInput = React.memo((props: TextInputProps) => {
 
 	const handleChange = useCallback((e: ChangeEvent) => {
 		setValue(e.target.value)
-		if (props.onChange) props.onChange(e.target.value)
+		if (onChange) onChange(e.target.value)
 	}, [ setValue ])
 
+	const handleBlur = useCallback(() => { onBlur?.(value) }, [ value ])
+
 	const handleKeyDown: FormEventHandler = useCallback((e: InputEvent) => {
-		if (props.onKeyDown) props.onKeyDown(e)
+		if (onKeyDown) onKeyDown(e)
 		if (e.key === 'Enter') {
-			if (props.onEnter) props.onEnter(value);
-			if (props.clearOnEnter) setValue('');
+			if (onEnter) onEnter(value);
+			if (clearOnEnter) setValue('');
 		}
-	}, [ props.onEnter, value ])
+	}, [ onEnter, value ])
 
 	const classString = useMemo(() => classNames({
 		'text-input': true,
-		'text-input-large': props.large,
-		'text-input-small': props.small,
-		'text-input-normal': !props.small && !props.large && !props.transparent,
-		'text-input-darker': props.darker,
-		'text-input-transparent': props.transparent,
-	}), [ props.large, props.small, props.darker ])
+		'text-input-large': large,
+		'text-input-small': small,
+		'text-input-normal': !small && !large && !transparent,
+		'text-input-darker': darker,
+		'text-input-transparent': transparent,
+	}), [ large, small, darker ])
 
-	if (props.multiline) return (
-		<textarea rows={ 10 } value={ value } onChange={ handleChange } onKeyDown={ handleKeyDown } className={ classString } style={ props.style }>
+	if (multiline) return (
+		<textarea rows={ rows || 10 } value={ value } onBlur={ handleBlur } onChange={ handleChange } onKeyDown={ handleKeyDown } className={ classString } style={ style }>
 		</textarea>
 	)
 
 	return (
-		<input type={ props.secret ? 'password' : 'type' } style={ props.style } className={ classString } onChange={ handleChange } value={ value } onKeyDown={ handleKeyDown } />
+		<input type={ secret ? 'password' : 'type' } style={ style } className={ classString } onChange={ handleChange } value={ value } onKeyDown={ handleKeyDown } />
 	)
 
 })

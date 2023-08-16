@@ -9,6 +9,7 @@ import { Flex } from "../../Flex/Flex"
 import { Text } from "../../Text/Text"
 import { TimeDisplay } from "../../TimeDisplay/TimeDisplay"
 import './GalleryListItem.css'
+import { useItemEditor } from "../../../stores/useItemEditor"
 
 interface GalleryListItemProps {
 	itemId: string,
@@ -21,8 +22,14 @@ export const GalleryListItem = React.memo((props: GalleryListItemProps) => {
 	const { item } = useItem(props.itemId);
 	const parent = useStore(s => item?.parent_id ? s.items.byId[item?.parent_id] : null)
 
+	const handleRightClick = (e: React.MouseEvent) => {
+		e.stopPropagation()
+		e.preventDefault()
+		useItemEditor.getState().open(props.itemId)
+	}
+
 	return (
-		<Flex column onClick={ props.onClick } className={classNames({
+		<Flex column onClick={ props.onClick } onContextMenu={ handleRightClick } className={classNames({
 			'gallery-list-item': true,
 			'gallery-list-item-checked': item?.checked
 		})}>
