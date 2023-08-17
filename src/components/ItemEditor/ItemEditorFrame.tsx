@@ -35,7 +35,7 @@ export const ItemEditorFrame = React.memo((props: {
 	}
 
 	return (
-		<Flex column style={{ maxWidth: 800, paddingBottom: 20, flex: 1 }}>
+		<Flex column style={{ maxWidth: 800, paddingBottom: isMobile ? 0 : 20, flex: 1 }}>
 			<TrText small faded>Title</TrText>
 			<Bump h={ 5 } />
 			<TextInput

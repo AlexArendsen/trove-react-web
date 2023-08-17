@@ -25,7 +25,7 @@
 
 .text-input:focus-visible {
 	outline-width: 1px;
-	outline-color: rgb(156, 34, 158);
+	outline-color: rgb(74, 50, 172);
 }
 
 .text-input-transparent:focus-visible {

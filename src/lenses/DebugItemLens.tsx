@@ -21,6 +21,7 @@ import { UpdateOneItemAction } from "../redux/actions/ItemActions";
 import { ItemData } from "../utils/ItemData";
 import { useItemEditor } from "../stores/useItemEditor";
 import { ItemEditorFrame } from "../components/ItemEditor/ItemEditorFrame";
+import { useWindowSize } from "../hooks/UseWindowSize";
 
 export const DebugItemLens: ItemLens = {
 
@@ -76,7 +77,7 @@ const DebugChildList = React.memo((props: {
         } catch (e) {
             return { layout: null, error: (e as Error).message }
         }
-    }, txml)
+    }, [ txml ])
 
 
     return (
@@ -96,30 +97,55 @@ const LayoutItemEditor = React.memo((props: {
 }) => {
 
     const ed = useItemEditor()
-    const { itemId, onDone } = props
+    const src = ItemData.get(ed.item, '_layout', '')
 
-    const [ src, setSrc ] = useState<string>()
-    useEffect(() => {
-        setSrc(ed.item?.data?.['_layout'])
-    }, [ ed.item ])
+    console.log({ src, item: ed.item })
 
-    const handleBlur = () => {
+    const handleBlur = (value: string) => {
         if (!ed.item) return;
-        ItemData.set(ed.item, '_layout', src)
+        ItemData.set(ed.item, '_layout', value)
         ed.updateItem(ed.item)
     }
 
     const { spec, error } = useMemo(() => {
-        try { return { spec: Layout.Parse(ItemData.get(ed.item, '_layout', '')), error: null } }
+        try { return { spec: Layout.Parse(src), error: null } }
         catch (e) { return { spec: null, error: (e as Error).message } }
     }, [ src ])
 
     return (
         <ItemEditorFrame>
-            <TextInput multiline rows={ 30 }
-                value={ src } onChange={ setSrc }
-                onBlur={ handleBlur }
-                style={{ fontFamily: 'monospace' }} />
+            <>
+                <Flex column style={{ flex: 1, overflow: 'scroll' }}>
+                    <TrText small faded>Preview</TrText>
+                    <Bump h={ 5 } />
+                    <LayoutView preview layout={ spec || undefined } />
+                </Flex>
+
+                <Bump h={ 10 } />
+
+                <Flex column style={{ flex: 1 }}>
+                    <TrText small faded>Layout Spec</TrText>
+                    <Bump h={ 5 } />
+                    <TextInput
+                        multiline
+                        value={ src }
+                        onBlur={ handleBlur }
+                        onKeyDown={ ed.handleKeyDown }
+                        style={{ fontFamily: 'monospace', minHeight: 300 }} />
+                </Flex>
+
+                <Bump h={ 10 } />
+
+                <Flex column style={{ flex: 1 }}>
+                    <TrText small faded>Description</TrText>
+                    <Bump h={ 5 } />
+                    <TextInput
+                        multiline
+                        value={ ed.item?.description }
+                        onKeyDown={ ed.handleKeyDown }
+                        onBlur={ v => ed.updateItem({ description: v }) } />
+                </Flex>
+            </>
         </ItemEditorFrame>
     )
 
@@ -130,12 +156,14 @@ const LayoutItemEditor = React.memo((props: {
 
 type VariableLookup = { [name: string]: Item | Item[] | number }
 const CELL_UNIT_SIZE = 100
+const PREVIEW_CELL_UNIT_SIZE = 20
 
 const LayoutView = React.memo((props: {
-    layout?: LayoutSpec
+    layout?: LayoutSpec,
+    preview?: boolean
 }) => {
 
-    const { layout } = props
+    const { layout, preview } = props
 
     const vars: VariableLookup = useMemo(() => {
         const v = layout?.variables.reduce((lookup, v) => ({ ...lookup, [v.name]: QueryItems(v.path) }), {}) || {}
@@ -145,7 +173,7 @@ const LayoutView = React.memo((props: {
 
     if (!layout) return null
 
-    return <LayoutNodeInterpreter node={ layout.layout } context={ vars } />
+    return <LayoutNodeInterpreter node={ layout.layout } context={ vars } preview={ preview } />
 
 })
 
@@ -153,30 +181,57 @@ const LayoutNodeInterpreter = React.memo((props: {
     node: TxmlAstNode
     parent?: TxmlAstNode
     context: VariableLookup
+    preview?: boolean
 }) => {
 
-    const { node, context, parent } = props
+    const { node, context, parent, preview } = props
 
     if (node.name === 'Row') return (
         <Flex row>
-            { node.children?.map(c => <LayoutNodeInterpreter node={ c } parent={ node } context={ context } />) }
+            { node.children?.map(c => <LayoutNodeInterpreter node={ c } parent={ node } context={ context } preview={ preview } />) }
         </Flex>
     )
     else if (node.name === 'Col') return (
         <Flex column>
-            { node.children?.map(c => <LayoutNodeInterpreter node={ c } parent={ node } context={ context } />) }
+            { node.children?.map(c => <LayoutNodeInterpreter node={ c } parent={ node } context={ context } preview={ preview } />) }
         </Flex>
     )
-    else if (node.name === 'Box') return (
-        <Box { ...node.attributes } context={ context } />
-    )
-    else if (node.name === 'Boxes') return (
-        <Boxes { ...node.attributes } orientation={ parent?.name === 'Row' ? 'row' : 'col' } context={ context } />
-    )
+    else if (node.name === 'Box') return preview
+        ? (<PreviewBox { ...node.attributes } context={ context } />)
+        : (<Box { ...node.attributes } context={ context } />)
+    else if (node.name === 'Boxes') return preview
+        ? (<PreviewBoxes { ...node.attributes } orientation={ parent?.name === 'Row' ? 'row' : 'col' } context={ context } />)
+        : (<Boxes { ...node.attributes } orientation={ parent?.name === 'Row' ? 'row' : 'col' } context={ context } />)
     else return (
         <div><TrText bold style={{ color: 'red' }}>Unrecognized node { node.name }</TrText></div>
     )
 
+
+})
+
+const PreviewBox = React.memo((props: any) => {
+
+    const { single, items, width, height } = useBoxProps(props)
+
+    const label = single ? items[0]?.title : (props.item || props.items)
+
+    return (
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: width * PREVIEW_CELL_UNIT_SIZE,
+            height: height * PREVIEW_CELL_UNIT_SIZE,
+            border: 'solid 1px #eee',
+            margin: 2,
+            boxSizing: 'border-box',
+            borderRadius: 10,
+            boxShadow: '0 0 6 rgba(0,0,0,0.1)',
+            overflow: 'hidden'
+        }}>
+            <TrText small faded style={{ textAlign: 'center' }}>{ label }</TrText>
+        </div>
+    )
 
 })
 
@@ -211,13 +266,25 @@ const Box = React.memo((props: any) => {
 
 })
 
+const PreviewBoxes = React.memo((props: any) => {
+
+    const { items, orientation, context } = useBoxProps(props)
+
+    return (
+        <Flex column={ orientation === 'col' } row={ orientation === 'row' } >
+            { items.map(i => <PreviewBox { ...props } _item={i} context={ context } />) }
+        </Flex>
+    )
+
+})
+
 const Boxes = React.memo((props: any) => {
 
     const { items, orientation, context } = useBoxProps(props)
 
     return (
         <Flex column={ orientation === 'col' } row={ orientation === 'row' } >
-            { items.map(i => <Box { ...props } items={[i]} context={ context } />) }
+            { items.map(i => <Box { ...props } _item={i} context={ context } />) }
         </Flex>
     )
 
@@ -233,14 +300,15 @@ const useBoxProps = (props: any): {
 } => {
 
     const { item, items, width, height, orientation } = props as Record<string, string>
+    const realItem = props._item as Item
     const context = props.context as VariableLookup
     const i = castItemList(context[item || items])
     const w = parseInt(width)
     const h = parseInt(height)
 
     return {
-        single: i.length === 1,
-        items: i,
+        single: !!realItem || i.length === 1,
+        items: realItem ? [realItem] : i,
         orientation: orientation === 'row' ? 'row' : 'col',
         width: w,
         height: h,

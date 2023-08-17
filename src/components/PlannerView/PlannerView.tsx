@@ -12,6 +12,7 @@ import { ItemList } from "../ItemList/ItemList";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 import { Text } from "../Text/Text";
 import './PlannerView.css';
+import { useItemEditor } from "../../stores/useItemEditor";
 
 interface PlannerViewProps {
 	itemId: string
@@ -105,11 +106,22 @@ const SimpleItem = React.memo((props: { itemId: string, small?: boolean, showPro
 		'planner-card-item': true
 	})
 
+	const handleRightClick = (e: React.MouseEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+		if (item) useItemEditor.getState().open(item?._id) 
+	}
+
 	if (!item) return null;
 
 	return (
 		<ItemDropZone itemId={ item._id }>
-			<Flex row className={ classes } align='flex-start' onClick={ () => history.push(Routes.item(item._id)) }>
+			<Flex row
+				className={ classes }
+				align='flex-start'
+				onClick={ () => history.push(Routes.item(item._id)) }
+				onContextMenu={ handleRightClick }
+				>
 				<Checkbox showProgress={ props.showProgressInCheckbox } small={ props.small } itemId={ item._id } />
 				<Text small={ props.small } medium={ !props.small } bold={ !props.small } style={{ marginLeft: 10 }}>{ item.title }</Text>
 			</Flex>

@@ -93,6 +93,7 @@ export const DefaultItemEditor = React.memo((props: SelectedItemEditorProps) => 
 export const DefaultItemEditorControls = React.memo((props: { itemId: string, onDone: () => void }) => {
 
 	const ed = useItemEditor()
+	const { isMobile } = useWindowSize()
 
 	return (
 		<ItemEditorFrame canSave={ !!ed.item?.title } onDone={ props.onDone }>
@@ -105,7 +106,7 @@ export const DefaultItemEditorControls = React.memo((props: { itemId: string, on
 					key='description'
 					onKeyDown={ ed.handleKeyDown }
 					onChange={ v => ed.updateItem({ description: v }) } 
-					style={{ height: 500, padding: 15, borderRadius: 18, maxWidth: 800, fontWeight: 'normal' }}
+					style={{ height: isMobile ? '50%' : 500, maxHeight: '50vh', padding: 15, borderRadius: 18, maxWidth: 800, fontWeight: 'normal' }}
 					/>
 			</>
 		</ItemEditorFrame>
