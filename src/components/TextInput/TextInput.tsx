@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { FormEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import React, { FormEventHandler, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import './TextInput.css';
 
 type InputEvent = React.KeyboardEvent<HTMLInputElement> & React.KeyboardEvent<HTMLTextAreaElement>;
@@ -28,6 +28,8 @@ export const TextInput = React.memo((props: TextInputProps) => {
 	const { onBlur, onChange, onKeyDown, onEnter, clearOnEnter, large, small, darker, transparent, multiline, secret, style, rows } = props;
 	const [ value, setValue ] = useState('')
 
+	const elRef = useRef<HTMLTextAreaElement | HTMLInputElement>()
+
 	useEffect(() => {
 		if (props.value !== undefined) setValue(props.value)
 	}, [ props.value ])
@@ -44,6 +46,8 @@ export const TextInput = React.memo((props: TextInputProps) => {
 		if (e.key === 'Enter') {
 			if (onEnter) onEnter(value);
 			if (clearOnEnter) setValue('');
+		} else if (e.key === 'Escape') {
+			elRef.current?.blur()
 		}
 	}, [ onEnter, value ])
 
@@ -57,12 +61,12 @@ export const TextInput = React.memo((props: TextInputProps) => {
 	}), [ large, small, darker ])
 
 	if (multiline) return (
-		<textarea rows={ rows || 10 } value={ value } onBlur={ handleBlur } onChange={ handleChange } onKeyDown={ handleKeyDown } className={ classString } style={ style }>
+		<textarea ref={ elRef as any } rows={ rows || 10 } value={ value } onBlur={ handleBlur } onChange={ handleChange } onKeyDown={ handleKeyDown } className={ classString } style={ style }>
 		</textarea>
 	)
 
 	return (
-		<input type={ secret ? 'password' : 'type' } style={ style } className={ classString } onChange={ handleChange } value={ value } onKeyDown={ handleKeyDown } />
+		<input ref={ elRef as any } type={ secret ? 'password' : 'type' } style={ style } className={ classString } onChange={ handleChange } value={ value } onKeyDown={ handleKeyDown } />
 	)
 
 })

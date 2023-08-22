@@ -6,6 +6,7 @@ import { Button } from "../Button/Button";
 import { Flex } from "../Flex/Flex";
 import { TextInput } from "../TextInput/TextInput";
 import { History as DomHistory } from 'history';
+import { NewItem } from "../../utils/Parsing/NewItem";
 
 interface ItemInputFormProps {
 	itemId?: string,
@@ -25,7 +26,8 @@ export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
 	const handleSubmit = useCallback((e: React.FormEvent) => {
 		e.preventDefault();
 		if (onSubmitOverride) onSubmitOverride(dispatch, history, title)
-		if (itemId) dispatch(AddItemAction(title, itemId))
+		const parsed = NewItem.Parse(title)
+		if (itemId) dispatch(AddItemAction(title, itemId, parsed))
 		setTitle('')
 	}, [ title, history, dispatch, onSubmitOverride ])
 

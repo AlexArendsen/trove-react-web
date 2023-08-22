@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useItemEditor } from "../../stores/useItemEditor"
 import { Button } from "../Button/Button"
 import { Flex } from "../Flex/Flex"
@@ -18,6 +18,25 @@ export const ItemEditorFrame = React.memo((props: {
 	const { isMobile } = useWindowSize()
 
 	const { onDone, canSave, children } = props
+
+	const handle = (e: KeyboardEvent) => {
+		if (e.target !== document.body) return; // These shortcuts only apply if you aren't typing somewhere
+
+		if(e.key === 'Delete') {
+			// TODO -- require second press to confirm
+			ed.delete()
+			handleDone()
+		} else if (e.key === 'Escape')  {
+			// TODO -- check if you haven't changed anything, will need to take lenses into account
+			ed.close()
+		}
+	}
+
+	useEffect(() => {
+		const h = (e: KeyboardEvent) => handle(e)
+		document.addEventListener('keydown', h)
+		return () => document.removeEventListener('keydown', h)
+	}, [])
 
     const handleDone = () => {
         onDone?.()

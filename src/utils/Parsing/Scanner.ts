@@ -2,12 +2,14 @@ export type Scanner = {
     throwParseError: (message?: string) => void
     isPastEnd: () => boolean
     scanTo: (stop: string | Set<string>, includeMatch?: boolean) => string
+    scanToEnd: () => string
     isOnChar: (expect: string | Set<string>) => boolean
     currentChar: () => string
     scanChar: (expected?: string | Set<string>) => string
     debugCurrent: (debugMessage?: string) => void
     skipWhitespace: () => void
     currentIdx: () => number
+    isAtString: (subtring: string) => boolean
     resetIdx: (idx: number) => void
 }
 
@@ -44,6 +46,12 @@ export const MakeScanner = (
         return token
     }
 
+    const scanToEnd = () => {
+        const out = src.substring(idx)
+        idx = src.length
+        return out
+    }
+
     const isOnChar = (expect: string | Set<string>) => {
         if (typeof expect === 'string') return src[idx] === expect
         else return expect.has(src[idx])
@@ -71,11 +79,16 @@ export const MakeScanner = (
     const wsChars = new Set([' ', '\n', '\t', '\r'])
     const skipWhitespace = () => { while (isOnChar(wsChars)) scanChar(); }
 
+    const isAtString = (substring: string) => {
+        for(let i = 0; i < substring.length; ++i)
+            if (src[idx + i] !== substring[i]) return false
+        return true
+    }
 
     return {
-        throwParseError, isPastEnd, scanTo, isOnChar,
+        throwParseError, isPastEnd, scanTo, scanToEnd, isOnChar,
         currentChar, scanChar, resetIdx, debugCurrent, skipWhitespace,
-        currentIdx
+        currentIdx, isAtString
     }
 
 }

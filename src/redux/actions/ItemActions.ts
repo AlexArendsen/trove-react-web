@@ -48,8 +48,8 @@ export const UpdateOneItemAction = (item: Item) => new DataPlan('items:update-on
     .withSubject({ new: item, old: GetConfig().Store?.getState().items.byId[item._id] })
     .withReduxActions(Actions.Items.UpdateOne).do(() => Api.put('/item', item)).run()
 
-export const AddItemAction = (title: string, parent_id: string | null) => new DataPlan('items:add-one')
+export const AddItemAction = (title: string, parent_id: string | null, extras?: Partial<Item>) => new DataPlan('items:add-one')
     .withSubject({ title, parent_id, _id: uuid() })
-    .withReduxActions(Actions.Items.Add).do(() => Api.post('/item', { title, parent_id })).run()
+    .withReduxActions(Actions.Items.Add).do(() => Api.post('/item', { title, parent_id, ...extras })).run()
 
 export const SearchItemsAction = (query: string) => ({ type: Actions.Items.Search, data: query })
