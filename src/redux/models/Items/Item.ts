@@ -10,5 +10,6 @@ export interface Item {
 	created_at?: string
 	completed_at?: string
 	descendants?: number
+	rank?: number
 	completed?: number
 }
