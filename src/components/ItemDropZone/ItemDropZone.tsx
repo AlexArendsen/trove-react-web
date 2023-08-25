@@ -143,9 +143,11 @@ export const ItemSortingDropZone = React.memo((props: { dropIdx: number }) => {
 		'sort-zone-dangle': dangling
 	})
 
-	return (
-		<div ref={ drop } className={ classes }>
-		</div>
-	)
+	return null // For now
+
+	// return (
+	// 	<div ref={ drop } className={ classes }>
+	// 	</div>
+	// )
 
 })
