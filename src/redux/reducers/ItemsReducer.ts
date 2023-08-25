@@ -1,4 +1,4 @@
-import { GroupByFirst } from "../../utils/Arrays";
+import { GroupByFirst, Unique } from "../../utils/Arrays";
 import { Actions } from "../actions/Actions";
 import { Item } from "../models/Items/Item";
 import { ItemSort } from "../models/Items/ItemSort";
@@ -77,15 +77,32 @@ const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) =
 	console.log('Applying updates:', sortingUpdates)
 
 	if (!sortingUpdates.length) return state;
-	const parent = state.byId[sortingUpdates[0].itemId].parent_id
+	const representativeParent = state.byId[sortingUpdates[0].itemId].parent_id;
 
-	// Update byId substate
-	for(const u of sortingUpdates) 
-		if (state.byId[u.itemId]) {
-			console.log(`[.byId] Updating rank of ${ state.byId[u.itemId].title } to ${ u.newRank }`)
-			state.byId[u.itemId].rank = u.newRank
+	// Update byId, byParent substates
+	for(const u of sortingUpdates)  {
+
+		const preUpdateItem = state.byId[u.itemId]
+		if (!preUpdateItem) continue;
+
+		console.log(`[.byId] Updating rank of ${ state.byId[u.itemId].title } to ${ u.newRank }`)
+		state.byId[u.itemId].rank = u.newRank
+		if (u.newParent) { // Handle re-parent
+			const oldParent = state.byId[u.itemId].parent_id
+			const newParent = u.newParent
+			console.log(`Transferring item ${ u.itemId } from ${ oldParent } to ${ newParent }`)
+			state.byId[u.itemId].parent_id = u.newParent
+			if (oldParent) state.byParent[oldParent] = state.byParent[oldParent].filter(c => c._id !== u.itemId)
+			if (state.byParent[newParent]) {
+				console.log('PRE: New parent children', state.byParent[newParent])
+				state.byParent[newParent] = [ ...state.byParent[newParent].filter(c => c._id !== u.itemId), state.byId[u.itemId] ]
+				console.log('POST: New parent children', state.byParent[newParent])
+			}
 		}
+	}
+
 	state.byId = { ...state.byId } // For referential update
+	if (representativeParent) state.byParent[representativeParent] = [ ...state.byParent[representativeParent] ] // In case there was no re-parenting
 
 	// Update all substate
 	const lookup = GroupByFirst(sortingUpdates, l => l.itemId)
@@ -94,13 +111,10 @@ const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) =
 			const update = lookup[i._id]
 			console.log(`[.all] Updating rank of ${ i.title } to ${ update.newRank }`)
 			const updated = { ...i, rank: update.newRank }
+			if (update.newParent) updated.parent_id = update.newParent
 			return updated
 		} else return i
 	}) || [])
-
-	// Touch byParent substate
-	console.log(`Updating byParent[${ parent }]`)
-	if (!!parent) state.byParent[parent] = [ ...state.byParent[parent] ]
 
 	return state
 

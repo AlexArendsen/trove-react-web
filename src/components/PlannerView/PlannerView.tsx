@@ -34,7 +34,7 @@ export const PlannerView = React.memo((props: PlannerViewProps) => {
 				<Flex column align='center' className='planner-view-sidebar'>
 					<ItemInputForm smaller itemId={ item._id } />
 					<div style={{ maxWidth: '100%', width: '100%' }}>
-						<ItemList items={ flatChildren } navOnClick display='list' />
+						<ItemList items={ flatChildren } parentId={ props.itemId } navOnClick display='list' />
 					</div>
 				</Flex>
 			</div>
@@ -75,11 +75,11 @@ const PlannerCard = React.memo((props: { itemId: string }) => {
 			<Flex column className='planner-view-card-sublist'>
 			{ sortedChildren.map((c, idx) => (
 				<>
-					<ItemSortingDropZone dropIdx={ idx } />
+					<ItemSortingDropZone dropIdx={ idx } parentId={ item._id } short />
 					<PlannerCardSubItem key={ c._id } itemId={ c._id } />
 				</>
 			)) }
-			<ItemSortingDropZone dropIdx={ children.length } />
+			<ItemSortingDropZone dropIdx={ children.length } parentId={ item._id } short />
 			</Flex>
 
 		</Flex>

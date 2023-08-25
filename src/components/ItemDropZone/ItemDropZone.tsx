@@ -9,6 +9,7 @@ import { Item } from "../../redux/models/Items/Item";
 import './ItemDropZone.css';
 import { GetFromStore } from "../../utils/GetFromStore";
 import { ItemSort } from "../../redux/models/Items/ItemSort";
+import { TrText } from "../Text/Text";
 
 interface ItemDropZoneProps {
 	itemId?: string | null
@@ -35,7 +36,7 @@ export const ItemDropZone = React.memo((props: ItemDropZoneProps) => {
 		collect: (monitor) => {
 			return { dangling: monitor.isOver() && monitor.canDrop() }
 		}
-	}))
+	}), [ itemId, item ])
 
 	const classes = classNames({
 		'drop-zone': true,
@@ -53,20 +54,28 @@ export const ItemDropZone = React.memo((props: ItemDropZoneProps) => {
 })
 
 const SORT_SPREAD = 50; // Amount of space we put between items by default
-const sort = (itemId: string, to: number): ItemSort[] => {
+const createSortingActions = (itemId: string, to: number, newParent?: string): ItemSort[] => {
 
 
 	const item = GetFromStore(s => s.items.byId[itemId])
+	const parentId = newParent || item?.parent_id
 	if (!item) return [];
-	let siblings = (GetFromStore(s => item.parent_id
-		? s.items.byParent[item.parent_id]
+	let siblings = (GetFromStore(s => parentId
+		? s.items.byParent[parentId]
 		: s.items.topLevel) || []).sort((a, b) => (a.rank || 0) || (b.rank || 0))
 	if (!siblings?.length) return [];
+	console.log({ itemId, to, newParent })
 	console.log('Sibling order', siblings.map(s => `${s.title}/${s._id}, rank = ${s.rank}`))
-	const from = siblings.findIndex(s => s._id === itemId)
 
+	// We're also moving this item to a new parent; quick slap it on the end of the siblings list
+	if (item.parent_id != parentId) {
+		siblings.push(item)
+	}
+
+	const from = siblings.findIndex(s => s._id === itemId)
 	console.log(`Moving ${item.title} from its home at ${from} to position ${to}`)
 	if (to === from || (to === from + 1)) return []
+
 
 	const actions: ItemSort[] = []
 
@@ -82,12 +91,12 @@ const sort = (itemId: string, to: number): ItemSort[] => {
 		for(let i = 0; i < siblings.length; ++i) {
 			const loopItem = siblings[i]
 			if (i === 0) {
-				actions.push({ itemId: loopItem._id, newRank: SORT_SPREAD * 20 });
+				actions.push({ itemId: loopItem._id, newRank: SORT_SPREAD * 20, newParent });
 				last = SORT_SPREAD * 20;
 			} else if ((siblings[i].rank || -1) - last > SORT_SPREAD) {
 				last = siblings[i].rank || -1
 			} else {
-				actions.push({ itemId: loopItem._id, newRank: last + SORT_SPREAD });
+				actions.push({ itemId: loopItem._id, newRank: last + SORT_SPREAD, newParent });
 				last = last + SORT_SPREAD
 			}
 		}
@@ -99,12 +108,12 @@ const sort = (itemId: string, to: number): ItemSort[] => {
 
 	// Case 2: Adding to beginning of list
 	} else if (to <= 0) {
-		if (siblings[0].rank! > SORT_SPREAD) actions.push({ itemId, newRank: siblings[0].rank! - SORT_SPREAD })
+		if (siblings[0].rank! > SORT_SPREAD) actions.push({ itemId, newRank: siblings[0].rank! - SORT_SPREAD, newParent })
 		else swapAndRerank()
 		
 	// Case 3: Adding to end of list
 	} else if (to >= siblings.length) {
-		actions.push({ itemId, newRank: siblings[siblings.length - 1].rank! + SORT_SPREAD })
+		actions.push({ itemId, newRank: siblings[siblings.length - 1].rank! + SORT_SPREAD, newParent })
 
 	// Case 4: Putting somewhere in the middle of the list
 	} else {
@@ -113,41 +122,49 @@ const sort = (itemId: string, to: number): ItemSort[] => {
 		console.log(`Moving item ${ item.title } between ${ left.title } and ${ right.title }`)
 		const space = right.rank! - left.rank!
 		if (space <= 1) swapAndRerank()
-		else actions.push({ itemId, newRank: Math.round(left.rank! + (space / 2)) })
+		else actions.push({ itemId, newRank: Math.round(left.rank! + (space / 2)), newParent })
 	}
 
-	for(const a of actions) console.log(`> Change item ${ a.itemId } rank to ${ a.newRank }`)
+	console.log({ actions })
 
 	return actions
 
 }
 
-export const ItemSortingDropZone = React.memo((props: { dropIdx: number }) => {
+export const ItemSortingDropZone = React.memo((props: {
+	dropIdx: number,
+	parentId?: string,
+	short?: boolean
+}) => {
 
 	const dispatch = useDispatch()
-	const { dropIdx } = props
-	const [ { dangling }, drop ] = useDrop(() => ({
+	const { dropIdx, parentId, short } = props
+	const [ { dangling, dragging }, drop ] = useDrop(() => ({
 		accept: DndItemTypes.Item,
 		drop: (dragged: any) => {
-			const updates = sort(dragged._id, dropIdx)
+			const updates = createSortingActions(dragged._id, dropIdx, parentId)
 			dispatch(SortItemsAction(updates))
 		},
 		//canDrop: (dragging: Item) => !item?._id || dragging._id !== item?._id,
 		collect: (monitor) => {
-			return { dangling: monitor.isOver() && monitor.canDrop() }
+			return {
+				dragging: !!monitor.getItem(),
+				dangling: monitor.isOver() && monitor.canDrop()
+			}
 		}
-	}))
+	}), [ parentId, dropIdx ])
 
 	const classes = classNames({
 		'sort-zone': true,
+		'sort-zone-short': short,
+		'sort-zone-tall': !short,
+		'sort-zone-dragging': dragging,
 		'sort-zone-dangle': dangling
 	})
 
-	return null // For now
-
-	// return (
-	// 	<div ref={ drop } className={ classes }>
-	// 	</div>
-	// )
+	return (
+		<div ref={ drop } className={ classes }>
+		</div>
+	)
 
 })

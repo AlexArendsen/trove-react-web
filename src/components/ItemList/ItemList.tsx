@@ -6,10 +6,12 @@ import { Flex } from "../Flex/Flex";
 import { FlatListItem } from "./FlatList/FlatListItem";
 import { GalleryListItem } from "./GalleryList/GalleryListItem";
 import { ItemSortingDropZone } from "../ItemDropZone/ItemDropZone";
+import { TrText } from "../Text/Text";
 
 interface ItemListProps {
 	display?: 'list' | 'grouped-list' | 'gallery' | 'planner' | 'compact-list'
 	items?: Item[],
+	parentId?: string,
 	selected?: string,
 	onClick?: (item: Item) => void
 	navOnClick?: boolean
@@ -19,21 +21,23 @@ export const ItemList = React.memo((props: ItemListProps) => {
 
 	const history = useHistory();
 
+	const { display, parentId, selected, onClick, navOnClick } = props
+
 	const handleClick = useCallback((item: Item) => {
-		if (props.onClick) props.onClick(item)
-		else if (props.navOnClick) history.push(Routes.item(item._id))
-	}, [ props.onClick ])
+		if (onClick) onClick(item)
+		else if (navOnClick) history.push(Routes.item(item._id))
+	}, [ onClick ])
 
 	const items = useMemo(() => {
 		const l = props.items || []
 		return l.sort((a, b) => (a.rank || 0) - (b.rank || 0))
 	}, [ props.items ])
 
-	switch (props.display) {
+	switch (display) {
 
 		case 'gallery': return (
 			<Flex row style={{ width: '100%', flexWrap: 'wrap' }}>
-				{ (props.items || []).map(i => (
+				{ (items || []).map(i => (
 					<GalleryListItem key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } showParent />
 				)) }
 			</Flex>
@@ -43,11 +47,11 @@ export const ItemList = React.memo((props: ItemListProps) => {
 			<Flex column style={{ width: '100%' }}>
 				{ (items || []).map((i, idx) => (
 					<>
-						<ItemSortingDropZone dropIdx={ idx } />
-						<FlatListItem figures='on-end' selected={ props.selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
+						<ItemSortingDropZone dropIdx={ idx } parentId={ parentId } />
+						<FlatListItem figures='on-end' selected={ selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
 					</>
 				)) }
-				<ItemSortingDropZone dropIdx={ items.length } />
+				<ItemSortingDropZone dropIdx={ items.length } parentId={ parentId } />
 			</Flex>
 		)
 
@@ -55,11 +59,11 @@ export const ItemList = React.memo((props: ItemListProps) => {
 			<Flex column style={{ width: '100%' }}>
 				{ (items || []).map((i, idx) => (
 					<>
-						<ItemSortingDropZone dropIdx={ idx } />
-						<FlatListItem selected={ props.selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
+						<ItemSortingDropZone dropIdx={ idx } parentId={ parentId } />
+						<FlatListItem selected={ selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
 					</>
 				)) }
-				<ItemSortingDropZone dropIdx={ items.length } />
+				<ItemSortingDropZone dropIdx={ items.length } parentId={ parentId } />
 			</Flex>
 		)
 	}

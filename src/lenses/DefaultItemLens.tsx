@@ -23,7 +23,7 @@ export const DefaultItemLens : ItemLens = {
             RenderNewItemInputForm: (props: { itemId: string }) => <ItemInputForm darker itemId={ props.itemId } style={{ margin: '20px 0' }} />,
             RenderChildList: (props: { itemId: string, selectedItemId: string }) => {
                 const { children } = useItem(props.itemId)
-                return <ItemList selected={ props.selectedItemId } items={ children } display='compact-list' navOnClick />
+                return <ItemList selected={ props.selectedItemId } items={ children } parentId={ props.itemId } display='compact-list' navOnClick />
             },
         },
 
@@ -36,7 +36,7 @@ export const DefaultItemLens : ItemLens = {
             },
             RenderChildList: (props: { itemId: string }) => {
                 const { children } = useItem(props.itemId)
-                return <ItemList items={ children } navOnClick />
+                return <ItemList items={ children } parentId={ props.itemId } navOnClick />
             }
         },
 

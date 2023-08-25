@@ -8,10 +8,28 @@
 
 .sort-zone {
 	transition: height 200ms;
-	height: 32px;
-	margin: -14px 0 -18px 0;
+	/* background-color: rgba(0,0,0,0.1); */
+	z-index: -1;
 }
 
-.sort-zone-dangle {
+.sort-zone-short {
+	height: 12px;
+	margin: -5px 0 -7px 0;
+}
+
+.sort-zone-tall {
+	height: 24px;
+	margin: -10px 0 -14px 0;
+}
+
+.sort-zone-dragging {
+	z-index: 10;
+}
+
+.sort-zone-short.sort-zone-dangle {
+	height: 24px;
+}
+
+.sort-zone-tall.sort-zone-dangle {
 	height: 48px;
 }

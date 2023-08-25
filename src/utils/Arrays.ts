@@ -14,6 +14,8 @@ export const GroupBy = <TItem>(list: TItem[], keySelector: (item: TItem) => stri
 export const GroupByFirst = <TItem>(list: TItem[], keySelector: (item: TItem) => string) => Object.entries(GroupBy(list, keySelector))
 	.reduce((lookup, next) => ({ ...lookup, [ next[0] ]: next[1][0] }), {}) as { [key: string]: TItem }
 
+export const Unique = <TItem>(list: TItem[]): TItem[] => Array.from(new Set(list))
+
 export const Chunk = <TItem>(list: TItem[], chunkSize: number): TItem[][] => {
 	const out: TItem[][] = []
 	const nChunks = Math.ceil(list.length / chunkSize)
