@@ -5,12 +5,12 @@ import { Routes } from "../../constants/Routes";
 import { useItem } from "../../hooks/UseItem";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { Flex } from "../Flex/Flex";
-import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
+import { ItemDropZone, ItemSortingDropZone } from "../ItemDropZone/ItemDropZone";
 import { ItemInputForm } from "../ItemInputForm/ItemInputForm";
 import { FlatListItem } from "../ItemList/FlatList/FlatListItem";
 import { ItemList } from "../ItemList/ItemList";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { Text } from "../Text/Text";
+import { Text, TrText } from "../Text/Text";
 import './PlannerView.css';
 import { useItemEditor } from "../../stores/useItemEditor";
 
@@ -53,6 +53,7 @@ export const PlannerView = React.memo((props: PlannerViewProps) => {
 const PlannerCard = React.memo((props: { itemId: string }) => {
 
 	const { children, item } = useItem(props.itemId)
+	const sortedChildren = useMemo(() => children?.sort((a, b) => (a.rank || 0) - (b.rank || 0)) || [], [ children ])
 
 	if (!item) return null;
 
@@ -72,9 +73,13 @@ const PlannerCard = React.memo((props: { itemId: string }) => {
 			<ItemInputForm smaller itemId={ item._id } />
 
 			<Flex column className='planner-view-card-sublist'>
-			{ children.map(c => (
-				<PlannerCardSubItem key={ c._id } itemId={ c._id } />
+			{ sortedChildren.map((c, idx) => (
+				<>
+					<ItemSortingDropZone dropIdx={ idx } />
+					<PlannerCardSubItem key={ c._id } itemId={ c._id } />
+				</>
 			)) }
+			<ItemSortingDropZone dropIdx={ children.length } />
 			</Flex>
 
 		</Flex>
@@ -123,7 +128,7 @@ const SimpleItem = React.memo((props: { itemId: string, small?: boolean, showPro
 				onContextMenu={ handleRightClick }
 				>
 				<Checkbox showProgress={ props.showProgressInCheckbox } small={ props.small } itemId={ item._id } />
-				<Text small={ props.small } medium={ !props.small } bold={ !props.small } style={{ marginLeft: 10 }}>{ item.title }</Text>
+				<TrText small={ props.small } medium={ !props.small } bold={ !props.small } style={{ marginLeft: 10 }}>{ item.title }</TrText>
 			</Flex>
 		</ItemDropZone>
 	)

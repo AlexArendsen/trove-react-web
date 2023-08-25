@@ -4,6 +4,7 @@ import { Item } from "../models/Items/Item";
 import { GetConfig } from "../../utils/Config";
 import { uuid } from "../../utils/Uuid";
 import { Api } from "../Api";
+import { ItemSort } from "../models/Items/ItemSort";
 
 export const GetAllItemsAction = () => new DataPlan<Item[]>('items:get-all')
     .withReduxActions(Actions.Items.GetAll)
@@ -47,6 +48,12 @@ export const MoveManyItemsAction = (itemIds: string[], newParentId: string) => n
 export const UpdateOneItemAction = (item: Item) => new DataPlan('items:update-one')
     .withSubject({ new: item, old: GetConfig().Store?.getState().items.byId[item._id] })
     .withReduxActions(Actions.Items.UpdateOne).do(() => Api.put('/item', item)).run()
+
+export const SortItemsAction = (updates: ItemSort[]) => new DataPlan('items:sort')
+    .withSubject(updates)
+    .withReduxActions(Actions.Items.Sort)
+    .do(() => Api.put('/items/sort', updates))
+    .run()
 
 export const AddItemAction = (title: string, parent_id: string | null, extras?: Partial<Item>) => new DataPlan('items:add-one')
     .withSubject({ title, parent_id, _id: uuid() })

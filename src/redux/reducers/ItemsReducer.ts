@@ -1,5 +1,7 @@
+import { GroupByFirst } from "../../utils/Arrays";
 import { Actions } from "../actions/Actions";
 import { Item } from "../models/Items/Item";
+import { ItemSort } from "../models/Items/ItemSort";
 import { ItemState } from "../models/Items/ItemState";
 import { ReduxAction } from "../models/ReduxAction";
 
@@ -50,6 +52,11 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 		case Actions.Items.Add.success: return WithNewItem(WithoutItem(state, action.subject._id), action.data)
 		case Actions.Items.Add.failure: return WithoutItem(state, action.subject._id)
 
+		// Sort Item
+		case Actions.Items.Sort.loading: return WithSortedItems(state, action.subject as ItemSort[])
+		//case Actions.Items.Sort.success: return WithNewItem(WithoutItem(state, action.subject._id), action.data)
+		//case Actions.Items.Sort.failure: return WithoutItem(state, action.subject._id)
+
 		// Update Item
 		case Actions.Items.UpdateOne.loading: return WithItemUpdate(state, action.subject.new._id, i => action.subject.new)
 		case Actions.Items.UpdateOne.failure: return WithItemUpdate(state, action.subject.new._id, i => action.subject.old)
@@ -61,6 +68,41 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 	}
 
 	return state;
+
+}
+
+const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) => {
+
+	let state = { ...originalState }
+	console.log('Applying updates:', sortingUpdates)
+
+	if (!sortingUpdates.length) return state;
+	const parent = state.byId[sortingUpdates[0].itemId].parent_id
+
+	// Update byId substate
+	for(const u of sortingUpdates) 
+		if (state.byId[u.itemId]) {
+			console.log(`[.byId] Updating rank of ${ state.byId[u.itemId].title } to ${ u.newRank }`)
+			state.byId[u.itemId].rank = u.newRank
+		}
+	state.byId = { ...state.byId } // For referential update
+
+	// Update all substate
+	const lookup = GroupByFirst(sortingUpdates, l => l.itemId)
+	state.all.succeeded(state.all.data?.map(i => {
+		if (lookup[i._id]) {
+			const update = lookup[i._id]
+			console.log(`[.all] Updating rank of ${ i.title } to ${ update.newRank }`)
+			const updated = { ...i, rank: update.newRank }
+			return updated
+		} else return i
+	}) || [])
+
+	// Touch byParent substate
+	console.log(`Updating byParent[${ parent }]`)
+	if (!!parent) state.byParent[parent] = [ ...state.byParent[parent] ]
+
+	return state
 
 }
 

@@ -15,6 +15,7 @@ export const Actions = {
 		MoveOne: new ActionNames('ITEMS_MOVE_ONE'),
 		MoveMany: new ActionNames('ITEMS_MOVE_MANY'),
 		UpdateOne: new ActionNames('ITEMS_UPDATE_ONE'),
+		Sort: new ActionNames('ITEMS_SORT'),
 		Search: 'ITEMS_SEARCH'
 	},
 	User: {

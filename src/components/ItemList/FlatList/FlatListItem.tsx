@@ -1,20 +1,14 @@
 import classNames from "classnames";
-import React, { useMemo, useState } from "react";
-import { useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
-import { DndItemTypes } from "../../../constants/Dnd";
+import React, { useMemo } from "react";
 import { useItem } from "../../../hooks/UseItem";
-import { DeleteOneItemAction, MoveOneItemAction } from "../../../redux/actions/ItemActions";
+import { useItemEditor } from "../../../stores/useItemEditor";
 import { FormatNumber } from "../../../utils/FormatNumber";
-import { Button } from "../../Button/Button";
 import { Checkbox } from "../../Checkbox/Checkbox";
 import { Flex } from "../../Flex/Flex";
 import { ItemDropZone } from "../../ItemDropZone/ItemDropZone";
 import { ProgressBar } from "../../ProgressBar/ProgressBar";
-import { Text } from "../../Text/Text";
-import { TimeDisplay } from "../../TimeDisplay/TimeDisplay";
 import './FlatListItem.css';
-import { useItemEditor } from "../../../stores/useItemEditor";
+import { TrText } from "../../Text/Text";
 
 interface FlatListItemProps {
 	itemId: string
@@ -25,9 +19,7 @@ interface FlatListItemProps {
 
 export const FlatListItem = React.memo((props: FlatListItemProps) => {
 
-	//const ed = useItemEditor()
-	const dispatch = useDispatch();
-	const { item, children } = useItem(props.itemId)
+	const { item } = useItem(props.itemId)
 	const checked = useMemo(() => item?.checked, [ item ])
 
 	const handleRightClick = (e: React.MouseEvent) => {
@@ -59,23 +51,23 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 					</Flex>
 
 					<Flex column style={{ flex: 2 }}>
-						<Text medium bold className='flat-list-item-title'>{ item?.title }</Text>
+						<TrText medium bold className='flat-list-item-title'>{ item?.title }</TrText>
 					</Flex>
 
 					{ isNaN(pct) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
 						<ProgressBar floating item={ item } />
 						{
 							((props.figures || 'visible') === 'visible') ? (<Flex row>
-								<Text small accent>{ FormatNumber.withCommas(item?.completed || 0) }</Text>
-								<Text small faded style={{ marginLeft: 5, marginRight: 20, whiteSpace: 'nowrap' }}> / { FormatNumber.withCommas(item?.descendants || 0) }</Text>
-								<Text small accent bold>{ FormatNumber.toPercent(pct) }</Text>
+								<TrText small accent>{ FormatNumber.withCommas(item?.completed || 0) }</TrText>
+								<TrText small faded style={{ marginLeft: 5, marginRight: 20, whiteSpace: 'nowrap' }}> / { FormatNumber.withCommas(item?.descendants || 0) }</TrText>
+								<TrText small accent bold>{ FormatNumber.toPercent(pct) }</TrText>
 							</Flex>) : null
 						}
 					</Flex>) }
 
 					{ (props.figures === 'on-end' && item?.descendants) ? (
 						<Flex row justify='flex-end' align='center' style={{ width: 40 }}>
-							<Text small faded style={{ opacity: 0.8 }}>{ FormatNumber.withCommas(item?.descendants || 0) }</Text>
+							<TrText small faded style={{ opacity: 0.8 }}>{ FormatNumber.withCommas(item?.descendants || 0) }</TrText>
 						</Flex>
 					) : null }
 
@@ -84,7 +76,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 				</Flex>
 
 				{ item?.description ? (<div style={{ maxHeight: 40, marginLeft: 65, overflow: 'hidden' }}>
-					<Text small faded>{ item?.description }</Text>
+					<TrText small faded>{ item?.description }</TrText>
 				</div>) : null }
 
 			</Flex>

@@ -5,3 +5,13 @@
 .drop-zone-dangle {
 	opacity: 0.4;
 }
+
+.sort-zone {
+	transition: height 200ms;
+	height: 32px;
+	margin: -14px 0 -18px 0;
+}
+
+.sort-zone-dangle {
+	height: 48px;
+}
