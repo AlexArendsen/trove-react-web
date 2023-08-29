@@ -5,6 +5,7 @@ import { LayoutItemView } from "./LayoutView";
 export const LayoutItemLens : ItemLens = {
 
     Name: 'LayoutItemLens',
+    TypeId: 'layout',
     Test: i => /^#layout/.test(i.description || ''),
 
     Self: {

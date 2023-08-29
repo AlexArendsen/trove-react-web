@@ -17,6 +17,7 @@ const MAX_DELETE_BATCH_SIZE = 2000
 export const OrphansLens: ItemLens = {
 
     Name: 'OrphansLens',
+    TypeId: 'orphans',
     Test: (i) => /^#orphans/.test(i.description || ''),
     Self: {
         AsSelected: {

@@ -4,6 +4,7 @@ import { ItemLens } from "./ItemLens";
 export const GridLens: ItemLens = {
 
     Name: 'GridItemLens',
+    TypeId: 'grid',
     Test: i => /^#grid/.test(i.description || ''),
 
     Self: {

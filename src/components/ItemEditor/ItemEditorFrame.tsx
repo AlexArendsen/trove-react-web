@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useItemEditor } from "../../stores/useItemEditor"
 import { Button } from "../Button/Button"
 import { Flex } from "../Flex/Flex"
@@ -6,20 +6,31 @@ import { TextInput } from "../TextInput/TextInput"
 import { Bump } from "../Bump/Bump"
 import { useWindowSize } from "../../hooks/UseWindowSize"
 import { TrText } from "../Text/Text"
+import { ItemData } from "../../utils/ItemData"
+import { LensConfiguration } from "./ItemEditorNewLensPage"
+import { PillList } from "../PillList/PillList"
 
 export const ItemEditorFrame = React.memo((props: {
 	children: JSX.Element,
 	canSave?: boolean,
-	onDone?: () => void
+	onDone?: () => void,
+	selectedLens?: string | null
+	onSelectLens?: (lens: string) => void
 }) => {
 
 	const ed = useItemEditor()
 
 	const { isMobile } = useWindowSize()
 
-	const { onDone, canSave, children } = props
+	const { onDone, canSave, children, selectedLens, onSelectLens } = props
 
-	const handle = (e: KeyboardEvent) => {
+	const lenses = useMemo(() => {
+		const fromItem = ItemData.get<LensConfiguration[]>(ed.item, '__lenses', [])
+			.map(c => ({ label: c.title, value: c.id }));
+		return [ { label: 'General', value: null }, ...fromItem, { label: '+', value: '%ADD' } ]
+	}, [ ed.item ])
+
+	const handleKeyEvent = (e: KeyboardEvent) => {
 		if (e.target !== document.body) return; // These shortcuts only apply if you aren't typing somewhere
 
 		if(e.key === 'Delete') {
@@ -33,7 +44,7 @@ export const ItemEditorFrame = React.memo((props: {
 	}
 
 	useEffect(() => {
-		const h = (e: KeyboardEvent) => handle(e)
+		const h = (e: KeyboardEvent) => handleKeyEvent(e)
 		document.addEventListener('keydown', h)
 		return () => document.removeEventListener('keydown', h)
 	}, [])
@@ -64,6 +75,8 @@ export const ItemEditorFrame = React.memo((props: {
 				onKeyDown={ ed.handleKeyDown }
 				onChange={ v => ed.updateItem({ title: v }) }
 				/>
+			<Bump h={ 20 } />
+			<PillList options={ lenses } onClick={ l => onSelectLens?.(l) } selected={ selectedLens } />
 			<Bump h={ 20 } />
 			<div style={{ flex: 1 }}>
 				{ children }

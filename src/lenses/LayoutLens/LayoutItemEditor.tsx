@@ -31,40 +31,38 @@ export const LayoutItemEditor = React.memo((props: {
     }, [ src ])
 
     return (
-        <ItemEditorFrame>
-            <>
-                <Flex column style={{ flex: 1, overflow: 'scroll' }}>
-                    <TrText small faded>Preview</TrText>
-                    <Bump h={ 5 } />
-                    <LayoutView preview layout={ spec || undefined } />
-                </Flex>
+        <>
+            <Flex column style={{ flex: 1, overflow: 'scroll' }}>
+                <TrText small faded>Preview</TrText>
+                <Bump h={ 5 } />
+                <LayoutView preview layout={ spec || undefined } />
+            </Flex>
 
-                <Bump h={ 10 } />
+            <Bump h={ 10 } />
 
-                <Flex column style={{ flex: 1 }}>
-                    <TrText small faded>Layout Spec</TrText>
-                    <Bump h={ 5 } />
-                    <TextInput
-                        multiline
-                        value={ src }
-                        onBlur={ handleBlur }
-                        onKeyDown={ ed.handleKeyDown }
-                        style={{ fontFamily: 'monospace', minHeight: 300 }} />
-                </Flex>
+            <Flex column style={{ flex: 1 }}>
+                <TrText small faded>Layout Spec</TrText>
+                <Bump h={ 5 } />
+                <TextInput
+                    multiline
+                    value={ src }
+                    onBlur={ handleBlur }
+                    onKeyDown={ ed.handleKeyDown }
+                    style={{ fontFamily: 'monospace', minHeight: 300 }} />
+            </Flex>
 
-                <Bump h={ 10 } />
+            <Bump h={ 10 } />
 
-                <Flex column style={{ flex: 1 }}>
-                    <TrText small faded>Description</TrText>
-                    <Bump h={ 5 } />
-                    <TextInput
-                        multiline
-                        value={ ed.item?.description }
-                        onKeyDown={ ed.handleKeyDown }
-                        onBlur={ v => ed.updateItem({ description: v }) } />
-                </Flex>
-            </>
-        </ItemEditorFrame>
+            <Flex column style={{ flex: 1 }}>
+                <TrText small faded>Description</TrText>
+                <Bump h={ 5 } />
+                <TextInput
+                    multiline
+                    value={ ed.item?.description }
+                    onKeyDown={ ed.handleKeyDown }
+                    onBlur={ v => ed.updateItem({ description: v }) } />
+            </Flex>
+        </>
     )
 
 })

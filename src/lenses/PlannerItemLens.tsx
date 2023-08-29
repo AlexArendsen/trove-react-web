@@ -4,6 +4,7 @@ import { ItemLens } from "./ItemLens";
 export const PlannerItemLens : ItemLens = {
 
     Name: 'PlannerItemLens',
+    TypeId: 'planner',
     Test: (i) => /^#planner/.test(i.description || ''),
 
     Self: {

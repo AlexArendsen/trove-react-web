@@ -9,6 +9,7 @@ import { ItemLens } from "./ItemLens";
 export const DebugItemLens: ItemLens = {
 
     Name: 'DebugItemLens',
+    TypeId: 'debug',
     Test: i => /^#debug/.test(i.description || ''),
 
     Self: {

@@ -5,6 +5,7 @@ type El = JSX.Element | null
 export interface ItemLens {
 
     Name: string
+    TypeId: string
     Test?: (item: Item) => boolean
 
     Default?: ItemLensItemSpec // How to display anything, should only be defined by DefaultItemLens

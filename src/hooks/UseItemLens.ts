@@ -8,7 +8,7 @@ import { GridLens } from '../lenses/GridLens'
 import { OrphansLens } from '../lenses/OrphansLens'
 import { DebugItemLens } from '../lenses/DebugItemLens'
 
-const lenses = [
+export const allLenses = [
     TaskItemLens,
     PlannerItemLens,
     GridLens,
@@ -25,8 +25,8 @@ export const useLenses = (itemId?: string): ItemLensItemSpec[] => {
 
         if (!item) return [ defaultLens?.Default ] as ItemLensItemSpec[]
 
-        const selfLens = lenses.find(l => l.Test?.(item))
-        const parentLens = parent ? lenses.find(l => l.Test?.(parent)) : undefined
+        const selfLens = allLenses.find(l => l.Test?.(item))
+        const parentLens = parent ? allLenses.find(l => l.Test?.(parent)) : undefined
 
         return [ selfLens?.Self, parentLens?.Children, defaultLens?.Default ].filter(x => !!x) as ItemLensItemSpec[]
 
