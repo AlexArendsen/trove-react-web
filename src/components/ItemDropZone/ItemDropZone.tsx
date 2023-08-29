@@ -84,7 +84,7 @@ const createSortingActions = (itemId: string, to: number, newParent?: string): I
 		const deletedItem = siblings.splice(from, 1)[0] // Delete moving item
 		const adjTo = (from < to) ? to - 1 : to // If we just deleted something before the destination, we need to adjust our target
 		siblings.splice(Math.max(0, adjTo), 0, item) // Re-add it where it needs to go
-		console.log(`Deleted item ${deletedItem.title} and put it in position ${adjTo}, so now it goes ${siblings[to - 1]?.title}, ${ siblings[to].title }, ${ siblings[to + 1]?.title }`)
+		console.log(`Deleted item ${deletedItem.title} and put it in position ${adjTo}, so now it goes ${siblings[to - 1]?.title}, ${ siblings[to]?.title }, ${ siblings[to + 1]?.title }`)
 
 		// Strip packed siblings with ranks
 		let last = -Infinity
@@ -164,6 +164,7 @@ export const ItemSortingDropZone = React.memo((props: {
 
 	return (
 		<div ref={ drop } className={ classes }>
+			<div className='sort-zone-line'></div>
 		</div>
 	)
 

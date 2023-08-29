@@ -7,9 +7,21 @@
 }
 
 .sort-zone {
-	transition: height 200ms;
-	/* background-color: rgba(0,0,0,0.1); */
+	transition: opacity 200ms;
+	opacity: 0;
 	z-index: -1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.sort-zone-dangle {
+	opacity: 0.8;
+}
+
+.sort-zone > .sort-zone-line {
+	height: 2px;
+	background-color: rgba(73, 48, 170, 1);
 }
 
 .sort-zone-short {
@@ -24,12 +36,4 @@
 
 .sort-zone-dragging {
 	z-index: 10;
-}
-
-.sort-zone-short.sort-zone-dangle {
-	height: 24px;
-}
-
-.sort-zone-tall.sort-zone-dangle {
-	height: 48px;
 }
