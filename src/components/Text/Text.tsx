@@ -69,7 +69,7 @@ export const Text = React.memo((props: TextProps) => {
 			case white: return 'white'
 			default: return undefined
 		}
-	}, [ large, medium, small ])
+	}, [ large, medium, small, white ])
 
 	const styles: React.CSSProperties = useMemo(() => ({ fontWeight, fontSize, color, ...style }), [ style, fontWeight, fontSize, color ]);
 

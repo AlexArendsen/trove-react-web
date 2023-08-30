@@ -11,6 +11,7 @@ import { Item } from "../redux/models/Items/Item";
 export const DefaultItemLens : ItemLens = {
 
     Name: 'DefaultItemLens',
+    TypeId: 'default',
 
     Default: {
 

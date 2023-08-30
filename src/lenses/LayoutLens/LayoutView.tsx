@@ -8,20 +8,24 @@ import { TxmlAstNode } from "../../utils/Parsing/Txml"
 import { QueryItems } from "../../utils/QueryItems"
 import { useItem } from "../../hooks/UseItem"
 import { useStore } from "../../hooks/UseStore"
+import { ItemData } from "../../utils/ItemData"
+import { LensConfiguration } from "../../components/ItemEditor/ItemEditorNewLensPage"
+import { parseJsonSourceFileConfigFileContent } from "typescript"
 
 type VariableLookup = { [name: string]: Item | Item[] | number }
 const CELL_UNIT_SIZE = 100
 const PREVIEW_CELL_UNIT_SIZE = 20
 
 export const LayoutItemView = React.memo((props: {
-    itemId: string
+    itemId: string,
+    config: LensConfiguration
 }) => {
 
-    const { itemId } = props
+    const { itemId, config } = props
 
     const { item } = useItem(itemId)
 
-    const txml = item?.data?.['_layout']
+    const { txml } = ItemData.getLensData(item, config.id, { txml: '' })
     const { layout, error } = useMemo(() => {
         try {
             if (txml) return { layout: Layout.Parse(txml), error: '' }

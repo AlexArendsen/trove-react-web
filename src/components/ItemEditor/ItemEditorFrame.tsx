@@ -9,6 +9,7 @@ import { TrText } from "../Text/Text"
 import { ItemData } from "../../utils/ItemData"
 import { LensConfiguration } from "./ItemEditorNewLensPage"
 import { PillList } from "../PillList/PillList"
+import { ItemLensPillList } from "../../lenses/Shared/ItemLensPillLIst"
 
 export const ItemEditorFrame = React.memo((props: {
 	children: JSX.Element,
@@ -76,7 +77,9 @@ export const ItemEditorFrame = React.memo((props: {
 				onChange={ v => ed.updateItem({ title: v }) }
 				/>
 			<Bump h={ 20 } />
-			<PillList options={ lenses } onClick={ l => onSelectLens?.(l) } selected={ selectedLens } />
+			<div style={{ margin: '0 -30px' }}>
+				<ItemLensPillList item={ ed.item } onClick={ (l: string) => onSelectLens?.(l) } selected={ selectedLens } startOffset={ 30 } endOffset={ 100 } includeAdd />
+			</div>
 			<Bump h={ 20 } />
 			<div style={{ flex: 1 }}>
 				{ children }

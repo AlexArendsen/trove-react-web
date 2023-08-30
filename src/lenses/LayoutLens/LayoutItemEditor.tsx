@@ -8,20 +8,23 @@ import { useItemEditor } from "../../stores/useItemEditor"
 import { ItemData } from "../../utils/ItemData"
 import { Layout } from "../../utils/Parsing/Layout"
 import { LayoutView } from "./LayoutView"
+import { LensConfiguration } from "../../components/ItemEditor/ItemEditorNewLensPage"
 
 export const LayoutItemEditor = React.memo((props: {
     itemId: string,
     onDone: () => void,
+    config: LensConfiguration
 }) => {
 
     const ed = useItemEditor()
-    const src = ItemData.get(ed.item, '_layout', '')
+    const { config, itemId, onDone } = props
+    const src = config.data?.['txml']
 
     console.log({ src, item: ed.item })
 
     const handleBlur = (value: string) => {
         if (!ed.item) return;
-        ItemData.set(ed.item, '_layout', value)
+        ItemData.setLensData(ed.item, config.id, { txml: value })
         ed.updateItem(ed.item)
     }
 
@@ -41,7 +44,7 @@ export const LayoutItemEditor = React.memo((props: {
             <Bump h={ 10 } />
 
             <Flex column style={{ flex: 1 }}>
-                <TrText small faded>Layout Spec</TrText>
+                <TrText small faded>Layout Spec (TXML)</TrText>
                 <Bump h={ 5 } />
                 <TextInput
                     multiline
@@ -51,17 +54,6 @@ export const LayoutItemEditor = React.memo((props: {
                     style={{ fontFamily: 'monospace', minHeight: 300 }} />
             </Flex>
 
-            <Bump h={ 10 } />
-
-            <Flex column style={{ flex: 1 }}>
-                <TrText small faded>Description</TrText>
-                <Bump h={ 5 } />
-                <TextInput
-                    multiline
-                    value={ ed.item?.description }
-                    onKeyDown={ ed.handleKeyDown }
-                    onBlur={ v => ed.updateItem({ description: v }) } />
-            </Flex>
         </>
     )
 

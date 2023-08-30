@@ -8,12 +8,15 @@ import { UniqueName } from "../../utils/UniqueName";
 import { PlannerItemLens } from "../../lenses/PlannerItemLens";
 import { GridLens } from "../../lenses/GridLens";
 import { LayoutItemLens } from "../../lenses/LayoutLens/LayoutItemLens";
+import { Bump } from "../Bump/Bump";
+import { useWindowSize } from "../../hooks/UseWindowSize";
 
 // TODO -- Move this somewhere
 export type LensConfiguration = {
     id: string
     type: string
     title: string
+    data?: any
 }
 
 type LensOption = {
@@ -83,8 +86,8 @@ export const ItemEditorNewLensPage = React.memo((props: {
         <Flex column>
 
             <TrText small faded>Add Lens</TrText>
-
-            <Flex row>
+			<Bump h={ 5 } />
+            <Flex row wrap>
                 { lensOptions.map(l => <NewLensCard model={ l } onClick={ () => handleSelectLens(l) } />) }
             </Flex>
 
@@ -100,16 +103,19 @@ const NewLensCard = React.memo((props: {
 }) => {
 
     const { model, onClick } = props
+    const { isMobile } = useWindowSize()
 
     return (
         <Flex onClick={ onClick } style={{
             border: 'solid 1px #ccc',
             padding: 20,
-            borderRadius: 30,
+            width: isMobile ? '100%' : 185,
+            maxWidth: '100vw',
+            borderRadius: 15,
             marginBottom: 20,
             marginRight: 10
         }} column>
-            <Flex row justify='space-between'>
+            <Flex row justify='space-between' align='center'>
                 <TrText mediumLarge bold>{ model.label }</TrText>
                 <Flex row>
                     { model.tags?.map(t => (
@@ -117,6 +123,7 @@ const NewLensCard = React.memo((props: {
                     )) }
                 </Flex>
             </Flex>
+            <Bump h={ 5 } />
             <TrText medium>{ model.description }</TrText>
         </Flex>
     )
@@ -128,9 +135,11 @@ const Badge = React.memo((props: {
 }) => {
     return (
         <div style={{
-            backgroundColor: '#ccc',
+            backgroundColor: '#efefef',
+            padding: '2px 8px 2px 8px',
+            borderRadius: 6
         }}>
-            <TrText medium bold>{ props.label }</TrText>
+            <TrText small bold style={{ opacity: 0.5, textTransform: 'uppercase' }}>{ props.label }</TrText>
         </div>
     )
 })

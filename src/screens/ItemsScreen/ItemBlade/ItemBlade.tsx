@@ -13,6 +13,7 @@ import { useLenses } from "../../../hooks/UseItemLens";
 import { ItemLens, ItemLensItemSpec } from "../../../lenses/ItemLens";
 import './ItemBlade.css';
 import { LensedComponent } from "../../../lenses/LensedComponent";
+import { DefaultItemLens } from "../../../lenses/DefaultItemLens";
 
 interface ItemBladeProps {
 	itemId: string
@@ -26,6 +27,7 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 	const history = useHistory();
 	const { item, children } = useItem(props.itemId);
 
+
 	const handleTitleClick = useCallback(() => {
 		if (item) history.push(Routes.item(item._id))
 	}, [ item ])
@@ -37,8 +39,6 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 			'item-blade': true,
 			'item-blade-darken': props.darken
 		})} style={ props.style }>
-
-			{/* TODO -- Image */}
 
 			<ProgressBar item={ item } />
 

@@ -1,3 +1,4 @@
+import { LensConfiguration } from "../components/ItemEditor/ItemEditorNewLensPage"
 import { Item } from "../redux/models/Items/Item"
 
 type El = JSX.Element | null
@@ -26,8 +27,8 @@ export interface ItemLensItemSpec {
 }
 
 export interface ItemLensDisplaySpec {
-    RenderHeader?: (props: { itemId: string, onClick: () => void }) => El,
-    RenderEditor?: (props: { itemId: string, onDone: () => void }) => El,
-    RenderNewItemInputForm?: (props: { itemId: string }) => El,
-    RenderChildList?: (props: { itemId: string, selectedItemId: string }) => El,
+    RenderHeader?: (props: { itemId: string, onClick: () => void, config: LensConfiguration }) => El,
+    RenderEditor?: (props: { itemId: string, onDone: () => void, config: LensConfiguration }) => El,
+    RenderNewItemInputForm?: (props: { itemId: string, config: LensConfiguration }) => El,
+    RenderChildList?: (props: { itemId: string, selectedItemId: string, config: LensConfiguration }) => El,
 }
