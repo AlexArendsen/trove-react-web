@@ -15,7 +15,7 @@
 }
 
 .selected-item-display-content-wrapper {
-	max-height: calc(100vh - 112px);
+	max-height: calc(100vh - 525px);
 	overflow-y: scroll;
 	width: 100%;
 	padding: 20px 0 300px 0;

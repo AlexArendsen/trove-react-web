@@ -25,11 +25,11 @@ export const ItemEditorFrame = React.memo((props: {
 
 	const { onDone, canSave, children, selectedLens, onSelectLens } = props
 
-	const lenses = useMemo(() => {
-		const fromItem = ItemData.get<LensConfiguration[]>(ed.item, '__lenses', [])
-			.map(c => ({ label: c.title, value: c.id }));
-		return [ { label: 'General', value: null }, ...fromItem, { label: '+', value: '%ADD' } ]
-	}, [ ed.item ])
+	const handleDeleteLens = (lensId: string) => {
+		const filteredLenses = (ed.item?.data?.__lenses as LensConfiguration[])?.filter(c => c.id !== lensId)
+		const updatedData = { ...ed.item?.data, __lenses: filteredLenses }
+		ed.updateItem({ data: updatedData })
+	}
 
 	const handleKeyEvent = (e: KeyboardEvent) => {
 		if (e.target !== document.body) return; // These shortcuts only apply if you aren't typing somewhere
@@ -67,18 +67,13 @@ export const ItemEditorFrame = React.memo((props: {
 
 	return (
 		<Flex column style={{ maxWidth: 800, paddingBottom: isMobile ? 0 : 20, flex: 1 }}>
-			<TrText small faded>Title</TrText>
-			<Bump h={ 5 } />
-			<TextInput
-				value={ ed.item?.title }
-				style={{ fontSize: 24, fontWeight: 700, marginTop: 1 }}
-				key='title'
-				onKeyDown={ ed.handleKeyDown }
-				onChange={ v => ed.updateItem({ title: v }) }
-				/>
-			<Bump h={ 20 } />
 			<div style={{ margin: '0 -30px' }}>
-				<ItemLensPillList item={ ed.item } onClick={ (l: string) => onSelectLens?.(l) } selected={ selectedLens } startOffset={ 30 } endOffset={ 100 } includeAdd />
+				<ItemLensPillList item={ ed.item }
+					onClick={ (l: string) => onSelectLens?.(l) }
+					selected={ selectedLens }
+					startOffset={ 30 } endOffset={ 100 }
+					onDelete={ handleDeleteLens }
+					includeAdd />
 			</div>
 			<Bump h={ 20 } />
 			<div style={{ flex: 1 }}>

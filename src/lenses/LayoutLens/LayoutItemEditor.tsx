@@ -35,14 +35,6 @@ export const LayoutItemEditor = React.memo((props: {
 
     return (
         <>
-            <Flex column style={{ flex: 1, overflow: 'scroll' }}>
-                <TrText small faded>Preview</TrText>
-                <Bump h={ 5 } />
-                <LayoutView preview layout={ spec || undefined } />
-            </Flex>
-
-            <Bump h={ 10 } />
-
             <Flex column style={{ flex: 1 }}>
                 <TrText small faded>Layout Spec (TXML)</TrText>
                 <Bump h={ 5 } />
@@ -52,6 +44,14 @@ export const LayoutItemEditor = React.memo((props: {
                     onBlur={ handleBlur }
                     onKeyDown={ ed.handleKeyDown }
                     style={{ fontFamily: 'monospace', minHeight: 300 }} />
+            </Flex>
+
+            <Bump h={ 10 } />
+
+            <Flex column style={{ flex: 1, overflow: 'scroll' }}>
+                <TrText small faded>Preview</TrText>
+                <Bump h={ 5 } />
+                <LayoutView preview layout={ spec || undefined } />
             </Flex>
 
         </>

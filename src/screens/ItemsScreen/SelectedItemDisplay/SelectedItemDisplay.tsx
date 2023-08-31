@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Bump } from "../../../components/Bump/Bump";
 import { Flex } from "../../../components/Flex/Flex";
 import { LensConfiguration } from "../../../components/ItemEditor/ItemEditorNewLensPage";
@@ -33,6 +33,11 @@ export const SelectedItemDisplay = React.memo(() => {
 		return { selectedLens, anyLenses: lenses.length, lensConfig }
 	}, [ lensId, item ])
 
+	useEffect(() => {
+		const defaultLens = (item?.data?.__lenses as LensConfiguration[])?.find(l => l.default)
+		setLensId(defaultLens?.id || '')
+	}, [ item ])
+
 	const narrow = !selectedLens?.FullWidthSelected;
 
 	const ed = useItemEditor()
@@ -62,7 +67,13 @@ export const SelectedItemDisplay = React.memo(() => {
 
 			<ProgressBar item={ item } />
 			<Bump h={ 10 } />
-			{ anyLenses ? <ItemLensPillList item={ item } onClick={ setLensId } selected={ lensId } startOffset={ 10 } /> : null }
+
+			{ anyLenses ? (
+				<>
+					<ItemLensPillList item={ item } onClick={ setLensId } selected={ lensId } startOffset={ 10 } generalLensLabel='Default' />
+					<Bump h={ 10 } />
+				</>
+			) : null }
 
 			<Flex column align='center' className='selected-item-display-content-wrapper' style={{ paddingTop }}>
 				<Flex column className={ contentClasses }>
@@ -110,6 +121,16 @@ export const DefaultItemEditorControls = React.memo((props: { itemId: string, on
 
 	return (
 		<Flex column>
+			<TrText small faded>Title</TrText>
+			<Bump h={ 5 } />
+			<TextInput
+				value={ ed.item?.title }
+				style={{ fontSize: 24, fontWeight: 700, marginTop: 1 }}
+				key='title'
+				onKeyDown={ ed.handleKeyDown }
+				onChange={ v => ed.updateItem({ title: v }) }
+				/>
+			<Bump h={ 20 } />
 			<TrText small faded>Description</TrText>
 			<Bump h={ 5 } />
 			<TextInput

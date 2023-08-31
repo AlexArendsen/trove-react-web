@@ -7,12 +7,16 @@ import { ItemEditorNewLensPage, LensConfiguration } from "./ItemEditorNewLensPag
 import { DefaultItemLens } from "../../lenses/DefaultItemLens";
 import { TrText } from "../Text/Text";
 import { ItemData } from "../../utils/ItemData";
+import { useItem } from "../../hooks/UseItem";
+import { LensConfigurationControls } from "../../lenses/Shared/LensConfigurationControls";
+import { Bump } from "../Bump/Bump";
 
-const noop = () => (<p>NOTHING</p>)
+const noop = () => null
 export const ItemEditorModal = React.memo(() => {
 
     const ed = useItemEditor()
     const itemId = ed.item?._id || ''
+    const { item } = useItem()
 
     const [ lensId, setLensId ] = useState<string | null>(null)
     const configuredLenses = ItemData.get<LensConfiguration[]>(ed.item, '__lenses', [])
@@ -25,6 +29,11 @@ export const ItemEditorModal = React.memo(() => {
         return match.Self?.AsSelected?.RenderEditor || noop
 	}, [ lensId, targetConfig, configuredLenses ])
 
+    const realLensSelected = !!lensId && lensId !== '%ADD';
+    const handleUpdateLensConfig = (config: LensConfiguration) => {
+        if (realLensSelected) ItemData.setLens(ed.item, lensId, config)
+    }
+
     // Flip to "General" tab when the modal opens
     useEffect(() => {
         if (ed.isOpen) setLensId(null)
@@ -32,9 +41,15 @@ export const ItemEditorModal = React.memo(() => {
     }, [ ed.isOpen ])
 
     return (
-        <ModalPopover open={ ed.isOpen } onClose={ ed.close } title='Edit Item'>
+        <ModalPopover open={ ed.isOpen } onClose={ ed.close } title='Edit Item' subtitle={ ed.item?.title }>
             <ItemEditorFrame onSelectLens={ setLensId } selectedLens={ lensId }>
                 <>
+                    { realLensSelected && !!targetConfig ? (
+                        <>
+                            <LensConfigurationControls config={ targetConfig } onChange={ handleUpdateLensConfig } />
+                            <Bump h={ 20 } />
+                        </>
+                    ) : null }
                     <Content itemId={ itemId } onDone={ noop } config={ targetConfig } />
                 </>
             </ItemEditorFrame>

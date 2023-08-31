@@ -3,7 +3,7 @@ import React from "react";
 import { Text } from "../Text/Text";
 import './Button.css';
 
-interface ButtonProps {
+export interface ButtonProps {
 	variant?: 'submit'
 	submitForm?: boolean
 	fullWidth?: boolean

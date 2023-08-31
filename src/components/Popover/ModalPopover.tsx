@@ -11,10 +11,11 @@ export const ModalPopover = React.memo((props: {
     open: boolean,
     onClose: () => void,
     title: string,
+    subtitle?: string,
     children: JSX.Element
 }) => {
 
-    const { open, onClose, title, children } = props
+    const { open, onClose, title, subtitle, children } = props
 
     const { isMobile } = useWindowSize()
 
@@ -49,7 +50,10 @@ export const ModalPopover = React.memo((props: {
                     <Bump h={ 15 } />
                         <div style={{ padding: `0 30px` }}>
                             <Flex row justify='space-between' align='center'>
-                                <TrText small bold style={{ textTransform: 'uppercase' }}>{ title }</TrText>
+                                <TrText small style={{ textTransform: 'uppercase' }}>
+                                    <strong>{ title }</strong>
+                                    { subtitle ? (<span> · { subtitle }</span>) : null }
+                                </TrText>
                                 <FontAwesomeIcon icon={ faXmark } onClick={ onClose } size='lg' style={{ cursor: 'pointer' }} />
                             </Flex>
                         </div>

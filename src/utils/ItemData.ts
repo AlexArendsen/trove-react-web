@@ -19,6 +19,18 @@ export const ItemData = {
         return ((item?.data?.__lenses as LensConfiguration[])?.find(l => l.id === lensId)?.data || defaultValue) as TData
     },
 
+    setLens: (item: Item | null, lensId: string, value: LensConfiguration) => {
+        if (!item) return
+        if (!item.data) item.data = {};
+        if (!item.data?.__lenses) item.data.__lenses = []
+        let lenses = item.data.__lenses as LensConfiguration[]
+        if (value.default)
+            lenses = lenses.map(l => l.id === lensId ? value : { ...l, default: false } )
+        else
+            lenses = lenses.map(l => l.id === lensId ? value : l )
+        item.data.__lenses = lenses
+    },
+
     setLensData: <TData>(item: Item | null, lensId: string, value: TData) => {
         if (!item) return
         if (!item.data) item.data = {};
