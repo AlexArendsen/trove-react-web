@@ -16,7 +16,6 @@ export type LensConfiguration = {
     id: string
     type: string
     title: string
-    default?: boolean
     data?: any
 }
 

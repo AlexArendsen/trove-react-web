@@ -25,7 +25,7 @@ export const SelectedItemDisplay = React.memo(() => {
 	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
 
-	const [ lensId, setLensId ] = useState('')
+	const [ lensId, setLensId ] = useState<string | null>(null)
 	const { selectedLens, anyLenses, lensConfig } = useMemo(() => {
 		const lenses = ItemData.get<LensConfiguration[]>(item, '__lenses', [])
 		const lensConfig = lenses.find(l => l.id === lensId)
@@ -33,14 +33,18 @@ export const SelectedItemDisplay = React.memo(() => {
 		return { selectedLens, anyLenses: lenses.length, lensConfig }
 	}, [ lensId, item ])
 
-	useEffect(() => {
-		const defaultLens = (item?.data?.__lenses as LensConfiguration[])?.find(l => l.default)
-		setLensId(defaultLens?.id || '')
-	}, [ item ])
-
 	const narrow = !selectedLens?.FullWidthSelected;
 
 	const ed = useItemEditor()
+
+	useEffect(() => {
+		setLensId(ItemData.getItemLocalMemo(item, 'default-lens') || null)
+	}, [ item ])
+
+	const handleSelectLens = (id: string) => {
+		setLensId(id)
+		ItemData.setItemLocalMemo(item, 'default-lens', id)
+	}
 
 	const paddingTop = useMemo(() => {
 		if (isMobile) return 20
@@ -62,20 +66,25 @@ export const SelectedItemDisplay = React.memo(() => {
 		'selected-item-display-content-narrow': narrow
 	})
 
+	const contentWrapperClasses = classNames({
+		'selected-item-display-content-wrapper': true,
+		'selected-item-display-content-wrapper-lenses': anyLenses
+	})
+
 	return (
 		<Flex column className={ displayClasses }>
 
 			<ProgressBar item={ item } />
-			<Bump h={ 10 } />
 
 			{ anyLenses ? (
 				<>
-					<ItemLensPillList item={ item } onClick={ setLensId } selected={ lensId } startOffset={ 10 } generalLensLabel='Default' />
+					<Bump h={ 10 } />
+					<ItemLensPillList item={ item } onClick={ handleSelectLens } selected={ lensId } startOffset={ 10 } generalLensLabel='Default' />
 					<Bump h={ 10 } />
 				</>
 			) : null }
 
-			<Flex column align='center' className='selected-item-display-content-wrapper' style={{ paddingTop }}>
+			<Flex column align='center' className={ contentWrapperClasses } style={{ paddingTop }}>
 				<Flex column className={ contentClasses }>
 					<div style={{ margin: '0 20px' }}>
 						<LensedComponent lens={ selectedLens }

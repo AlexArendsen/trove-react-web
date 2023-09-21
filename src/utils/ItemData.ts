@@ -24,10 +24,7 @@ export const ItemData = {
         if (!item.data) item.data = {};
         if (!item.data?.__lenses) item.data.__lenses = []
         let lenses = item.data.__lenses as LensConfiguration[]
-        if (value.default)
-            lenses = lenses.map(l => l.id === lensId ? value : { ...l, default: false } )
-        else
-            lenses = lenses.map(l => l.id === lensId ? value : l )
+        lenses = lenses.map(l => l.id === lensId ? value : l )
         item.data.__lenses = lenses
     },
 
@@ -48,4 +45,9 @@ export const ItemData = {
         ItemData.setLensData(item, lensId, v)
     },
 
+    setItemLocalMemo: (item: Item | null, key: string, value: string) => {
+        localStorage.setItem(`item:${item?._id}:${key}`, value)
+    },
+
+    getItemLocalMemo: (item: Item | null, key: string) => localStorage.getItem(`item:${item?._id}:${key}`)
 }

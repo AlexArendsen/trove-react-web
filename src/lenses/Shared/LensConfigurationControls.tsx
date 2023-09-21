@@ -26,10 +26,6 @@ export const LensConfigurationControls = React.memo((props: {
                     onKeyDown={ ed.handleKeyDown }
                     onChange={ title => onChange({ ...config, title }) }
                 />
-                <Bump w={ 10 } />
-                <Button variant={ config.default ? 'submit' : undefined } onClick={ () => onChange({ ...config, default: !config.default }) } style={{ width: 150 }}>
-                    { config.default ? 'Default' : 'Set As Default' }
-                </Button>
             </Flex>
         </Flex>
     )

@@ -17,9 +17,10 @@ export const PillList = React.memo((props: PillListProps) => {
     const { options, onClick, selected, startOffset, endOffset } = props
 
     return (
-        <Flex row style={{
+        <Flex row align='center' style={{
             overflowX: 'scroll',
             paddingLeft: startOffset,
+            height: 60,
             paddingRight: endOffset
         }}>
             {
