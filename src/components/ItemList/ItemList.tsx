@@ -7,6 +7,7 @@ import { FlatListItem } from "./FlatList/FlatListItem";
 import { GalleryListItem } from "./GalleryList/GalleryListItem";
 import { ItemSortingDropZone } from "../ItemDropZone/ItemDropZone";
 import { TrText } from "../Text/Text";
+import { useSortedItems } from "../../hooks/UseSortedItems";
 
 interface ItemListProps {
 	display?: 'list' | 'grouped-list' | 'gallery' | 'planner' | 'compact-list'
@@ -28,10 +29,7 @@ export const ItemList = React.memo((props: ItemListProps) => {
 		else if (navOnClick) history.push(Routes.item(item._id))
 	}, [ onClick ])
 
-	const items = useMemo(() => {
-		const l = props.items || []
-		return l.sort((a, b) => (a.rank || Infinity) - (b.rank || Infinity))
-	}, [ props.items ])
+	const items = useSortedItems(props.items || [])
 
 	switch (display) {
 

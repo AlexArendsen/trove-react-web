@@ -13,6 +13,7 @@ import { ProgressBar } from "../ProgressBar/ProgressBar";
 import { Text, TrText } from "../Text/Text";
 import './PlannerView.css';
 import { useItemEditor } from "../../stores/useItemEditor";
+import { useSortedItems } from "../../hooks/UseSortedItems";
 
 interface PlannerViewProps {
 	itemId: string
@@ -53,7 +54,7 @@ export const PlannerView = React.memo((props: PlannerViewProps) => {
 const PlannerCard = React.memo((props: { itemId: string }) => {
 
 	const { children, item } = useItem(props.itemId)
-	const sortedChildren = useMemo(() => children?.sort((a, b) => (a.rank || 0) - (b.rank || 0)) || [], [ children ])
+	const sortedChildren = useSortedItems(children);
 
 	if (!item) return null;
 
