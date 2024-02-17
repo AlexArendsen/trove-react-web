@@ -74,7 +74,7 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) => {
 
 	let state = { ...originalState }
-	console.log('Applying updates:', sortingUpdates)
+	//console.log('Applying updates:', sortingUpdates)
 
 	if (!sortingUpdates.length) return state;
 	const representativeParent = state.byId[sortingUpdates[0].itemId].parent_id;
@@ -85,18 +85,18 @@ const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) =
 		const preUpdateItem = state.byId[u.itemId]
 		if (!preUpdateItem) continue;
 
-		console.log(`[.byId] Updating rank of ${ state.byId[u.itemId].title } to ${ u.newRank }`)
+		//console.log(`[.byId] Updating rank of ${ state.byId[u.itemId].title } to ${ u.newRank }`)
 		state.byId[u.itemId].rank = u.newRank
 		if (u.newParent) { // Handle re-parent
 			const oldParent = state.byId[u.itemId].parent_id
 			const newParent = u.newParent
-			console.log(`Transferring item ${ u.itemId } from ${ oldParent } to ${ newParent }`)
+			//console.log(`Transferring item ${ u.itemId } from ${ oldParent } to ${ newParent }`)
 			state.byId[u.itemId].parent_id = u.newParent
 			if (oldParent) state.byParent[oldParent] = state.byParent[oldParent].filter(c => c._id !== u.itemId)
 			if (state.byParent[newParent]) {
-				console.log('PRE: New parent children', state.byParent[newParent])
+				//console.log('PRE: New parent children', state.byParent[newParent])
 				state.byParent[newParent] = [ ...state.byParent[newParent].filter(c => c._id !== u.itemId), state.byId[u.itemId] ]
-				console.log('POST: New parent children', state.byParent[newParent])
+				//console.log('POST: New parent children', state.byParent[newParent])
 			}
 		}
 	}
@@ -109,7 +109,7 @@ const WithSortedItems = (originalState: ItemState, sortingUpdates: ItemSort[]) =
 	state.all.succeeded(state.all.data?.map(i => {
 		if (lookup[i._id]) {
 			const update = lookup[i._id]
-			console.log(`[.all] Updating rank of ${ i.title } to ${ update.newRank }`)
+			//console.log(`[.all] Updating rank of ${ i.title } to ${ update.newRank }`)
 			const updated = { ...i, rank: update.newRank }
 			if (update.newParent) updated.parent_id = update.newParent
 			return updated
@@ -192,7 +192,7 @@ const WithoutItem = (originalState: ItemState, itemId: string) => {
 
 	const state = { ...originalState }
 	const i = state.byId[itemId];
-	console.info({ me: 'withoutItem', itemId, found: i })
+	//console.info({ me: 'withoutItem', itemId, found: i })
 	if (!i) return state;
 
 	state.all = state.all.succeeded((state.all.data || []).filter(i => i._id !== itemId))
@@ -277,7 +277,7 @@ const RecalculateStats = (state: ItemState, startId?: string) => {
 	// 2. If the item has a parent, bubble up to them and do the same thing
 	const crunch = (item: Item) => {
 		if (!item) return;
-		console.info({ me: 'crunch', item: item.title })
+		//console.info({ me: 'crunch', item: item.title })
 		const c = state.byParent[item._id];
 		if (c) {
 			newState = WithItemUpdate(newState, item._id, i => {

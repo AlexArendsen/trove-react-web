@@ -8,10 +8,28 @@ import { Flex } from "../Flex/Flex";
 import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
 import { Text } from "../Text/Text";
 import './Breadcrumbs.css'
+import { useItem } from "../../hooks/UseItem";
 
-export const Breadcrumbs = React.memo(() => {
+export const SelectedItemBreadcrumbs = React.memo(() => {
 
-	const { item } = useSelectedItem();
+	const selectedItem = useSelectedItem()?.item as Item | undefined
+	const history = useHistory()
+
+	return <Breadcrumbs
+		itemId={selectedItem?._id}
+		onSelectCrumb={(i) => history.push(i?._id || '')}
+	/>
+
+})
+
+export const Breadcrumbs = React.memo((props: {
+	itemId?: string
+	onSelectCrumb: (item: Item | null) => void
+}) => {
+
+	const { itemId, onSelectCrumb } = props
+
+	const item = useItem(itemId)?.item;
 
 	const lineage = useMemo(() => {
 		if (!item) return [];
@@ -28,8 +46,8 @@ export const Breadcrumbs = React.memo(() => {
 	return (
 		<div style={{ overflow: 'scroll' }}>
 			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }}>
-				<Crumb title='Home' />
-				{ lineage.map((l, idx) => <Crumb title={ l?.title || 'UNKNOWN' } item={ l } last={ (idx + 1) === lineage.length } />) }
+				<Crumb title='Home' onClick={ () => onSelectCrumb(null) } />
+				{ lineage.map((l, idx) => <Crumb title={ l?.title || 'UNKNOWN' } item={ l } isLast={ (idx + 1) === lineage.length } onClick={ () => onSelectCrumb(l) } />) }
 			</Flex>
 		</div>
 	)
@@ -37,18 +55,17 @@ export const Breadcrumbs = React.memo(() => {
 })
 
 interface CrumbProps {
-	title: string,
+	title: string
 	item?: Item | null
-	last?: boolean
+	isLast?: boolean
+	onClick: () => void
 }
 
 const Crumb = React.memo((props: CrumbProps) => {
 
-	const history = useHistory()
-
 	return (
 		<ItemDropZone itemId={ props.item?._id || null }>
-			<Flex row align='center' className='crumb' onClick={() => history.push(Routes.item(props.item?._id || ''))}>
+			<Flex row align='center' className='crumb' onClick={ props.onClick }>
 					<Text style={{ marginRight: 12 }} bold>{ props.title }</Text>
 					<Text medium>›</Text>
 			</Flex>

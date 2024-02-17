@@ -23,13 +23,16 @@ export const App = React.memo(() => {
   }, [])
 
   return (
-    <DndProvider backend={ HTML5Backend }>
-      <Provider store={ store }>
-        <BrowserRouter>
-          <BaseScreen />
-        </BrowserRouter>
-      </Provider>
-    </DndProvider>
+    <>
+    {/* @ts-ignore */}
+      <DndProvider backend={ HTML5Backend }>
+        <Provider store={ store }>
+          <BrowserRouter>
+            <BaseScreen />
+          </BrowserRouter>
+        </Provider>
+      </DndProvider>
+    </>
   );
 
 })

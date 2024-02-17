@@ -1,11 +1,7 @@
 import React from "react";
-import { useSelector } from 'react-redux';
-import { useBreakpoint } from "use-breakpoint";
-import { Breadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
+import { SelectedItemBreadcrumbs } from "../../components/Breadcrumbs/Breadcrumbs";
 import { Flex } from "../../components/Flex/Flex";
-import { Text } from "../../components/Text/Text";
 import { useSelectedItem } from "../../hooks/UseSelectedItem";
-import { useStore } from "../../hooks/UseStore";
 import { useWindowSize } from "../../hooks/UseWindowSize";
 import { ItemBlade } from "./ItemBlade/ItemBlade";
 import { SelectedItemDisplay } from "./SelectedItemDisplay/SelectedItemDisplay";
@@ -20,7 +16,7 @@ export const ItemsScreen = React.memo(() => {
 
 	return (
 		<Flex column>
-			<Breadcrumbs />
+			<SelectedItemBreadcrumbs />
 			<Flex row style={{ height: 'calc(100vh - 112px)', maxHeight: 'calc(100vh - 115px)', overflow: 'hidden' }}>
 
 				{ grandparent && !isMobile ? <ItemBlade darken itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} /> : null }

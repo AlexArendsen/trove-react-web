@@ -1,7 +1,9 @@
 import React from "react";
 import { Flex } from "../Flex/Flex";
 import { TrText } from "../Text/Text";
+//@ts-ignore
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//@ts-ignore
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { PopoverOverlay } from "./PopoverOverlay";
 import { Bump } from "../Bump/Bump";
@@ -12,10 +14,11 @@ export const ModalPopover = React.memo((props: {
     onClose: () => void,
     title: string,
     subtitle?: string,
+    scrollMode?: 'scroll-all-content' | 'fixed-max-height-container'
     children: JSX.Element
 }) => {
 
-    const { open, onClose, title, subtitle, children } = props
+    const { open, onClose, title, subtitle, children, scrollMode } = props
 
     const { isMobile } = useWindowSize()
 
@@ -61,7 +64,8 @@ export const ModalPopover = React.memo((props: {
                     <Flex column style={{
                         padding: `0 30px`,
                         flex: 1,
-                        overflowY: 'scroll'
+                        overflowY: scrollMode === 'scroll-all-content' ? 'scroll' : undefined,
+                        maxHeight: scrollMode === 'fixed-max-height-container' ? '92%' : undefined
                     }}>
                         { children }
                         <Bump h={ isMobile ? 40 : 0 } />

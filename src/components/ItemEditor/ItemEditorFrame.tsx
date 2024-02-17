@@ -10,6 +10,7 @@ import { ItemData } from "../../utils/ItemData"
 import { LensConfiguration } from "./ItemEditorNewLensPage"
 import { PillList } from "../PillList/PillList"
 import { ItemLensPillList } from "../../lenses/Shared/ItemLensPillLIst"
+import { useMoveEditor } from "../../stores/useMoveEditor"
 
 export const ItemEditorFrame = React.memo((props: {
 	children: JSX.Element,
@@ -20,6 +21,7 @@ export const ItemEditorFrame = React.memo((props: {
 }) => {
 
 	const ed = useItemEditor()
+	const move = useMoveEditor()
 
 	const { isMobile } = useWindowSize()
 
@@ -83,6 +85,10 @@ export const ItemEditorFrame = React.memo((props: {
 			<Flex row={ !isMobile } column={ isMobile } align={ isMobile ? 'stretch' : 'center' }>
 				<Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }}>
 					Delete
+				</Button>
+				<Bump w={ 20 } h={ 10 } />
+				<Button onClick={ () => move.open(ed.item?._id || '') }>
+					Move
 				</Button>
 				<div style={{ flex: 1 }}></div>
 				{ isMobile ? null : <TrText small faded>Ctrl+Enter</TrText> }

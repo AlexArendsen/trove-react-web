@@ -14,6 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
 import { ModalPopover } from "../components/Popover/ModalPopover";
 import { ItemEditorModal } from "../components/ItemEditor/ItemEditorModal";
+import { MoveEditorModal } from "../components/MoveEditor/MoveEditor";
 
 export const BaseScreen = React.memo(() => {
 
@@ -46,6 +47,7 @@ export const BaseScreen = React.memo(() => {
 			{ screen }
 			<ReactTooltip id='tooltip' place='left' effect='solid' />
 			<ItemEditorModal />
+			<MoveEditorModal />
 		</Flex>
 	)
 
