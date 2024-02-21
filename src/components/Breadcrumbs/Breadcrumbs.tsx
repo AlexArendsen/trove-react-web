@@ -17,7 +17,7 @@ export const SelectedItemBreadcrumbs = React.memo(() => {
 
 	return <Breadcrumbs
 		itemId={selectedItem?._id}
-		onSelectCrumb={(i) => history.push(i?._id || '')}
+		onSelectCrumb={(i) => history.push(Routes.item(i?._id || ''))}
 	/>
 
 })

@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { GetConfig } from "../utils/Config";
-import { MoveOneItemAction } from "../redux/actions/ItemActions";
+import { MoveManyItemsAction, MoveOneItemAction } from "../redux/actions/ItemActions";
 import { getConfig } from "@testing-library/react";
 
 type MoveEditorState = {
 
     isLoading: boolean
     isOpen: boolean
-    subjectId: string | undefined
+    subjectIds: string[] | undefined
     targetId: string | undefined
     viewportParentId: string | undefined
 
-    open: (itemId: string) => void
+    open: (itemId: string | string[]) => void
     close: () => void
     setTarget: (itemId: string) => void
     setViewportParent: (itemId: string) => void
@@ -29,14 +29,13 @@ export const useMoveEditor = create<MoveEditorState>((set, get) => {
 
         isLoading: false,
         isOpen: false,
-        subjectId: undefined,
+        subjectIds: undefined,
         targetId: undefined,
         viewportParentId: undefined,
 
-        open: (itemId: string) => set({
+        open: (itemId: string | string[]) => set({
             isOpen: true,
-            subjectId: itemId,
-            viewportParentId: GetConfig().Store?.getState().items.byId[itemId]?.parent_id
+            subjectIds: Array.isArray(itemId) ? itemId : [itemId]
         }),
         close: () => set({ isOpen: false }),
         setTarget: (itemId: string) => set({ targetId: itemId }),
@@ -50,12 +49,12 @@ export const useMoveEditor = create<MoveEditorState>((set, get) => {
             try {
                 const dispatch = GetConfig().Store?.dispatch as any;
 
-                const subject = get().subjectId
+                const subjects = get().subjectIds
                 const target = get().targetId
-                if (subject === undefined || target === undefined) {
-                    console.error('Cannot move, no subject item specified')
+                if (subjects === undefined || !(subjects?.length) || target === undefined) {
+                    console.error('Cannot move, no subject item(s) specified')
                 } else {
-                    await dispatch(MoveOneItemAction(subject, target))
+                    await dispatch(MoveManyItemsAction(subjects, target))
                     result = true
                 }
 

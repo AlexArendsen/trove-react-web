@@ -15,6 +15,7 @@ import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
 import { ModalPopover } from "../components/Popover/ModalPopover";
 import { ItemEditorModal } from "../components/ItemEditor/ItemEditorModal";
 import { MoveEditorModal } from "../components/MoveEditor/MoveEditor";
+import { MultiSelectBottomSheet } from "../components/Popover/MultiSelectBottomSheet";
 
 export const BaseScreen = React.memo(() => {
 
@@ -48,6 +49,7 @@ export const BaseScreen = React.memo(() => {
 			<ReactTooltip id='tooltip' place='left' effect='solid' />
 			<ItemEditorModal />
 			<MoveEditorModal />
+			<MultiSelectBottomSheet />
 		</Flex>
 	)
 

@@ -46,6 +46,12 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 		// Move Item(s)
 		case Actions.Items.MoveOne.loading: return WithItemUpdate(state, action.subject.child, i => ({ ...i, parent_id: action.subject.newParent }))
 		case Actions.Items.MoveOne.failure: return WithItemUpdate(state, action.subject.child, i => ({ ...i, parent_id: action.subject.oldParent }))
+		case Actions.Items.MoveMany.success:
+			const manyMoveChildren = action.subject.children as string[]
+			const manyMoveNewParent = action.subject.newParent as string
+			let s = state
+			for(const i of manyMoveChildren) s = WithItemUpdate(s, i, x => ({ ...x, parent_id: manyMoveNewParent }))
+			return s
 
 		// Add Item
 		case Actions.Items.Add.loading: return WithNewItem(state, { _id: action.subject._id, user_id: '', checked: false, title: action.subject.title, parent_id: action.subject.parent_id })
@@ -54,8 +60,6 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 
 		// Sort Item
 		case Actions.Items.Sort.loading: return WithSortedItems(state, action.subject as ItemSort[])
-		//case Actions.Items.Sort.success: return WithNewItem(WithoutItem(state, action.subject._id), action.data)
-		//case Actions.Items.Sort.failure: return WithoutItem(state, action.subject._id)
 
 		// Update Item
 		case Actions.Items.UpdateOne.loading: return WithItemUpdate(state, action.subject.new._id, i => action.subject.new)

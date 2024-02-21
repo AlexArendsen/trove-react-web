@@ -43,6 +43,7 @@ export const MoveOneItemAction = (itemId: string, newParentId: string) => {
 
 export const MoveManyItemsAction = (itemIds: string[], newParentId: string) => new DataPlan('items:move-many')
     .withReduxActions(Actions.Items.MoveMany)
+    .withSubject({ children: itemIds, newParent: newParentId })
     .do(() => Api.put(`/items/move`, { ids: itemIds, new_parent: newParentId })).run()
 
 export const UpdateOneItemAction = (item: Item) => new DataPlan('items:update-one')

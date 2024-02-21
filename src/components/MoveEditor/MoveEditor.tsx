@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useItem } from "../../hooks/UseItem";
 import { useStore } from "../../hooks/UseStore";
 import { Item } from "../../redux/models/Items/Item";
@@ -11,12 +11,16 @@ import { ItemList } from "../ItemList/ItemList";
 import { ModalPopover } from "../Popover/ModalPopover";
 import { TrText } from "../Text/Text";
 import { useItemEditor } from "../../stores/useItemEditor";
+import { GetConfig } from "../../utils/Config";
 
 export const MoveEditorModal = React.memo(() => {
 
     const ed = useMoveEditor()
-    const itemId = ed.subjectId
-    const subject = useItem(itemId)?.item as Item | undefined
+    //const subject = useItem(itemId)?.item as Item | undefined
+    const subjectTitle = useMemo(() => {
+        if (ed.subjectIds?.length === 1) return GetConfig().Store?.getState().items.byId[ed.subjectIds[0]]?.title || 'Item'
+        else return `${ed.subjectIds?.length} items`
+    }, [ ed.subjectIds ])
     const target = useItem(ed.targetId)?.item as Item | undefined
 
 	const topLevels = useStore(s => s.items.topLevel)
@@ -35,7 +39,7 @@ export const MoveEditorModal = React.memo(() => {
     }
 
     return (
-        <ModalPopover open={ ed.isOpen } onClose={ ed.close } title='Move Item' subtitle={ subject?.title } scrollMode='fixed-max-height-container'>
+        <ModalPopover open={ ed.isOpen } onClose={ ed.close } title='Move Item' subtitle={ subjectTitle } scrollMode='fixed-max-height-container'>
 
             <Flex column style={{ flex: 1, minHeight: '100%', maxHeight: '100%', margin: '0 -15px' }}>
 
@@ -51,7 +55,7 @@ export const MoveEditorModal = React.memo(() => {
                     margin: '0 -15px'
                 }}>
 
-                    <TrText>Moving <strong>{ subject?.title }</strong> to <strong>{ target?.title || 'root' }</strong>.</TrText>
+                    <TrText>Moving <strong>{ subjectTitle }</strong> to <strong>{ target?.title || 'root' }</strong>.</TrText>
 
                     <div style={{ flex: 1 }}></div>
 

@@ -18,7 +18,7 @@
 
 .trove-logo-gradient {
 	background: #2300B1;
-	background: -webkit-linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
+	background: -webkit-linear-gradient(to right, rgba(73,48,170,1) 0%,  #3061aa 100%);
 	background: -moz-linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
 	background: linear-gradient(to right, rgba(73,48,170,1) 0%,  rgba(48,97,170,1) 100%);
 	-webkit-background-clip: text;

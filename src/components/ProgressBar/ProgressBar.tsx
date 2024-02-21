@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import { useItemProgress } from "../../hooks/UseItemProgress";
 import { Item } from "../../redux/models/Items/Item";
 import './ProgressBar.css';
+import { useMultiSelect } from "../../stores/useMultiSelect";
 
 interface ProgressBarProps {
 	floating?: boolean
@@ -13,6 +14,7 @@ interface ProgressBarProps {
 export const ProgressBar = React.memo((props: ProgressBarProps) => {
 
 	const { floating, percent, item } = props;
+	const msEnabled = useMultiSelect().isEnabled
 
 	const itemPct = useItemProgress(item);
 	const propPct = useMemo(() => {
@@ -23,7 +25,11 @@ export const ProgressBar = React.memo((props: ProgressBarProps) => {
 
 	return (
 		<div className={ classNames({ 'progress-bar-background': true, 'progress-bar-floating': floating }) }>
-			<div className={ classNames({ 'progress-bar-contents': true, 'progress-bar-floating': floating }) } style={{ width: `${ pct * 100 }%` }}>
+			<div className={ classNames({
+				'progress-bar-contents': true,
+				'progress-bar-floating': floating,
+				'multiselect': msEnabled
+			}) } style={{ width: `${ pct * 100 }%` }}>
 			</div>
 		</div>
 	)

@@ -11,6 +11,10 @@
 	height: 7px;
 }
 
+.progress-bar-contents.multiselect {
+	background-color: #3061aa;
+}
+
 .progress-bar-floating {
 	border-radius: 4px;
 }
