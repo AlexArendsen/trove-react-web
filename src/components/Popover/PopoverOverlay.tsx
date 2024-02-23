@@ -9,7 +9,7 @@ export const PopoverOverlay = React.memo((props: {
 
     return (
         <div style={{
-            position: 'absolute',
+            position: 'fixed',
             left: 0,
             top: 0,
             width: '100%',

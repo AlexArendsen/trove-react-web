@@ -30,7 +30,9 @@ export const DeleteOneItemAction = (itemId: string) => new DataPlan('items:delet
     .withReduxActions(Actions.Items.DeleteOne).do(() => Api.del(`/item/${ itemId }`)).run()
 
 export const DeleteManyItemsAction = (itemIds: string[]) => new DataPlan('items:delete-many')
-    .withReduxActions(Actions.Items.DeleteMany).do(() => Api.del(`/items`, { ids: itemIds })).run()
+    .withSubject({ ids: itemIds })
+    .withReduxActions(Actions.Items.DeleteMany)
+    .do(() => Api.del(`/items`, null, { ids: itemIds.join(',') })).run()
 
 export const MoveOneItemAction = (itemId: string, newParentId: string) => {
     const existing = GetConfig().Store?.getState().items.byId[itemId];

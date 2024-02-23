@@ -15,6 +15,11 @@
 	color: white;
 }
 
+.button-danger {
+	background: #ff000033;
+	color: red;
+}
+
 .button-large {
 	padding: 16px 16px;
 }

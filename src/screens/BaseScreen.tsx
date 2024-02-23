@@ -16,6 +16,7 @@ import { ModalPopover } from "../components/Popover/ModalPopover";
 import { ItemEditorModal } from "../components/ItemEditor/ItemEditorModal";
 import { MoveEditorModal } from "../components/MoveEditor/MoveEditor";
 import { MultiSelectBottomSheet } from "../components/Popover/MultiSelectBottomSheet";
+import { ConfirmPopover } from "../components/Popover/ConfirmPopover";
 
 export const BaseScreen = React.memo(() => {
 
@@ -50,6 +51,7 @@ export const BaseScreen = React.memo(() => {
 			<ItemEditorModal />
 			<MoveEditorModal />
 			<MultiSelectBottomSheet />
+			<ConfirmPopover />
 		</Flex>
 	)
 

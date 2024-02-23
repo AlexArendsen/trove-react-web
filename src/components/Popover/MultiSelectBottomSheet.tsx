@@ -3,11 +3,18 @@ import { BottomSheetPopover } from "./BottomSheetPopover";
 import { useMultiSelect } from "../../stores/useMultiSelect";
 import { Button } from "../Button/Button";
 import { useMoveEditor } from "../../stores/useMoveEditor";
+import { Bump } from "../Bump/Bump";
+import { Flex } from "../Flex/Flex";
+import { useConfirm } from "../../stores/useConfirm";
+import { useDispatch } from "react-redux";
+import { DeleteManyItemsAction } from "../../redux/actions/ItemActions";
 
 export const MultiSelectBottomSheet = React.memo(() => {
 
     const ms = useMultiSelect()
     const move = useMoveEditor()
+    const confirm = useConfirm()
+    const dispatch = useDispatch()
 
     const title = useMemo(() => {
         const s = ms.itemIds?.size
@@ -21,6 +28,17 @@ export const MultiSelectBottomSheet = React.memo(() => {
         move.open(ids)
     }
 
+    const handleClickDelete = () => {
+        const ids = Array.from(ms.itemIds)
+        ms.stop()
+        const s = ids.length === 1 ? '' : 's'
+        confirm.open({
+            title: 'Delete Many',
+            subtitle: `Are you sure you want to delete ${ids.length} item${s}?`,
+            onConfirm: () => dispatch(DeleteManyItemsAction(ids))
+        })
+    }
+
     return (
         <BottomSheetPopover
             variant='multiselect'
@@ -29,9 +47,11 @@ export const MultiSelectBottomSheet = React.memo(() => {
             title={title}
             withoutOverlay
         >
-            <Button onClick={ handleClickMove } variant='submit'>
-                Move
-            </Button>
+            <Flex row>
+                <Button onClick={ handleClickMove } variant='submit'>Move</Button>
+                <Bump w={ 20 } />
+                <Button onClick={ handleClickDelete } variant='danger'>Delete</Button>
+            </Flex>
         </BottomSheetPopover>
     )
 

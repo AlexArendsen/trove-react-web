@@ -33,7 +33,7 @@ export const BottomSheetPopover = React.memo((props: {
             { withoutOverlay ? null : <PopoverOverlay onClick={ onClose } /> }
 
             <Flex row justify='center' style={{
-                position: 'absolute',
+                position: 'fixed',
                 zIndex: 1100,
                 width: '100vw',
                 bottom: 0,

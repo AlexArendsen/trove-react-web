@@ -4,7 +4,7 @@ import { Text } from "../Text/Text";
 import './Button.css';
 
 export interface ButtonProps {
-	variant?: 'submit'
+	variant?: 'submit' | 'danger'
 	submitForm?: boolean
 	fullWidth?: boolean
 	onClick?: (e: React.MouseEvent) => void
@@ -25,6 +25,7 @@ export const Button = React.memo((props: ButtonProps) => {
 			className={classNames({
 				'button': true,
 				'button-submit': props.variant === 'submit',
+				'button-danger': props.variant === 'danger',
 				'button-full-width': props.fullWidth,
 				'button-large': props.large
 			})}

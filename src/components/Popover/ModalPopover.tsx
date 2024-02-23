@@ -30,7 +30,7 @@ export const ModalPopover = React.memo((props: {
             <PopoverOverlay onClick={ onClose } />
 
             <Flex row center style={{
-                position: 'absolute',
+                position: 'fixed',
                 zIndex: 1101,
                 left: 0,
                 top: 0,

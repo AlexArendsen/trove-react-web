@@ -68,6 +68,11 @@ export const ItemReducer = (state: ItemState = new ItemState(), action: ReduxAct
 		// Delete Item
 		case Actions.Items.DeleteOne.loading: return WithoutItem(state, action.subject._id)
 		case Actions.Items.DeleteOne.failure: return WithNewItem(state, action.subject)
+		case Actions.Items.DeleteMany.success:
+			const ids = action.subject.ids as string[]
+			let postDeleteState = state
+			for(const i of ids) postDeleteState = WithoutItem(state, i)
+			return postDeleteState
 
 	}
 
