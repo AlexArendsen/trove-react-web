@@ -15,6 +15,7 @@ interface CheckboxProps {
 	className?: string,
 	itemId?: string, // Convenience prop, when passed will check / uncheck item accordingly
 	small?: boolean,
+	hitSlop?: 'full' | 'slim' | 'none'
 	showProgress?: boolean
 }
 
@@ -58,21 +59,37 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 
 	const progress = useItemProgress(item);
 	const showProgress = props.showProgress && !ms.isEnabled
+	const [ vslop, hslop ] = useMemo(() => {
+		switch(props.hitSlop) {
+			case 'full': return [15, 15];
+			case 'slim': return [5, 15];
+			default: return [0, 0];
+		}
+	}, [ props.hitSlop ])
 
 	return (
 		<div
 			onClick={ handleClick }
 			onContextMenu={ handleRightClick }
 			style={{
-				background: showProgress ? `linear-gradient(45deg, #4931AB ${progress * 100}%, transparent ${progress * 100}%)` : undefined,
-				borderColor: showProgress && progress > 0 ? '#4931AB' : undefined
+				//backgroundColor: '#0000ff33',
+				margin: `-${vslop}px -${hslop}px`,
+				padding: `${vslop}px ${hslop}px`
 			}}
-			className={classNames({
-				'checkbox': true,
-				'checkbox-small': props.small,
-				'checkbox-checked': checked,
-				'multiselect': ms.isEnabled
-			})}>
+			>
+				<div
+					style={{
+						background: showProgress ? `linear-gradient(45deg, #4931AB ${progress * 100}%, transparent ${progress * 100}%)` : undefined,
+						borderColor: showProgress && progress > 0 ? '#4931AB' : undefined
+					}}
+					className={classNames({
+						'checkbox': true,
+						'checkbox-small': props.small,
+						'checkbox-checked': checked,
+						'multiselect': ms.isEnabled
+					})
+				}>
+				</div>
 		</div>
 	)
 

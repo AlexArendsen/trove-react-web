@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { GetConfig } from "../utils/Config";
 import { MoveManyItemsAction, MoveOneItemAction } from "../redux/actions/ItemActions";
 import { getConfig } from "@testing-library/react";
+import { GetFromStore } from "../utils/GetFromStore";
 
 type MoveEditorState = {
 
@@ -33,10 +34,15 @@ export const useMoveEditor = create<MoveEditorState>((set, get) => {
         targetId: undefined,
         viewportParentId: undefined,
 
-        open: (itemId: string | string[]) => set({
-            isOpen: true,
-            subjectIds: Array.isArray(itemId) ? itemId : [itemId]
-        }),
+        open: (itemId: string | string[]) => {
+            const firstId = Array.isArray(itemId) ? itemId[0] : itemId
+            const idsList = Array.isArray(itemId) ? itemId : [itemId]
+            set({
+                isOpen: true,
+                viewportParentId: get().viewportParentId || GetFromStore(s => s.items.byId[firstId])?.parent_id,
+                subjectIds: idsList
+            })
+        },
         close: () => set({ isOpen: false }),
         setTarget: (itemId: string) => set({ targetId: itemId }),
         setViewportParent: (itemId: string) => set({ viewportParentId: itemId }),

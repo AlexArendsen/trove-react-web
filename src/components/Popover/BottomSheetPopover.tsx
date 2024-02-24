@@ -62,7 +62,9 @@ export const BottomSheetPopover = React.memo((props: {
                             <TrText small style={{ textTransform: 'uppercase' }}>
                                 <strong>{ title }</strong>
                             </TrText>
-                            <FontAwesomeIcon icon={ faXmark } onClick={ onClose } />
+                            <div onClick={ onClose } style={{ margin: -15, padding: 15, cursor: 'pointer' }}>
+                                <FontAwesomeIcon icon={ faXmark } />
+                            </div>
                         </Flex>
                         <Bump h={ 20 } />
                         { children }

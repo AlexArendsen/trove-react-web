@@ -3,6 +3,8 @@ import { Item } from "../redux/models/Items/Item";
 import { GetFromStore } from "../utils/GetFromStore";
 import { GetConfig } from "../utils/Config";
 import { DeleteOneItemAction, UpdateOneItemAction } from "../redux/actions/ItemActions";
+import { TrHistory } from "../constants/History";
+import { Routes } from "../constants/Routes";
 
 type ItemEditorStore = {
 

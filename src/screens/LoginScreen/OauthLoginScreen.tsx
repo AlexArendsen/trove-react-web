@@ -16,7 +16,14 @@ export const OauthLoginScreen = React.memo(() => {
             <div style={{ maxWidth: 600, backgroundColor: 'white', padding: 50 }}>
                 <Logo large variant='gradient' />
                 <Bump h={ 120 } />
-                <Button variant='submit' fullWidth large onClick={ () => auth.loginWithRedirect({  }) }>Log In</Button>
+                <Button
+                    variant={ auth.isLoading ? undefined : 'submit' }
+                    fullWidth
+                    large
+                    onClick={ () => auth.loginWithRedirect({  }) }
+                >
+                    { auth.isLoading ? 'Loading...' : 'Log In' }
+                </Button>
             </div>
 
 		</Flex>

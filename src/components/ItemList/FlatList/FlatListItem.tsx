@@ -9,12 +9,14 @@ import { ItemDropZone } from "../../ItemDropZone/ItemDropZone";
 import { ProgressBar } from "../../ProgressBar/ProgressBar";
 import './FlatListItem.css';
 import { TrText } from "../../Text/Text";
+import { Bump } from "../../Bump/Bump";
 
 interface FlatListItemProps {
 	itemId: string
 	selected?: boolean
 	figures?: 'visible' | 'on-end' | 'hidden'
 	onClick?: () => void
+	withouthCheckboxes?: boolean
 }
 
 export const FlatListItem = React.memo((props: FlatListItemProps) => {
@@ -46,9 +48,11 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 
 				<Flex row align='center'>
 
-					<Flex row justify='center' style={{ width: 50, marginRight: 15 }}>
-						<Checkbox checked={ checked } itemId={ item?._id } />
-					</Flex>
+					{ props.withouthCheckboxes ? <Bump w={ 25 } /> : (
+						<Flex row justify='center' style={{ width: 50, marginRight: 15 }}>
+							<Checkbox checked={ checked } itemId={ item?._id } hitSlop='full' />
+						</Flex>
+					) }
 
 					<Flex column style={{ flex: 2 }}>
 						<TrText medium bold className='flat-list-item-title'>{ item?.title }</TrText>

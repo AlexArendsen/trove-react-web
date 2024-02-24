@@ -10,7 +10,7 @@ import { TrText } from "../Text/Text";
 import { useSortedItems } from "../../hooks/UseSortedItems";
 
 interface ItemListProps {
-	display?: 'list' | 'grouped-list' | 'gallery' | 'planner' | 'compact-list'
+	display?: 'list' | 'grouped-list' | 'gallery' | 'planner' | 'compact-list' | 'picker-list'
 	items?: Item[],
 	parentId?: string,
 	selected?: string,
@@ -38,6 +38,18 @@ export const ItemList = React.memo((props: ItemListProps) => {
 				{ (items || []).map(i => (
 					<GalleryListItem key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } showParent />
 				)) }
+			</Flex>
+		)
+
+		case 'picker-list': return (
+			<Flex column style={{ width: '100%' }}>
+				{ (items || []).map((i, idx) => (
+					<>
+						<ItemSortingDropZone dropIdx={ idx } parentId={ parentId } />
+						<FlatListItem withouthCheckboxes figures='on-end' selected={ selected === i._id } key={ i._id } itemId={ i._id } onClick={ () => handleClick(i) } />
+					</>
+				)) }
+				<ItemSortingDropZone dropIdx={ items.length } parentId={ parentId } />
 			</Flex>
 		)
 

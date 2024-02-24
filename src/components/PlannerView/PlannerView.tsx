@@ -128,7 +128,7 @@ const SimpleItem = React.memo((props: { itemId: string, small?: boolean, showPro
 				onClick={ () => history.push(Routes.item(item._id)) }
 				onContextMenu={ handleRightClick }
 				>
-				<Checkbox showProgress={ props.showProgressInCheckbox } small={ props.small } itemId={ item._id } />
+				<Checkbox showProgress={ props.showProgressInCheckbox } small={ props.small } itemId={ item._id } hitSlop='slim' />
 				<TrText small={ props.small } medium={ !props.small } bold={ !props.small } style={{ marginLeft: 10 }}>{ item.title }</TrText>
 			</Flex>
 		</ItemDropZone>

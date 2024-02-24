@@ -8,7 +8,6 @@ import { useStore } from "../hooks/UseStore";
 import { GetStoredToken } from "../redux/actions/AuthenticationActions";
 import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
 import { LoadingScreen } from "./LoadingScreen/LoadingScreen";
-import { LoginScreen } from "./LoginScreen/LoginScreen";
 import { SearchScreen } from "./SearchScreen/SearchScreen";
 import { useAuth0 } from "@auth0/auth0-react";
 import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
@@ -17,6 +16,7 @@ import { ItemEditorModal } from "../components/ItemEditor/ItemEditorModal";
 import { MoveEditorModal } from "../components/MoveEditor/MoveEditor";
 import { MultiSelectBottomSheet } from "../components/Popover/MultiSelectBottomSheet";
 import { ConfirmPopover } from "../components/Popover/ConfirmPopover";
+import { GlobalEventController } from "../components/Controllers/GlobalEventController";
 
 export const BaseScreen = React.memo(() => {
 
@@ -31,7 +31,7 @@ export const BaseScreen = React.memo(() => {
 	const itemsLoading = useStore(s => s.items.all.loading);
 	const showHeader = useMemo(() => !itemsLoading && loggedIn, [ itemsLoading, loggedIn ])
 
-	const { view } = useQueryParams();
+	const { view, edit } = useQueryParams();
 	const screen = useMemo(() => {
 
 		if (!loggedIn) return <OauthLoginScreen />
@@ -47,6 +47,7 @@ export const BaseScreen = React.memo(() => {
 		<Flex column>
 			{ showHeader ? <Header /> : null }
 			{ screen }
+			<GlobalEventController />
 			<ReactTooltip id='tooltip' place='left' effect='solid' />
 			<ItemEditorModal />
 			<MoveEditorModal />

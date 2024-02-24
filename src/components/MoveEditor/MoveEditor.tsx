@@ -16,11 +16,12 @@ import { GetConfig } from "../../utils/Config";
 export const MoveEditorModal = React.memo(() => {
 
     const ed = useMoveEditor()
-    //const subject = useItem(itemId)?.item as Item | undefined
+
     const subjectTitle = useMemo(() => {
         if (ed.subjectIds?.length === 1) return GetConfig().Store?.getState().items.byId[ed.subjectIds[0]]?.title || 'Item'
         else return `${ed.subjectIds?.length} items`
     }, [ ed.subjectIds ])
+
     const target = useItem(ed.targetId)?.item as Item | undefined
 
 	const topLevels = useStore(s => s.items.topLevel)
@@ -46,7 +47,12 @@ export const MoveEditorModal = React.memo(() => {
                 <Breadcrumbs itemId={ ed.viewportParentId } onSelectCrumb={ (i) => ed.setViewportParent(i?._id || '') } />
 
                 <div style={{ flex: 1, overflowY: 'scroll' }}>
-                    <ItemList items={ viewportItems } parentId={ ed.viewportParentId || undefined } onClick={ handleTargetClick } display="compact-list" />
+                    <ItemList
+                        items={ viewportItems }
+                        parentId={ ed.viewportParentId || undefined }
+                        onClick={ handleTargetClick }
+                        display="picker-list"
+                        />
                 </div>
 
                 <Flex row justify="space-between" style={{
