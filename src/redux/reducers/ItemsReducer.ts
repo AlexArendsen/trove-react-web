@@ -218,7 +218,6 @@ const WithStats = (items: Item[], byParent: Record<string, Item[]>): Item[] => {
 
     const statCache: Record<string, StatBundle> = {}
 
-
 	// Recursive runner:
 	// - If we've already calculated the stats for this item, just use those.
 	// - If the item has no children, its stats are zero

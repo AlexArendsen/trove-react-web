@@ -1,9 +1,10 @@
 import { Auth0ContextInterface } from "@auth0/auth0-react";
-import { SetTokenResolver } from "./utils/GetToken";
+import { GetToken, SetTokenResolver } from "./utils/GetToken";
 import { Auth0Constants } from "./constants/Auth0";
 import { Store } from "redux";
 import { ReduxAction } from "./redux/models/ReduxAction";
 import { SetConfig } from "./utils/Config";
+import axios from "axios";
 
 export const Initialize = async (config: {
     auth0: Auth0ContextInterface,
@@ -27,6 +28,18 @@ export const Initialize = async (config: {
             console.log('ERROR GETTING TOKEN!!', e)
             return ''
         }
+    })
+
+    // Configure Axios
+    axios.interceptors.request.use(async (request) => {
+
+        const jwt = await GetToken()
+        if (!jwt) return request
+
+        if (!request.headers) request.headers = {}
+        request.headers['Authorization'] = `Bearer ${jwt}`
+        return request
+
     })
 
     SetConfig({ Store: store })

@@ -7,11 +7,13 @@ import { GridLens } from '../lenses/GridLens'
 import { OrphansLens } from '../lenses/OrphansLens'
 import { DebugItemLens } from '../lenses/DebugItemLens'
 import { LayoutItemLens } from '../lenses/LayoutLens/LayoutItemLens'
+import { ZustandDebugLens } from '../lenses/ZustandDebugLens'
 
 export const allLenses = [
     PlannerItemLens,
     LayoutItemLens,
     GridLens,
+    ZustandDebugLens,
     OrphansLens,
     DebugItemLens
 ]

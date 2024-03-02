@@ -9,7 +9,8 @@ export const GridLens: ItemLens = {
 
     Self: {
         AsSelected: {
-            RenderChildList: (props) => <GridView parentItemId={ props.itemId } />
+            //RenderChildList: (props) => <GridView parentItemId={ props.itemId } />
+            RenderChildList: (props) => null
         },
         FullWidthSelected: true
     }

@@ -12,4 +12,5 @@ export interface Item {
 	descendants?: number
 	rank?: number
 	completed?: number
+	isRoot?: boolean
 }
