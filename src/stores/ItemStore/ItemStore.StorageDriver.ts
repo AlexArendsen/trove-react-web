@@ -3,6 +3,7 @@ import { Item } from "../../redux/models/Items/Item"
 import { ItemSort } from "../../redux/models/Items/ItemSort"
 import { Environment } from "../../utils/Environment"
 import { GroupByFirst } from "../../utils/Arrays"
+import { MakePromise } from "../../utils/MakePromise"
 
 export type ItemStoreStorageDriverResponse<TData> = {
     data: TData
@@ -34,8 +35,29 @@ const ItemStoreApiStorageDriver: ItemStoreStorageDriver = {
 
 const getLocalItems = (): Item[] => {
     try {
-        return JSON.parse(localStorage.getItem('ITEMS') || '[]') as Item[]
+        const allItems = JSON.parse(localStorage.getItem('ITEMS') || '[]') as Item[]
+
+        // Re-capitate items if there is no root
+        if (!allItems.some(i => i.isRoot)) {
+            const newRoot: Item = {
+                _id: `ROOT${new Date().getTime()}`,
+                checked: false,
+                title: 'NEW ROOT',
+                user_id: 'this-current-user', // TODO -- Make a useUserStore() store
+                created_at: new Date().toISOString(),
+                isRoot: true
+            }
+
+            allItems.push(newRoot)
+            for(const i of allItems) if (!i.parent_id && !i.isRoot) i.parent_id = newRoot._id
+            setLocalItems(allItems)
+        }
+
+        return allItems
+
     } catch (e) {
+        console.log('FAILED TO LOAD ITEMS')
+        console.error(e)
         return []
     }
 }
@@ -52,7 +74,7 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
         return { data: item }
     },
     updateOne: async (item) => {
-        const items = [ ...getLocalItems() ].map(i => i._id === item._id ? item : i)
+        const items = getLocalItems().map(i => i._id === item._id ? item : i)
         setLocalItems(items)
         return { data: item }
     },
@@ -61,7 +83,7 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
         const updated = local.find(l => l._id === itemId)
         if (!updated) throw new Error('Item does not exist')
         updated.checked = true
-        const items = [ ...getLocalItems() ].map(i => i._id === itemId ? updated : i)
+        const items = local.map(i => i._id === itemId ? updated : i)
         setLocalItems(items)
         return { data: updated }
     },
@@ -70,7 +92,7 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
         const updated = local.find(l => l._id === itemId)
         if (!updated) throw new Error('Item does not exist')
         updated.checked = false
-        const items = [ ...getLocalItems() ].map(i => i._id === itemId ? updated : i)
+        const items = local.map(i => i._id === itemId ? updated : i)
         setLocalItems(items)
         return { data: updated }
     },
@@ -84,6 +106,7 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
         const local = getLocalItems()
         const toDelete = local.find(i => i._id === id)
         if (!toDelete) throw new Error('Item does not exist')
+        if (toDelete.isRoot) throw new Error('Cannot delete root')
         const items = local.filter(i => i._id !== id)
         setLocalItems(items)
         return { data: toDelete }
@@ -92,6 +115,7 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
         const idSet = new Set(ids)
         const local = getLocalItems()
         const toDelete = local.filter(i => idSet.has(i._id))
+        if (toDelete.some(d => d.isRoot)) throw new Error('Cannot delete root')
         const items = getLocalItems().filter(i => !idSet.has(i._id))
         setLocalItems(items)
         return { data: toDelete }
@@ -111,8 +135,25 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
 
 }
 
+const waitAndFail = async <TResult>() => {
+    const p = MakePromise<TResult>()
+    setTimeout(() => p.reject(new Error('Fake Error')), 750)
+    return p.promise
+}
+const ItemStoreBuggedStorageDriver: ItemStoreStorageDriver = {
+    load: async () => ({ data: getLocalItems() }),
+    create: async () => ({ data: await waitAndFail() }),
+    updateOne: async () => ({ data: await waitAndFail() }),
+    checkOne: async () => ({ data: await waitAndFail() }),
+    uncheckOne: async () => ({ data: await waitAndFail() }),
+    moveMany: async () => ({ data: await waitAndFail() }),
+    deleteOne: async () => ({ data: await waitAndFail() }),
+    deleteMany: async () => ({ data: await waitAndFail() }),
+    sort: async () => ({ data: await waitAndFail() }),
+}
+
 const ConvertAxiosResponse = <TData>(response: AxiosResponse<TData>): ItemStoreStorageDriverResponse<TData> => {
     return { data: response.data }
 }
 
-export const ItemStoreDefaultStorageDriver = ItemStoreDebuggingLocalStorageDriver;
+export const ItemStoreDefaultStorageDriver = ItemStoreBuggedStorageDriver;

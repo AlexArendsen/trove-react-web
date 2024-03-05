@@ -23,12 +23,13 @@ export const ItemStoreLoadItems = async (store: ItemStoreAccess) => {
     // Remove orphans, tabulate stats
     const itemsRaw = [ ...response.data ]
     let byParent = GroupBy(itemsRaw, i => i.parent_id || '')
-    const items = RetabEntireTree(RemoveOrphans(itemsRaw, byParent))
+    const items = RetabEntireTree(RemoveOrphansAndLoops(itemsRaw, byParent))
 
     // Create byId, byParent lookups
     const byId = GroupByFirst(items, i => i._id)
     byParent = GroupBy(items, i => i.parent_id || '')
     const root = items.find(i => i.isRoot)
+    console.log({ byId, root, items, response })
 
     //store.set({ items, byId, byParent, root })
     store.set({ byId, byParent, root })
@@ -38,13 +39,23 @@ export const ItemStoreLoadItems = async (store: ItemStoreAccess) => {
 // We don't want to waste our time with unnavigable items, or worse, items that form a loop
 // Removing all items who are not descendants of the top-level items is an effective way to
 // take care of this problem.
-const RemoveOrphans = (items: Item[], byParent: Record<string, Item[]>): Item[] => {
+const RemoveOrphansAndLoops = (items: Item[], byParent: Record<string, Item[]>): Item[] => {
 
+    console.log({ items, byParent }) 
+    const looped = new Set<string>();
     const found = new Set<string>();
-    const topLevelItems = items.filter(i => !i.parent_id);
+    const topLevelItems = items.filter(i => i.isRoot);
     const markChildren = (item: Item) => {
-        found.add(item._id);
-        byParent[item._id]?.forEach(x => markChildren(x));
+        if (found.has(item._id)) { // If we were already here, there was a loop; blacklist it
+            looped.add(item._id)
+            found.delete(item._id)
+        } else if (looped.has(item._id)) { // If this item has been flagged as a loop component, get out of here
+            return
+        } else { // Otherwise, it's fine
+            found.add(item._id);
+            const children = byParent[item._id] || []
+            children.forEach(x => markChildren(x));
+        }
     }
     topLevelItems.forEach(markChildren);
     return items.filter(i => found.has(i._id));

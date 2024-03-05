@@ -46,6 +46,7 @@ const ReplaceItem = (store: ItemStoreAccess, newItem: Item, replaceId: string): 
     // If parent has changed, update byParent accordingly
     if (oldParent !== newParent) {
         byParent[oldParent] = byParent[oldParent].filter(i => i._id !== oldId)
+        if (!byParent[newParent]) byParent[newParent] = [] // Old parent definitely exists in byParent, but new parent may not
         byParent[newParent] = [ ...byParent[newParent], newItem ]
     } else { // ... otherwise, just update it in place
         byParent[oldParent] = byParent[oldParent].map(i => i._id === newId ? newItem : i)
@@ -57,11 +58,14 @@ const ReplaceItem = (store: ItemStoreAccess, newItem: Item, replaceId: string): 
 
 const RetabBubbleUp = (
     state: ItemStoreState,
-    startIds: string[]
+    startIds: (string | null | undefined)[]
 ) => {
 
+    console.log(`-- RETABBING ${startIds.join(', ')}`, state)
 
-    for(const start in startIds) {
+    for(const start of startIds) {
+
+        if (!start) continue;
 
         // We shouldn't have trouble with cycles, but just in case
         const updated = new Set<string>()
@@ -76,9 +80,11 @@ const RetabBubbleUp = (
             else updated.add(wrk._id)
 
             // Add up children stats
-            const children = state.byParent[wrk._id]
+            const children = state.byParent[wrk._id] || []
             wrk.descendants = MoreMath.Sum(children.map(c => c.descendants || 1))
             wrk.completed = MoreMath.Sum(children.map(c => c.checked ? c.descendants || 1 : c.completed || 0))
+
+            console.log(`${wrk.title}: DESC = ${wrk.descendants} / COMP = ${wrk.completed}`)
 
             // Go up to parent
             if (!wrk.parent_id) break;

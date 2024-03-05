@@ -5,6 +5,8 @@ import { ItemStoreLoadItems } from "./ItemStore.LoadItems"
 import { ItemStoreCreateItem } from "./ItemStore.CreateItem"
 import { ItemStoreUpdateOneItem } from "./ItemStore.UpdateItem"
 import { ItemStoreCheckItem, ItemStoreUncheckItem } from "./ItemStore.CheckItem"
+import { ItemStoreMoveManyItems, ItemStoreMoveOneItem } from "./ItemStore.MoveItem"
+import { ItemStoreDeleteManyItem, ItemStoreDeleteOneItem } from "./ItemStore.DeleteItem"
 
 export type ItemStoreState = {
 
@@ -37,6 +39,47 @@ export type ItemStoreAccess = {
     get: () => ItemStoreState
 }
 
+export const useItemStore = create<ItemStoreState>((set, get) => {
+
+    return {
+
+        isLoading: false,
+        byId: {},
+        byParent: {},
+        root: undefined,
+
+        load: async () => await ItemStoreLoadItems({ set, get }),
+
+        create: async (title: string, parentId: string, extras?: Partial<Item>) => await ItemStoreCreateItem({ set, get }, title, parentId, extras),
+
+        updateOne: async (itemId: string, update: Partial<Item>) => await ItemStoreUpdateOneItem({ set, get }, itemId, update),
+
+        checkOne: async (itemId: string) => await ItemStoreCheckItem({ set, get }, itemId),
+
+        uncheckOne: async (itemId: string) => await ItemStoreUncheckItem({ set, get }, itemId),
+
+        moveOne: async (itemId: string, newParentId: string) => await ItemStoreMoveOneItem({ set, get }, itemId, newParentId),
+
+        moveMany: async (itemIds: string[], newParentId: string) => await ItemStoreMoveManyItems({ set, get }, itemIds, newParentId),
+
+        deleteOne: async (itemId: string) => await ItemStoreDeleteOneItem({ set, get }, itemId),
+
+        deleteMany: async (itemIds: string[]) => await ItemStoreDeleteManyItem({ set, get }, itemIds),
+
+        sort: async (updates: ItemSort[]) => {
+            // Record all current item ranks and parents
+            // Update all items with new ranks and parents, retab all old parents, new parent, and up
+            // Send PUT to API
+            // If failed, restore all item ranks and parents, send error toast
+            // Retab all old parents and up
+        }
+
+    }
+
+})
+
+// === Debug
+
 const wrappedAccess = (access: ItemStoreAccess): ItemStoreAccess => {
     return {
         get: access.get,
@@ -62,67 +105,3 @@ const wrappedAccess = (access: ItemStoreAccess): ItemStoreAccess => {
         }
     }
 }
-
-export const useItemStore = create<ItemStoreState>((set, get) => {
-
-    return {
-
-        isLoading: false,
-        //items: [],
-        byId: {},
-        byParent: {},
-        root: undefined,
-
-        load: async () => await ItemStoreLoadItems({ set, get }),
-
-        create: async (title: string, parentId: string, extras?: Partial<Item>) => await ItemStoreCreateItem({ set, get }, title, parentId, extras),
-
-        updateOne: async (itemId: string, update: Partial<Item>) => await ItemStoreUpdateOneItem({ set, get }, itemId, update),
-
-        checkOne: async (itemId: string) => await ItemStoreCheckItem({ set, get }, itemId),
-
-        uncheckOne: async (itemId: string) => await ItemStoreUncheckItem({ set, get }, itemId),
-
-        moveOne: async (itemId: string, newParentId: string) => {
-            // Save current parent
-            // Move item, retab old and new parents and up
-            // Send PUT to API
-            // If update fails, move back, send error toast
-            // Retab old and new parents, and up
-        },
-
-        moveMany: async (itemIds: string[], newParentId: string) => {
-            // Save current parents
-            // Move items, retab all old parents, new parent, and up
-            // Send PUT to API
-            // On failure, move back, send error toast
-            // Retab all old parents, new parent, and up
-        },
-
-        deleteOne: async (itemId: string) => {
-            // Save copy
-            // Delete item, retab parent and up
-            // Send DELETE to API
-            // If failed, restore from copy, send error toast
-            // Retab old parent and up
-        },
-
-        deleteMany: async (itemIds: string[]) => {
-            // Save copies in list
-            // Delete items, retab all old parents and up
-            // Send DELETE to API
-            // If failed, restore from copies, send error toast
-            // Retab all old parents and up
-        },
-
-        sort: async (updates: ItemSort[]) => {
-            // Record all current item ranks and parents
-            // Update all items with new ranks and parents, retab all old parents, new parent, and up
-            // Send PUT to API
-            // If failed, restore all item ranks and parents, send error toast
-            // Retab all old parents and up
-        }
-
-    }
-
-})

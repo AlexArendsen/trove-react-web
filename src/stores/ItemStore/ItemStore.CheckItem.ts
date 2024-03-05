@@ -16,7 +16,10 @@ const ItemStoreSetItemChecked = async (store: ItemStoreAccess, itemId: string, c
 
     // Send PUT to API
     try {
-        await ItemStoreDefaultStorageDriver.checkOne(itemId)
+        if (checked)
+            await ItemStoreDefaultStorageDriver.checkOne(itemId)
+        else
+            await ItemStoreDefaultStorageDriver.uncheckOne(itemId)
     } catch (e) {
         // If update fails, revert, send error toast
         const revertState = ItemStoreHelpers.ReplaceItem(store, original, itemId)
