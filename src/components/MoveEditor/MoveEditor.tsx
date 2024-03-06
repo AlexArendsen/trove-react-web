@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { useItem } from "../../hooks/UseItem";
-import { useStore } from "../../hooks/UseStore";
 import { Item } from "../../redux/models/Items/Item";
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
+import { useItemEditor } from "../../stores/useItemEditor";
 import { useMoveEditor } from "../../stores/useMoveEditor";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { Bump } from "../Bump/Bump";
@@ -10,21 +11,19 @@ import { Flex } from "../Flex/Flex";
 import { ItemList } from "../ItemList/ItemList";
 import { ModalPopover } from "../Popover/ModalPopover";
 import { TrText } from "../Text/Text";
-import { useItemEditor } from "../../stores/useItemEditor";
-import { GetConfig } from "../../utils/Config";
 
 export const MoveEditorModal = React.memo(() => {
 
     const ed = useMoveEditor()
 
     const subjectTitle = useMemo(() => {
-        if (ed.subjectIds?.length === 1) return GetConfig().Store?.getState().items.byId[ed.subjectIds[0]]?.title || 'Item'
+        if (ed.subjectIds?.length === 1) return useItemStore.getState().byId[ed.subjectIds[0]]?.title || 'Item'
         else return `${ed.subjectIds?.length} items`
     }, [ ed.subjectIds ])
 
     const target = useItem(ed.targetId)?.item as Item | undefined
 
-	const topLevels = useStore(s => s.items.topLevel)
+	const topLevels = useItemStore(s => [s.root].filter(x => !!x)) as Item[]
     const targetChildren = useItem(ed.viewportParentId)?.children as Item[]
     const viewportItems = ed.viewportParentId ? targetChildren : topLevels
 

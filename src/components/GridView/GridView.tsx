@@ -1,23 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useItem } from "../../hooks/UseItem";
-import { Item } from "../../redux/models/Items/Item";
-import { TrText } from "../Text/Text";
-import { Flex } from "../Flex/Flex";
-import { Bump } from "../Bump/Bump";
-import { CheckItemAction, UpdateOneItemAction } from "../../redux/actions/ItemActions";
-import { Checkbox } from "../Checkbox/Checkbox";
-import { MoreMath } from "../../utils/MoreMath";
-import { ProgressBar } from "../ProgressBar/ProgressBar";
-import { Button } from "../Button/Button";
-import { useDispatch } from "react-redux";
-import { ItemData } from "../../utils/ItemData";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
-import { BottomSheetPopover } from "../Popover/BottomSheetPopover";
-import { TextInput } from "../TextInput/TextInput";
-import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../constants/Routes";
+import { useItem } from "../../hooks/UseItem";
+import { Item } from "../../redux/models/Items/Item";
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
+import { ItemData } from "../../utils/ItemData";
+import { MoreMath } from "../../utils/MoreMath";
+import { Bump } from "../Bump/Bump";
+import { Button } from "../Button/Button";
+import { Checkbox } from "../Checkbox/Checkbox";
+import { Flex } from "../Flex/Flex";
+import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
+import { BottomSheetPopover } from "../Popover/BottomSheetPopover";
+import { TrText } from "../Text/Text";
+import { TextInput } from "../TextInput/TextInput";
 
 const nonEmptyArrayOrDefault = (maybeArray: any, defaultValue: any) => (Array.isArray(maybeArray) && !!maybeArray.length) ? maybeArray : defaultValue
 const pickBetween = (min: number, max: number) => MoreMath.Clamp(Math.round(min + (Math.random() * (max - min))), max, min)
@@ -34,7 +32,6 @@ export const GridView = React.memo((props: { parentItemId: string }) => {
 
     const { parentItemId } = props
     const { item, children } = useItem(parentItemId)
-    const dispatch = useDispatch()
     const [ editContext, setEditContext ] = useState<GridEditContext>(null)
 
     const { columns, rows, childLookup } = useMemo((): { columns: string[], rows: string[], childLookup: ChildLookup } => {
@@ -63,7 +60,7 @@ export const GridView = React.memo((props: { parentItemId: string }) => {
             if (!d.columns) d.columns = ['New Column']
             else d.columns.push('New Column')
         })
-        dispatch(UpdateOneItemAction(item))
+        useItemStore.getState().updateOne(item)
     }, [item])
 
     const handleAddRow = useCallback(() => {
@@ -73,7 +70,7 @@ export const GridView = React.memo((props: { parentItemId: string }) => {
             else d.rows.push('New Row')
         })
         console.log(item.data)
-        dispatch(UpdateOneItemAction(item))
+        useItemStore.getState().updateOne(item)
     }, [item])
 
     const handleSubmitEditContext = useCallback((value: string) => {
@@ -84,7 +81,7 @@ export const GridView = React.memo((props: { parentItemId: string }) => {
             //@ts-ignore
             d[subkey][editContext.idx] = value
         })
-        if (item) dispatch(UpdateOneItemAction(item))
+        if (item) useItemStore.getState().updateOne(item)
     }, [editContext])
 
     const handleDeleteViaEditContext = useCallback(() => {
@@ -94,7 +91,7 @@ export const GridView = React.memo((props: { parentItemId: string }) => {
             if (!d[subkey]) return
             d[subkey]?.splice(editContext.idx, 1)
         })
-        if (item) dispatch(UpdateOneItemAction(item))
+        if (item) useItemStore.getState().updateOne(item)
     }, [editContext])
 
     return (
@@ -222,14 +219,13 @@ const GridCell = React.memo((props: {
 }) => {
 
     const { parent, items, col, row } = props
-    const dispatch = useDispatch()
 
     const handleDrop = (dropped: Item) => {
         ItemData.mutate<GridChildData>(dropped, DATA_KEY, {}, d => {
             d.col = col
             d.row = row
         })
-        dispatch(UpdateOneItemAction(dropped))
+        useItemStore.getState().updateOne(dropped)
     }
 
     return (

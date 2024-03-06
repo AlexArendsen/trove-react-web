@@ -7,7 +7,8 @@ export const ItemStoreCreateItem = async (store: ItemStoreAccess, title: string,
 
     // Create item with pending field, retab parent and up
     const tempId = `TEMPID${new Date().getTime()}`
-    const item: Item = { _id: tempId, title, parent_id: parentId, user_id: '', checked: false, ...extras }
+    const item: Item = { title: `[Loading]${title}`, parent_id: parentId, user_id: '', checked: false, ...extras, _id: tempId }
+    console.log('Inserting item', item)
     const optimisticState = ItemStoreHelpers.AddItem(store, item)
     ItemStoreHelpers.RetabBubbleUp(optimisticState, [ parentId ])
     store.set(optimisticState)
@@ -15,6 +16,7 @@ export const ItemStoreCreateItem = async (store: ItemStoreAccess, title: string,
     // Send POST to API
     try {
         const response = await ItemStoreDefaultStorageDriver.create(item)
+        console.log('RESPONSE', response)
 
         // Update item with new ID
         const confirmedState = ItemStoreHelpers.ReplaceItem(store, response.data, tempId)

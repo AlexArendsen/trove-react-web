@@ -7,6 +7,7 @@ import { ItemStoreUpdateOneItem } from "./ItemStore.UpdateItem"
 import { ItemStoreCheckItem, ItemStoreUncheckItem } from "./ItemStore.CheckItem"
 import { ItemStoreMoveManyItems, ItemStoreMoveOneItem } from "./ItemStore.MoveItem"
 import { ItemStoreDeleteManyItem, ItemStoreDeleteOneItem } from "./ItemStore.DeleteItem"
+import { ItemStoreSortItems } from "./ItemStore.Sorting"
 
 export type ItemStoreState = {
 
@@ -20,7 +21,7 @@ export type ItemStoreState = {
 
     create: (title: string, parentId: string, extras?: Partial<Item>) => Promise<void>
 
-    updateOne: (itemId: string, update: Partial<Item>) => Promise<void>
+    updateOne: (update: Partial<Item>) => Promise<void>
     checkOne: (itemId: string) => Promise<void>
     uncheckOne: (itemId: string) => Promise<void>
 
@@ -52,7 +53,7 @@ export const useItemStore = create<ItemStoreState>((set, get) => {
 
         create: async (title: string, parentId: string, extras?: Partial<Item>) => await ItemStoreCreateItem({ set, get }, title, parentId, extras),
 
-        updateOne: async (itemId: string, update: Partial<Item>) => await ItemStoreUpdateOneItem({ set, get }, itemId, update),
+        updateOne: async (update: Partial<Item>) => await ItemStoreUpdateOneItem({ set, get }, update),
 
         checkOne: async (itemId: string) => await ItemStoreCheckItem({ set, get }, itemId),
 
@@ -66,13 +67,7 @@ export const useItemStore = create<ItemStoreState>((set, get) => {
 
         deleteMany: async (itemIds: string[]) => await ItemStoreDeleteManyItem({ set, get }, itemIds),
 
-        sort: async (updates: ItemSort[]) => {
-            // Record all current item ranks and parents
-            // Update all items with new ranks and parents, retab all old parents, new parent, and up
-            // Send PUT to API
-            // If failed, restore all item ranks and parents, send error toast
-            // Retab all old parents and up
-        }
+        sort: async (updates: ItemSort[]) => await ItemStoreSortItems({ set, get }, updates)
 
     }
 

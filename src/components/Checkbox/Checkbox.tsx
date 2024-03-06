@@ -1,13 +1,9 @@
 import classNames from "classnames";
-import React, { useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { Colors } from "../../constants/Colors";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useItemProgress } from "../../hooks/UseItemProgress";
-import { useLens } from "../../hooks/UseLens";
-import { useStore } from "../../hooks/UseStore";
-import { CheckItemAction, UncheckItemAction } from "../../redux/actions/ItemActions";
-import './Checkbox.css';
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
 import { useMultiSelect } from "../../stores/useMultiSelect";
+import './Checkbox.css';
 
 interface CheckboxProps {
 	checked?: boolean
@@ -21,15 +17,13 @@ interface CheckboxProps {
 
 export const Checkbox = React.memo((props: CheckboxProps) => {
 
-	const dispatch = useDispatch();
-	const item = useStore(s => props.itemId ? s.items.byId[props.itemId] : null);
-	const lens = useLens()
+	const item = useItemStore(s => props.itemId ? s.byId[props.itemId] : null);
 	const ms = useMultiSelect()
 
 	const checked = useMemo(() => {
 		if (ms.isEnabled) return props.itemId ? ms.itemIsSelected(props.itemId) : false;
 		else return item ? item.checked : props.checked;
-	}, [ props.checked, item, ms.isEnabled, ms.itemIds ])
+	}, [ props.checked, item?.checked, ms.isEnabled, ms.itemIds ])
 
 	const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.preventDefault();
@@ -42,12 +36,12 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 		else
 		{
 			if (item && props.itemId) {
-				item.checked ? dispatch(UncheckItemAction(props.itemId)) : dispatch(CheckItemAction(props.itemId))
+				item.checked ? useItemStore.getState().uncheckOne(props.itemId) : useItemStore.getState().checkOne(props.itemId)
 			}
 			if (props.onClick) props.onClick()
 		}
 
-	}, [ props.onClick, checked, lens.current, ms.isEnabled, ms.toggleItem, props.itemId ])
+	}, [ props.onClick, checked, ms.isEnabled, ms.toggleItem, props.itemId ])
 
 	const handleRightClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 		e.preventDefault();
@@ -72,7 +66,6 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 			onClick={ handleClick }
 			onContextMenu={ handleRightClick }
 			style={{
-				//backgroundColor: '#0000ff33',
 				margin: `-${vslop}px -${hslop}px`,
 				padding: `${vslop}px ${hslop}px`
 			}}

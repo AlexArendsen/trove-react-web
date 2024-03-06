@@ -18,7 +18,7 @@ export type ItemStoreStorageDriver = {
     moveMany: (itemIds: string[], newParentId: string) => Promise<ItemStoreStorageDriverResponse<void>>
     deleteOne: (itemId: string) => Promise<ItemStoreStorageDriverResponse<Item>>
     deleteMany: (itemIds: string[]) => Promise<ItemStoreStorageDriverResponse<Item[]>>
-    sort: (update: ItemSort[]) => Promise<ItemStoreStorageDriverResponse<void>>
+    sort: (updates: ItemSort[]) => Promise<ItemStoreStorageDriverResponse<void>>
 }
 
 const ItemStoreApiStorageDriver: ItemStoreStorageDriver = {
@@ -29,7 +29,7 @@ const ItemStoreApiStorageDriver: ItemStoreStorageDriver = {
     uncheckOne: async (itemId) => ConvertAxiosResponse(await axios.put<Item>(`${Environment.getApiBaseUrl()}/item/${itemId}/uncheck`)),
     moveMany: async (ids, new_parent) => ConvertAxiosResponse(await axios.put<void>(`${Environment.getApiBaseUrl()}/items/move`, { ids, new_parent })),
     deleteOne: async (itemId) => ConvertAxiosResponse(await axios.delete<Item>(`${Environment.getApiBaseUrl()}/item/${itemId}`)),
-    deleteMany: async (ids) => ConvertAxiosResponse(await axios.delete<Item[]>(`${Environment.getApiBaseUrl()}/items`, { data: { ids: ids.join(',') } })),
+    deleteMany: async (ids) => ConvertAxiosResponse(await axios.delete<Item[]>(`${Environment.getApiBaseUrl()}/items?ids=${ids.join(',')}`)),
     sort: async (updates) => ConvertAxiosResponse(await axios.put<void>(`${Environment.getApiBaseUrl()}/items/sort`, updates)),
 }
 
@@ -70,8 +70,9 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
 
     load: async () => ({ data: getLocalItems() }),
     create: async (item) => {
-        setLocalItems([ ...getLocalItems(), item ])
-        return { data: item }
+        const realItem = { ...item, _id: `REALID${new Date().getTime()}` }
+        setLocalItems([ ...getLocalItems(), realItem ])
+        return { data: realItem }
     },
     updateOne: async (item) => {
         const items = getLocalItems().map(i => i._id === item._id ? item : i)
@@ -156,4 +157,4 @@ const ConvertAxiosResponse = <TData>(response: AxiosResponse<TData>): ItemStoreS
     return { data: response.data }
 }
 
-export const ItemStoreDefaultStorageDriver = ItemStoreBuggedStorageDriver;
+export const ItemStoreDefaultStorageDriver = ItemStoreApiStorageDriver;

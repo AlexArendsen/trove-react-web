@@ -3,9 +3,16 @@ import { ItemStoreHelpers } from "./ItemStore.Helpers";
 import { ItemStoreAccess } from "./useItemStore";
 import { ItemStoreDefaultStorageDriver } from "./ItemStore.StorageDriver";
 
-export const ItemStoreUpdateOneItem = async (store: ItemStoreAccess, itemId: string, update: Partial<Item>) => {
+export const ItemStoreUpdateOneItem = async (store: ItemStoreAccess, update: Partial<Item>) => {
 
     // TODO -- Deny requests to update checked, parent, or ID
+
+    // TODO -- Display error toast if no ID is given
+    const itemId = update._id;
+    if (!itemId) {
+        console.error('No ID given for item update')
+        return;
+    }
 
     // Save current copy
     const original = { ...store.get().byId[itemId] }

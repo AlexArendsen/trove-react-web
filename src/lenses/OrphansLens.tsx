@@ -10,7 +10,6 @@ import { DefaultItemEditorDisplay } from "../screens/ItemsScreen/SelectedItemDis
 import { Chunk, GroupBy } from "../utils/Arrays";
 import { ItemLens } from "./ItemLens";
 import { Button } from "../components/Button/Button";
-import { TopLevelDisplay } from "../screens/ItemsScreen/TopLevelDisplay";
 
 const MAX_DELETE_BATCH_SIZE = 2000
 

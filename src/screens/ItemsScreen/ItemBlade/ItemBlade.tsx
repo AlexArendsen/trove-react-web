@@ -25,7 +25,7 @@ interface ItemBladeProps {
 export const ItemBlade = React.memo((props: ItemBladeProps) => {
 
 	const history = useHistory();
-	const { item, children } = useItem(props.itemId);
+	const { item } = useItem(props.itemId);
 
 
 	const handleTitleClick = useCallback(() => {

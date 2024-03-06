@@ -1,14 +1,14 @@
 import React, { useMemo } from "react";
 import { useHistory } from "react-router";
 import { Routes } from "../../constants/Routes";
+import { useItem } from "../../hooks/UseItem";
 import { useSelectedItem } from "../../hooks/UseSelectedItem";
 import { Item } from "../../redux/models/Items/Item";
-import { GetConfig } from "../../utils/Config";
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
 import { Flex } from "../Flex/Flex";
 import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
-import { Text } from "../Text/Text";
-import './Breadcrumbs.css'
-import { useItem } from "../../hooks/UseItem";
+import { TrText } from "../Text/Text";
+import './Breadcrumbs.css';
 
 export const SelectedItemBreadcrumbs = React.memo(() => {
 
@@ -33,7 +33,7 @@ export const Breadcrumbs = React.memo((props: {
 
 	const lineage = useMemo(() => {
 		if (!item) return [];
-		const lookup = GetConfig().Store?.getState().items.byId || {};
+		const lookup = useItemStore.getState().byId
 		let l: Item[] = [ item ]
 		let i = item
 		while (!!i?.parent_id) {
@@ -46,7 +46,6 @@ export const Breadcrumbs = React.memo((props: {
 	return (
 		<div style={{ overflow: 'scroll' }}>
 			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }}>
-				<Crumb title='Home' onClick={ () => onSelectCrumb(null) } />
 				{ lineage.map((l, idx) => <Crumb title={ l?.title || 'UNKNOWN' } item={ l } isLast={ (idx + 1) === lineage.length } onClick={ () => onSelectCrumb(l) } />) }
 			</Flex>
 		</div>
@@ -66,8 +65,8 @@ const Crumb = React.memo((props: CrumbProps) => {
 	return (
 		<ItemDropZone itemId={ props.item?._id || null }>
 			<Flex row align='center' className='crumb' onClick={ props.onClick }>
-					<Text style={{ marginRight: 12 }} bold>{ props.title }</Text>
-					<Text medium>›</Text>
+					<TrText style={{ marginRight: 12 }} bold>{ props.title }</TrText>
+					<TrText medium>›</TrText>
 			</Flex>
 		</ItemDropZone>
 	)

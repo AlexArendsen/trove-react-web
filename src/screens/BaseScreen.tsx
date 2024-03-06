@@ -1,22 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import React, { useEffect, useMemo } from "react";
 import ReactTooltip from "react-tooltip";
+import { GlobalEventController } from "../components/Controllers/GlobalEventController";
 import { Flex } from "../components/Flex/Flex";
 import { Header } from "../components/Header/Header";
-import { useQueryParams } from "../hooks/UseQueryParams";
-import { useSelectedItem } from "../hooks/UseSelectedItem";
-import { useStore } from "../hooks/UseStore";
-import { GetStoredToken } from "../redux/actions/AuthenticationActions";
-import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
-import { LoadingScreen } from "./LoadingScreen/LoadingScreen";
-import { SearchScreen } from "./SearchScreen/SearchScreen";
-import { useAuth0 } from "@auth0/auth0-react";
-import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
-import { ModalPopover } from "../components/Popover/ModalPopover";
 import { ItemEditorModal } from "../components/ItemEditor/ItemEditorModal";
 import { MoveEditorModal } from "../components/MoveEditor/MoveEditor";
-import { MultiSelectBottomSheet } from "../components/Popover/MultiSelectBottomSheet";
 import { ConfirmPopover } from "../components/Popover/ConfirmPopover";
-import { GlobalEventController } from "../components/Controllers/GlobalEventController";
+import { MultiSelectBottomSheet } from "../components/Popover/MultiSelectBottomSheet";
+import { useQueryParams } from "../hooks/UseQueryParams";
+import { useSelectedItem } from "../hooks/UseSelectedItem";
+import { useItemStore } from "../stores/ItemStore/useItemStore";
+import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
+import { LoadingScreen } from "./LoadingScreen/LoadingScreen";
+import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
+import { SearchScreen } from "./SearchScreen/SearchScreen";
 
 export const BaseScreen = React.memo(() => {
 
@@ -28,7 +26,7 @@ export const BaseScreen = React.memo(() => {
 		document.title = item ? `${ item.title } | Trove` : 'Trove'
 	}, [ item ])
 
-	const itemsLoading = useStore(s => s.items.all.loading);
+	const itemsLoading = useItemStore(s => s.isLoading);
 	const showHeader = useMemo(() => !itemsLoading && loggedIn, [ itemsLoading, loggedIn ])
 
 	const { view, edit } = useQueryParams();

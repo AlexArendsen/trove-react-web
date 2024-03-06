@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useItemProgress } from "../../hooks/UseItemProgress";
 import { Item } from "../../redux/models/Items/Item";
 import './ProgressBar.css';
@@ -17,6 +17,7 @@ export const ProgressBar = React.memo((props: ProgressBarProps) => {
 	const msEnabled = useMultiSelect().isEnabled
 
 	const itemPct = useItemProgress(item);
+
 	const propPct = useMemo(() => {
 		if (percent) return (percent > 1) ? percent / 100 : percent;
 		return 0;

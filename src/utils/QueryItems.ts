@@ -1,4 +1,3 @@
-import { getConfig } from "@testing-library/react";
 import { Item } from "../redux/models/Items/Item"
 import { GetConfig } from "./Config"
 import { Path, PathAstNode } from "./Parsing/Path";
@@ -45,6 +44,7 @@ export const QueryItems = (src: string | PathAstNode[], options?: Partial<{
 
     let match: Item[] = []
 
+    // TODO -- Switch to new Zustand store via useItemStore
     let candidates: Item[] = GetFromStore(s => s.items.topLevel) || []
     if (options?.rootId) candidates = GetFromStore(s => s.items.byParent[options?.rootId || '']) || []
 

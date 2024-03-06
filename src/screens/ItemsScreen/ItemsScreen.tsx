@@ -5,14 +5,11 @@ import { useSelectedItem } from "../../hooks/UseSelectedItem";
 import { useWindowSize } from "../../hooks/UseWindowSize";
 import { ItemBlade } from "./ItemBlade/ItemBlade";
 import { SelectedItemDisplay } from "./SelectedItemDisplay/SelectedItemDisplay";
-import { TopLevelDisplay } from "./TopLevelDisplay";
 
 export const ItemsScreen = React.memo(() => {
 
 	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
-
-	if (!item) return <TopLevelDisplay />
 
 	return (
 		<Flex column>

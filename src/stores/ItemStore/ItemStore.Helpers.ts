@@ -21,8 +21,8 @@ const RemoveItem = (store: ItemStoreAccess, itemId: string): ItemStoreState => {
 
     const { byId, byParent } = store.get()
 
-    const parent = byId[itemId].parent_id
-    delete byId[itemId]
+    const parent = byId[itemId]?.parent_id
+    if (byId[itemId]) delete byId[itemId]
     if (parent && byParent[parent]) byParent[parent] = byParent[parent].filter(e => e._id !== itemId)
 
     return { ...store.get(), byId, byParent }
@@ -49,7 +49,7 @@ const ReplaceItem = (store: ItemStoreAccess, newItem: Item, replaceId: string): 
         if (!byParent[newParent]) byParent[newParent] = [] // Old parent definitely exists in byParent, but new parent may not
         byParent[newParent] = [ ...byParent[newParent], newItem ]
     } else { // ... otherwise, just update it in place
-        byParent[oldParent] = byParent[oldParent].map(i => i._id === newId ? newItem : i)
+        byParent[oldParent] = byParent[oldParent].map(i => i._id === replaceId ? newItem : i)
     }
 
     return { ...store.get(), byId, byParent }
@@ -60,8 +60,6 @@ const RetabBubbleUp = (
     state: ItemStoreState,
     startIds: (string | null | undefined)[]
 ) => {
-
-    console.log(`-- RETABBING ${startIds.join(', ')}`, state)
 
     for(const start of startIds) {
 
@@ -81,10 +79,11 @@ const RetabBubbleUp = (
 
             // Add up children stats
             const children = state.byParent[wrk._id] || []
-            wrk.descendants = MoreMath.Sum(children.map(c => c.descendants || 1))
-            wrk.completed = MoreMath.Sum(children.map(c => c.checked ? c.descendants || 1 : c.completed || 0))
-
-            console.log(`${wrk.title}: DESC = ${wrk.descendants} / COMP = ${wrk.completed}`)
+            state.byId[wrk._id] = {
+                ...wrk,
+                descendants: MoreMath.Sum(children.map(c => c.descendants || 1)),
+                completed: MoreMath.Sum(children.map(c => c.checked ? c.descendants || 1 : c.completed || 0))
+            }
 
             // Go up to parent
             if (!wrk.parent_id) break;

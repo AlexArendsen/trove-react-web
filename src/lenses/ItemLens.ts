@@ -19,8 +19,8 @@ export interface ItemLensItemSpec {
 
     AsSelected?: ItemLensDisplaySpec // How to show this item when it is the selected item
     AsAncestor?: ItemLensDisplaySpec // How to show this item when it is the parent / grandparent of the selected item
-    OnCheck?: (dispatch: any, item: Item) => Promise<void>
-    OnUncheck?: (dispatch: any, item: Item) => Promise<void>
+    OnCheck?: (item: Item) => Promise<void>
+    OnUncheck?: (item: Item) => Promise<void>
 
     FullWidthSelected?: boolean
 

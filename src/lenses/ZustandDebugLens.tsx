@@ -33,7 +33,7 @@ export const ZustandDebugLens: ItemLens = {
 
                 const handleUpdateItem = () => {
                     if (!selectedId) return
-                    useItemStore.getState().updateOne(selectedId, { title: `Updated title ${new Date().getTime()}` })
+                    useItemStore.getState().updateOne({ _id: selectedId, title: `Updated title ${new Date().getTime()}` })
                 }
 
                 const handleMoveItem = () => {

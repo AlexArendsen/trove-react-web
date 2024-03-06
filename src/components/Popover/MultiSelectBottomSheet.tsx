@@ -1,20 +1,18 @@
 import React, { useMemo } from "react";
-import { BottomSheetPopover } from "./BottomSheetPopover";
-import { useMultiSelect } from "../../stores/useMultiSelect";
-import { Button } from "../Button/Button";
-import { useMoveEditor } from "../../stores/useMoveEditor";
-import { Bump } from "../Bump/Bump";
-import { Flex } from "../Flex/Flex";
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
 import { useConfirm } from "../../stores/useConfirm";
-import { useDispatch } from "react-redux";
-import { DeleteManyItemsAction } from "../../redux/actions/ItemActions";
+import { useMoveEditor } from "../../stores/useMoveEditor";
+import { useMultiSelect } from "../../stores/useMultiSelect";
+import { Bump } from "../Bump/Bump";
+import { Button } from "../Button/Button";
+import { Flex } from "../Flex/Flex";
+import { BottomSheetPopover } from "./BottomSheetPopover";
 
 export const MultiSelectBottomSheet = React.memo(() => {
 
     const ms = useMultiSelect()
     const move = useMoveEditor()
     const confirm = useConfirm()
-    const dispatch = useDispatch()
 
     const title = useMemo(() => {
         const s = ms.itemIds?.size
@@ -35,7 +33,7 @@ export const MultiSelectBottomSheet = React.memo(() => {
         confirm.open({
             title: 'Delete Many',
             subtitle: `Are you sure you want to delete ${ids.length} item${s}?`,
-            onConfirm: () => dispatch(DeleteManyItemsAction(ids))
+            onConfirm: () => useItemStore.getState().deleteMany(ids)
         })
     }
 

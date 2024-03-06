@@ -1,16 +1,15 @@
 import React, { useMemo } from "react"
 import { Flex } from "../../components/Flex/Flex"
+import { LensConfiguration } from "../../components/ItemEditor/ItemEditorNewLensPage"
 import { ItemList } from "../../components/ItemList/ItemList"
 import { TrText } from "../../components/Text/Text"
+import { useItem } from "../../hooks/UseItem"
 import { Item } from "../../redux/models/Items/Item"
+import { useItemStore } from "../../stores/ItemStore/useItemStore"
+import { ItemData } from "../../utils/ItemData"
 import { Layout, LayoutSpec } from "../../utils/Parsing/Layout"
 import { TxmlAstNode } from "../../utils/Parsing/Txml"
 import { QueryItems } from "../../utils/QueryItems"
-import { useItem } from "../../hooks/UseItem"
-import { useStore } from "../../hooks/UseStore"
-import { ItemData } from "../../utils/ItemData"
-import { LensConfiguration } from "../../components/ItemEditor/ItemEditorNewLensPage"
-import { parseJsonSourceFileConfigFileContent } from "typescript"
 
 type VariableLookup = { [name: string]: Item | Item[] | number }
 const CELL_UNIT_SIZE = 100
@@ -126,11 +125,11 @@ const PreviewBox = React.memo((props: any) => {
 const Box = React.memo((props: any) => {
 
     const { single, items, width, height } = useBoxProps(props)
-    const children = useStore(s => {
+    const children = useItemStore(s => {
         if (!single) return []
         const first = items?.[0]
         if (!first) return []
-        return s.items.byParent[first._id]
+        return s.byParent[first._id]
     })
 
     return (

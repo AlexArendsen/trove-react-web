@@ -8,6 +8,7 @@ export type ErrorDetails = {
     error: any
 }
 
+/**@deprecated This implementation of the data plan concept is tied to Redux, which we no longer use */
 export class DataPlan<TResult> {
 
     action?: () => Promise<TResult>;

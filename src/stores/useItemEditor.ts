@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { Item } from "../redux/models/Items/Item";
-import { GetFromStore } from "../utils/GetFromStore";
-import { GetConfig } from "../utils/Config";
-import { DeleteOneItemAction, UpdateOneItemAction } from "../redux/actions/ItemActions";
-import { TrHistory } from "../constants/History";
-import { Routes } from "../constants/Routes";
+import { useItemStore } from "./ItemStore/useItemStore";
 
 type ItemEditorStore = {
 
@@ -27,7 +23,7 @@ export const useItemEditor = create<ItemEditorStore>((set, get) => ({
 
     isOpen: false,
     open: (itemId: string) => {
-        const i = GetFromStore(s => s.items.byId[itemId])
+        const i = useItemStore.getState().byId[itemId]
         if (!!i) set({ isOpen: true, item: i })
     },
     close: () => { set({ isOpen: false, item: null }) },
@@ -36,11 +32,11 @@ export const useItemEditor = create<ItemEditorStore>((set, get) => ({
 
     save: () => {
         const i = get().item
-        if(!!i) GetConfig().Store?.dispatch(UpdateOneItemAction(i) as any)
+        if(!!i) useItemStore.getState().updateOne(i)
     },
     delete: () => {
         const itemId = get().item?._id
-        if(!!itemId) GetConfig().Store?.dispatch(DeleteOneItemAction(itemId) as any)
+        if(!!itemId) useItemStore.getState().deleteOne(itemId)
     },
     revert: () => {
         const i = get().item

@@ -1,15 +1,14 @@
 import classNames from "classnames"
-import React, { useMemo } from "react"
+import React from "react"
 import { Colors } from "../../../constants/Colors"
 import { useItem } from "../../../hooks/UseItem"
-import { useStore } from "../../../hooks/UseStore"
-import { Item } from "../../../redux/models/Items/Item"
+import { useItemStore } from "../../../stores/ItemStore/useItemStore"
+import { useItemEditor } from "../../../stores/useItemEditor"
 import { Checkbox } from "../../Checkbox/Checkbox"
 import { Flex } from "../../Flex/Flex"
 import { Text } from "../../Text/Text"
 import { TimeDisplay } from "../../TimeDisplay/TimeDisplay"
 import './GalleryListItem.css'
-import { useItemEditor } from "../../../stores/useItemEditor"
 
 interface GalleryListItemProps {
 	itemId: string,
@@ -20,7 +19,7 @@ interface GalleryListItemProps {
 export const GalleryListItem = React.memo((props: GalleryListItemProps) => {
 
 	const { item } = useItem(props.itemId);
-	const parent = useStore(s => item?.parent_id ? s.items.byId[item?.parent_id] : null)
+	const parent = useItemStore(s => item?.parent_id ? s.byId[item?.parent_id] : null)
 
 	const handleRightClick = (e: React.MouseEvent) => {
 		e.stopPropagation()

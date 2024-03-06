@@ -1,8 +1,5 @@
 import { create } from "zustand";
-import { GetConfig } from "../utils/Config";
-import { MoveManyItemsAction, MoveOneItemAction } from "../redux/actions/ItemActions";
-import { getConfig } from "@testing-library/react";
-import { GetFromStore } from "../utils/GetFromStore";
+import { useItemStore } from "./ItemStore/useItemStore";
 
 type MoveEditorState = {
 
@@ -39,7 +36,7 @@ export const useMoveEditor = create<MoveEditorState>((set, get) => {
             const idsList = Array.isArray(itemId) ? itemId : [itemId]
             set({
                 isOpen: true,
-                viewportParentId: get().viewportParentId || GetFromStore(s => s.items.byId[firstId])?.parent_id,
+                viewportParentId: get().viewportParentId || useItemStore.getState().byId[firstId]?.parent_id,
                 subjectIds: idsList
             })
         },
@@ -53,14 +50,13 @@ export const useMoveEditor = create<MoveEditorState>((set, get) => {
             let result = false
 
             try {
-                const dispatch = GetConfig().Store?.dispatch as any;
 
                 const subjects = get().subjectIds
                 const target = get().targetId
                 if (subjects === undefined || !(subjects?.length) || target === undefined) {
                     console.error('Cannot move, no subject item(s) specified')
                 } else {
-                    await dispatch(MoveManyItemsAction(subjects, target))
+                    useItemStore.getState().moveMany(subjects, target)
                     result = true
                 }
 

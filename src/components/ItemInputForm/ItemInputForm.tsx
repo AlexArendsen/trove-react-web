@@ -7,13 +7,14 @@ import { Flex } from "../Flex/Flex";
 import { TextInput } from "../TextInput/TextInput";
 import { History as DomHistory } from 'history';
 import { NewItem } from "../../utils/Parsing/NewItem";
+import { useItemStore } from "../../stores/ItemStore/useItemStore";
 
 interface ItemInputFormProps {
 	itemId?: string,
 	style?: React.CSSProperties,
 	darker?: boolean,
 	smaller?: boolean,
-	onSubmitOverride?: (dispatch: Dispatch<any>, history: DomHistory, title: string) => void
+	/**@deprecated */ onSubmitOverride?: (dispatch: Dispatch<any>, history: DomHistory, title: string) => void
 }
 
 export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
@@ -27,7 +28,7 @@ export const ItemInputForm = React.memo((props: ItemInputFormProps) => {
 		e.preventDefault();
 		if (onSubmitOverride) onSubmitOverride(dispatch, history, title)
 		const parsed = NewItem.Parse(title)
-		if (itemId) dispatch(AddItemAction(title, itemId, parsed))
+		if (itemId) useItemStore.getState().create(title, itemId, parsed)
 		setTitle('')
 	}, [ title, history, dispatch, onSubmitOverride ])
 
