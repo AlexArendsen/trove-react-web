@@ -16,20 +16,21 @@ interface ItemListProps {
 	selected?: string,
 	onClick?: (item: Item) => void
 	navOnClick?: boolean
+	noSort?: boolean
 }
 
 export const ItemList = React.memo((props: ItemListProps) => {
 
 	const history = useHistory();
 
-	const { display, parentId, selected, onClick, navOnClick } = props
+	const { display, parentId, selected, onClick, navOnClick, noSort } = props
 
 	const handleClick = useCallback((item: Item) => {
 		if (onClick) onClick(item)
 		else if (navOnClick) history.push(Routes.item(item._id))
 	}, [ onClick ])
 
-	const items = useSortedItems(props.items || [])
+	const items = useSortedItems(props.items || [], { disableSort: noSort })
 
 	switch (display) {
 

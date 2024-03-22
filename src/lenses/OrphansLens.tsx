@@ -10,6 +10,8 @@ import { DefaultItemEditorDisplay } from "../screens/ItemsScreen/SelectedItemDis
 import { Chunk, GroupBy } from "../utils/Arrays";
 import { ItemLens } from "./ItemLens";
 import { Button } from "../components/Button/Button";
+import { ItemStoreDefaultStorageDriver } from "../stores/ItemStore/ItemStore.StorageDriver";
+import { useItemStore } from "../stores/ItemStore/useItemStore";
 
 const MAX_DELETE_BATCH_SIZE = 2000
 
@@ -104,7 +106,7 @@ const useOrphansStore = create<OrphansStore>((set, get) => ({
     leafOrphans: [],
 
     load: async () => {
-        set({ allItems: await Api.get<Item[]>('/items') })
+        set({ allItems: (await ItemStoreDefaultStorageDriver.load()).data })
         get().crunch()
     },
 
@@ -157,8 +159,7 @@ const useOrphansStore = create<OrphansStore>((set, get) => ({
         let total = 0
         for(const c of chunks) {
             try {
-                const ids = c.map(x => x._id).join(',')
-                await Api.del(`/items/`, undefined, { ids })
+                await useItemStore.getState().deleteMany(c.map(c => c._id))
                 total += c.length
                 console.log(`Deleted ${c.length} (total)...`)
             } catch (e) {

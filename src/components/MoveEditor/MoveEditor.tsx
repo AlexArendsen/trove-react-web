@@ -24,12 +24,11 @@ export const MoveEditorModal = React.memo(() => {
     const target = useItem(ed.targetId)?.item as Item | undefined
 
 	const topLevels = useItemStore(s => [s.root].filter(x => !!x)) as Item[]
-    const targetChildren = useItem(ed.viewportParentId)?.children as Item[]
-    const viewportItems = ed.viewportParentId ? targetChildren : topLevels
+    const targetChildren = useItem(ed.targetId)?.children as Item[]
+    const viewportItems = ed.targetId ? targetChildren : topLevels
 
     const handleTargetClick = (target: Item) => {
         ed.setTarget(target._id)
-        ed.setViewportParent(target._id)
     }
 
     const handleSubmit = async () => {
@@ -43,12 +42,12 @@ export const MoveEditorModal = React.memo(() => {
 
             <Flex column style={{ flex: 1, minHeight: '100%', maxHeight: '100%', margin: '0 -15px' }}>
 
-                <Breadcrumbs itemId={ ed.viewportParentId } onSelectCrumb={ (i) => ed.setViewportParent(i?._id || '') } />
+                <Breadcrumbs itemId={ ed.targetId } onSelectCrumb={ (i) => ed.setTarget(i?._id || '') } />
 
                 <div style={{ flex: 1, overflowY: 'scroll' }}>
                     <ItemList
                         items={ viewportItems }
-                        parentId={ ed.viewportParentId || undefined }
+                        parentId={ ed.targetId || undefined }
                         onClick={ handleTargetClick }
                         display="picker-list"
                         />
