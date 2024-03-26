@@ -8,10 +8,14 @@ import { OrphansLens } from '../lenses/OrphansLens'
 import { DebugItemLens } from '../lenses/DebugItemLens'
 import { LayoutItemLens } from '../lenses/LayoutLens/LayoutItemLens'
 import { ZustandDebugLens } from '../lenses/ZustandDebugLens'
+import { SagaLens } from '../lenses/SagaItemLens'
+import { DocumentsItemLens } from '../lenses/DocumentItemLens'
 
 export const allLenses = [
     PlannerItemLens,
     LayoutItemLens,
+    SagaLens,
+    DocumentsItemLens,
     GridLens,
     ZustandDebugLens,
     OrphansLens,

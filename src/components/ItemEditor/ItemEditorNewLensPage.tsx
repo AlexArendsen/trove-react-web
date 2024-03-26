@@ -10,6 +10,8 @@ import { GridLens } from "../../lenses/GridLens";
 import { LayoutItemLens } from "../../lenses/LayoutLens/LayoutItemLens";
 import { Bump } from "../Bump/Bump";
 import { useWindowSize } from "../../hooks/UseWindowSize";
+import { SagaLens } from "../../lenses/SagaItemLens";
+import { DocumentsItemLens } from "../../lenses/DocumentItemLens";
 
 // TODO -- Move this somewhere
 export type LensConfiguration = {
@@ -31,6 +33,16 @@ const lensOptions: LensOption[] = [
         label: 'Kanban',
         value: PlannerItemLens.TypeId,
         description: 'Group your items in a Kanban-style board where each direct child is a column'
+    },
+    {
+        label: 'Saga',
+        value: SagaLens.TypeId,
+        description: 'Display item children alongside their parents'
+    },
+    {
+        label: 'Documents',
+        value: DocumentsItemLens.TypeId,
+        description: 'Display items as documents with ability to easily copy conents'
     },
     {
         label: 'Grid',

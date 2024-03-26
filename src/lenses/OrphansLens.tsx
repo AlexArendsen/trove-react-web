@@ -138,6 +138,7 @@ const useOrphansStore = create<OrphansStore>((set, get) => ({
         addIds(topLevelItems)
 
         const orphans = itemsFlat.filter(i => !embodiedIds.has(i._id))
+        console.log({ orphans })
         const orphanIds = new Set(orphans?.map(o => o._id) || [])
         const orphanParentIds = new Set(get().orphans.map(o => o.parent_id || '_NULL'))
 
