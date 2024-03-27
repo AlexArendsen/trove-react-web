@@ -56,7 +56,7 @@ const createSortingActions = (itemId: string, to: number, newParent?: string): I
 	const item = useItemStore.getState().byId[itemId]
 	const parentId = newParent || item?.parent_id || ''
 	if (!item) return [];
-	let siblings = useItemStore.getState().byParent[parentId]
+	let siblings = [...useItemStore.getState().byParent[parentId]]
 	if (!siblings?.length) return [];
 
 	// We're also moving this item to a new parent; quick slap it on the end of the siblings list

@@ -70,7 +70,8 @@ const ItemStoreDebuggingLocalStorageDriver: ItemStoreStorageDriver = {
 
     load: async () => ({ data: getLocalItems() }),
     create: async (item) => {
-        const realItem = { ...item, _id: `REALID${new Date().getTime()}` }
+        const saneName = encodeURIComponent(item.title.replace(/\s+/g, '-'))
+        const realItem = { ...item, _id: `REALID${new Date().getTime()}-${saneName}` }
         setLocalItems([ ...getLocalItems(), realItem ])
         return { data: realItem }
     },

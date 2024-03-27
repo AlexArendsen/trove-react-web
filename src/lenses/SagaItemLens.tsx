@@ -14,6 +14,7 @@ import './SagaItemLens.css'
 import { useHistory } from "react-router";
 import { Routes } from "../constants/Routes";
 import { useItemEditor } from "../stores/useItemEditor";
+import { ItemInputForm } from "../components/ItemInputForm/ItemInputForm";
 
 export const SagaLens: ItemLens = {
 
@@ -41,7 +42,7 @@ const SagaView = React.memo((props: {
     return (
         <Flex column>
             {
-                children.map(c => (
+                children?.map(c => (
                     <SagaItem itemId={ c._id } />
                 ))
             }
@@ -65,6 +66,8 @@ const SagaItem = React.memo((props: {
             </div>
             <div style={{ flex: 4, marginLeft: isMobile ? 30 : undefined }}>
                 <ItemList items={ children } parentId={ props.itemId } navOnClick />
+                <Bump h={ 20 } />
+                <ItemInputForm itemId={ props.itemId } smaller />
             </div>
 
         </Flex>

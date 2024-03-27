@@ -83,13 +83,9 @@ export const ItemEditorFrame = React.memo((props: {
 			</div>
 			<Bump h={ 20 } />
 			<Flex row={ !isMobile } column={ isMobile } align={ isMobile ? 'stretch' : 'center' }>
-				<Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }}>
-					Delete
-				</Button>
+				{ ed.item?.isRoot ? null : <Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }}>Delete</Button> }
 				<Bump w={ 20 } h={ 10 } />
-				<Button onClick={ () => move.open(ed.item?._id || '') }>
-					Move
-				</Button>
+				{ ed.item?.isRoot ? null : <Button onClick={ () => move.open(ed.item?._id || '') }>Move</Button> }
 				<div style={{ flex: 1 }}></div>
 				{ isMobile ? null : <TrText small faded>Ctrl+Enter</TrText> }
 				<Bump w={ 20 } h={ 10 } />
