@@ -1,11 +1,6 @@
-import React, { useState } from "react";
-import { Bump } from "../components/Bump/Bump";
-import { Button } from "../components/Button/Button";
-import { Flex } from "../components/Flex/Flex";
-import { TrText } from "../components/Text/Text";
-import { TextInput } from "../components/TextInput/TextInput";
-import { ItemLens } from "./ItemLens";
+import React from "react";
 import { useItem } from "../hooks/UseItem";
+import { ItemLens } from "./ItemLens";
 
 export const DebugItemLens: ItemLens = {
 

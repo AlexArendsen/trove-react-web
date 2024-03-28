@@ -12,3 +12,9 @@ export const useQueryParams = () => {
 	}, [ location?.search ])
 
 }
+
+export const GetQueryParams = (): Record<string, string> => {
+	const lookup: Record<string, string> = {}
+	new URLSearchParams(window.location.search).forEach((val, key) => lookup[key] = val)
+	return lookup;
+}
