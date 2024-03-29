@@ -6,10 +6,10 @@ import { TrText } from "../../components/Text/Text"
 import { useItem } from "../../hooks/UseItem"
 import { Item } from "../../redux/models/Items/Item"
 import { useItemStore } from "../../stores/ItemStore/useItemStore"
-import { ItemData } from "../../utils/ItemData"
 import { Layout, LayoutSpec } from "../../utils/Parsing/Layout"
 import { TxmlAstNode } from "../../utils/Parsing/Txml"
 import { QueryItems } from "../../utils/QueryItems"
+import { useItemLensData } from "../../hooks/UseItemLens"
 
 type VariableLookup = { [name: string]: Item | Item[] | number }
 const CELL_UNIT_SIZE = 100
@@ -24,7 +24,7 @@ export const LayoutItemView = React.memo((props: {
 
     const { item } = useItem(itemId)
 
-    const { txml } = ItemData.getLensData(item, config.id, { txml: '' })
+    const txml = useItemLensData<{txml?: string}>(itemId, config.id)?.txml || ''
     const { layout, error } = useMemo(() => {
         try {
             if (txml) return { layout: Layout.Parse(txml), error: '' }

@@ -1,16 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect } from "react"
+import { useWindowSize } from "../../hooks/UseWindowSize"
+import { ItemLensPillList } from "../../lenses/Shared/ItemLensPillLIst"
 import { useItemEditor } from "../../stores/useItemEditor"
+import { useMoveEditor } from "../../stores/useMoveEditor"
+import { Bump } from "../Bump/Bump"
 import { Button } from "../Button/Button"
 import { Flex } from "../Flex/Flex"
-import { TextInput } from "../TextInput/TextInput"
-import { Bump } from "../Bump/Bump"
-import { useWindowSize } from "../../hooks/UseWindowSize"
 import { TrText } from "../Text/Text"
-import { ItemData } from "../../utils/ItemData"
 import { LensConfiguration } from "./ItemEditorNewLensPage"
-import { PillList } from "../PillList/PillList"
-import { ItemLensPillList } from "../../lenses/Shared/ItemLensPillLIst"
-import { useMoveEditor } from "../../stores/useMoveEditor"
 
 export const ItemEditorFrame = React.memo((props: {
 	children: JSX.Element,

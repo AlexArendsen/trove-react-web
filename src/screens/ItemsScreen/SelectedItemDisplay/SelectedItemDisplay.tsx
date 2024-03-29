@@ -4,30 +4,28 @@ import { Bump } from "../../../components/Bump/Bump";
 import { Flex } from "../../../components/Flex/Flex";
 import { LensConfiguration } from "../../../components/ItemEditor/ItemEditorNewLensPage";
 import { Markdown } from "../../../components/Markdown/Markdown";
-import { PillList } from "../../../components/PillList/PillList";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 import { Text, TrText } from "../../../components/Text/Text";
 import { TextInput } from "../../../components/TextInput/TextInput";
 import { TimeDisplay } from "../../../components/TimeDisplay/TimeDisplay";
 import { useItem } from "../../../hooks/UseItem";
-import { allLenses } from "../../../hooks/UseItemLens";
+import { allLenses, useItemSelectedLens } from "../../../hooks/UseItemLens";
 import { useSelectedItem } from "../../../hooks/UseSelectedItem";
 import { useWindowSize } from "../../../hooks/UseWindowSize";
-import { LensedComponent } from "../../../lenses/LensedComponent";
-import { useItemEditor } from "../../../stores/useItemEditor";
-import { ItemData } from "../../../utils/ItemData";
-import './SelectedItemDisplay.css';
 import { DefaultItemLens } from "../../../lenses/DefaultItemLens";
+import { LensedComponent } from "../../../lenses/LensedComponent";
 import { ItemLensPillList } from "../../../lenses/Shared/ItemLensPillLIst";
+import { useItemEditor } from "../../../stores/useItemEditor";
+import './SelectedItemDisplay.css';
 
 export const SelectedItemDisplay = React.memo(() => {
 
 	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
 
-	const [ lensId, setLensId ] = useState<string | null>(null)
+	const [ lensId, setLensId ] = useItemSelectedLens(item?._id)
 	const { selectedLens, anyLenses, lensConfig } = useMemo(() => {
-		const lenses = ItemData.get<LensConfiguration[]>(item, '__lenses', [])
+		const lenses = (item?.data?.__lenses || []) as LensConfiguration[]
 		const lensConfig = lenses.find(l => l.id === lensId)
 		const selectedLens = allLenses.find(l => lensConfig?.type === l.TypeId)?.Self || DefaultItemLens.Default
 		return { selectedLens, anyLenses: lenses.length, lensConfig }
@@ -36,15 +34,6 @@ export const SelectedItemDisplay = React.memo(() => {
 	const narrow = !selectedLens?.FullWidthSelected;
 
 	const ed = useItemEditor()
-
-	useEffect(() => {
-		setLensId(ItemData.getItemLocalMemo(item, 'default-lens') || null)
-	}, [ item ])
-
-	const handleSelectLens = (id: string) => {
-		setLensId(id)
-		ItemData.setItemLocalMemo(item, 'default-lens', id)
-	}
 
 	const paddingTop = useMemo(() => {
 		if (isMobile) return 20
@@ -79,7 +68,7 @@ export const SelectedItemDisplay = React.memo(() => {
 			{ anyLenses ? (
 				<>
 					<Bump h={ 10 } />
-					<ItemLensPillList item={ item } onClick={ handleSelectLens } selected={ lensId } startOffset={ 10 } generalLensLabel='Default' />
+					<ItemLensPillList item={ item } onClick={ setLensId } selected={ lensId } startOffset={ 10 } generalLensLabel='Default' />
 					<Bump h={ 10 } />
 				</>
 			) : null }

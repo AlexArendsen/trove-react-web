@@ -1,27 +1,23 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useHistory } from "react-router";
 import { allLenses } from "../../hooks/UseItemLens";
-import { useItemEditor } from "../../stores/useItemEditor";
+import { DefaultItemLens } from "../../lenses/DefaultItemLens";
+import { LensConfigurationControls } from "../../lenses/Shared/LensConfigurationControls";
+import { useItemEditor, useItemEditorLensIndex } from "../../stores/useItemEditor";
+import { Bump } from "../Bump/Bump";
 import { ModalPopover } from "../Popover/ModalPopover";
 import { ItemEditorFrame } from "./ItemEditorFrame";
 import { ItemEditorNewLensPage, LensConfiguration } from "./ItemEditorNewLensPage";
-import { DefaultItemLens } from "../../lenses/DefaultItemLens";
-import { TrText } from "../Text/Text";
-import { ItemData } from "../../utils/ItemData";
-import { useItem } from "../../hooks/UseItem";
-import { LensConfigurationControls } from "../../lenses/Shared/LensConfigurationControls";
-import { Bump } from "../Bump/Bump";
-import { useHistory } from "react-router";
 
 const noop = () => null
 export const ItemEditorModal = React.memo(() => {
 
     const ed = useItemEditor()
     const itemId = ed.item?._id || ''
-    const { item } = useItem()
 
     const [ lensId, setLensId ] = useState<string | null>(null)
-    const configuredLenses = ItemData.get<LensConfiguration[]>(ed.item, '__lenses', [])
-    const targetConfig = configuredLenses.find(l => l.id === lensId)
+    const configuredLenses = useItemEditorLensIndex()
+    const targetConfig = configuredLenses?.find(l => l.id === lensId)
     const history = useHistory()
 
     // Block "go back" if open to close editor
@@ -56,7 +52,7 @@ export const ItemEditorModal = React.memo(() => {
 
     const realLensSelected = !!lensId && lensId !== '%ADD';
     const handleUpdateLensConfig = (config: LensConfiguration) => {
-        if (realLensSelected) ItemData.setLens(ed.item, lensId, config)
+        if (realLensSelected) ed.lenses.update(lensId, config)
     }
 
     // Flip to "General" tab when the modal opens

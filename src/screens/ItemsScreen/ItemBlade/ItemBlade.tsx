@@ -1,19 +1,14 @@
 import classNames from "classnames";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { useHistory } from "react-router";
 import { Flex } from "../../../components/Flex/Flex";
 import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
-import { ItemInputForm } from "../../../components/ItemInputForm/ItemInputForm";
-import { ItemList } from "../../../components/ItemList/ItemList";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 import { Routes } from "../../../constants/Routes";
 import { useItem } from "../../../hooks/UseItem";
-import { useLenses } from "../../../hooks/UseItemLens";
-import { ItemLens, ItemLensItemSpec } from "../../../lenses/ItemLens";
-import './ItemBlade.css';
 import { LensedComponent } from "../../../lenses/LensedComponent";
-import { DefaultItemLens } from "../../../lenses/DefaultItemLens";
+import './ItemBlade.css';
 
 interface ItemBladeProps {
 	itemId: string

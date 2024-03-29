@@ -1,24 +1,21 @@
 import React from "react";
-import { Flex } from "../Flex/Flex";
-import { TrText } from "../Text/Text";
-import { useItemEditor } from "../../stores/useItemEditor";
-import { ItemData } from "../../utils/ItemData";
-import { Item } from "../../redux/models/Items/Item";
-import { UniqueName } from "../../utils/UniqueName";
-import { PlannerItemLens } from "../../lenses/PlannerItemLens";
+import { useWindowSize } from "../../hooks/UseWindowSize";
+import { DocumentsItemLens } from "../../lenses/DocumentItemLens";
 import { GridLens } from "../../lenses/GridLens";
 import { LayoutItemLens } from "../../lenses/LayoutLens/LayoutItemLens";
-import { Bump } from "../Bump/Bump";
-import { useWindowSize } from "../../hooks/UseWindowSize";
+import { PlannerItemLens } from "../../lenses/PlannerItemLens";
 import { SagaLens } from "../../lenses/SagaItemLens";
-import { DocumentsItemLens } from "../../lenses/DocumentItemLens";
+import { useItemEditor, useItemEditorLensIndex } from "../../stores/useItemEditor";
+import { UniqueName } from "../../utils/UniqueName";
+import { Bump } from "../Bump/Bump";
+import { Flex } from "../Flex/Flex";
+import { TrText } from "../Text/Text";
 
 // TODO -- Move this somewhere
 export type LensConfiguration = {
     id: string
     type: string
     title: string
-    data?: any
 }
 
 type LensOption = {
@@ -69,6 +66,8 @@ export const ItemEditorNewLensPage = React.memo((props: {
 }) => {
 
     const ed = useItemEditor()
+    const lenses = useItemEditorLensIndex()
+
     const handleSelectLens = (l: LensOption) => {
 
         if (!ed.item) return;
@@ -79,17 +78,9 @@ export const ItemEditorNewLensPage = React.memo((props: {
             if (!type) return;
         }
 
-        const i = { ...ed.item }
-        const lensNames = new Set(ItemData.get<LensConfiguration[]>(i, '__lenses', []).map(c => c.title))
+        const lensNames = new Set(lenses.map(l => l.title))
         const title = UniqueName(l.label, lensNames)
-
-        ItemData.mutate<LensConfiguration[]>(i, '__lenses', [], list => list.push({
-            id: new Date().getTime().toString(),
-            type,
-            title: title
-        }))
-
-        ed.updateItem({ data: i.data })
+        ed.lenses.add({ id: new Date().getTime().toString(), type, title })
 
     }
 

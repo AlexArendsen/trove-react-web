@@ -1,14 +1,13 @@
 import React, { useMemo } from "react"
 import { Bump } from "../../components/Bump/Bump"
 import { Flex } from "../../components/Flex/Flex"
-import { ItemEditorFrame } from "../../components/ItemEditor/ItemEditorFrame"
 import { TrText } from "../../components/Text/Text"
 import { TextInput } from "../../components/TextInput/TextInput"
 import { useItemEditor } from "../../stores/useItemEditor"
-import { ItemData } from "../../utils/ItemData"
 import { Layout } from "../../utils/Parsing/Layout"
 import { LayoutView } from "./LayoutView"
 import { LensConfiguration } from "../../components/ItemEditor/ItemEditorNewLensPage"
+import { useItemLensData } from "../../hooks/UseItemLens"
 
 export const LayoutItemEditor = React.memo((props: {
     itemId: string,
@@ -18,13 +17,14 @@ export const LayoutItemEditor = React.memo((props: {
 
     const ed = useItemEditor()
     const { config, itemId, onDone } = props
-    const src = config.data?.['txml']
+    //const src = config.data?.['txml']
+    const src = useItemLensData<{txml?: string}>(itemId, config.id)?.txml || ''
 
     console.log({ src, item: ed.item })
 
     const handleBlur = (value: string) => {
         if (!ed.item) return;
-        ItemData.setLensData(ed.item, config.id, { txml: value })
+        //ItemData.setLensData(ed.item, config.id, { txml: value })
         ed.updateItem(ed.item)
     }
 

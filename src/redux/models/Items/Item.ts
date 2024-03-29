@@ -1,8 +1,12 @@
+import { LensConfiguration } from "../../../components/ItemEditor/ItemEditorNewLensPage"
+
 export interface Item {
 	_id: string
 	title: string
 	description?: string
-	data?: any
+	data?: {
+		__lenses?: LensConfiguration[]
+	} & any
 	parent_id?: string
 	user_id: string
 	checked: boolean
