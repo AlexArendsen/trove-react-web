@@ -68,7 +68,7 @@ const OrphansItemHeader = React.memo((props: {
                     <TrText medium bold>{ topLevelOrphans?.length || '...' }</TrText>
                 </Flex>
 
-                <Button onClick={ cleanUpLeaves }>{`Clean Up (${nToDelete})`}</Button>
+                <Button onClick={ cleanUpLeaves } label={`Clean Up (${nToDelete})`} />
 
             </Flex>
 

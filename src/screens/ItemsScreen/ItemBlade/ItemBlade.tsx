@@ -1,31 +1,28 @@
 import classNames from "classnames";
 import React, { useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { useHistory } from "react-router";
 import { Flex } from "../../../components/Flex/Flex";
 import { ItemDropZone } from "../../../components/ItemDropZone/ItemDropZone";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
-import { Routes } from "../../../constants/Routes";
 import { useItem } from "../../../hooks/UseItem";
 import { LensedComponent } from "../../../lenses/LensedComponent";
+import { Item } from "../../../redux/models/Items/Item";
 import './ItemBlade.css';
 
 interface ItemBladeProps {
 	itemId: string
 	selected?: string
 	style?: React.CSSProperties
+	onItemClick?: (item: Item) => void
 	darken?: boolean
 }
 
 export const ItemBlade = React.memo((props: ItemBladeProps) => {
 
-	const history = useHistory();
 	const { item } = useItem(props.itemId);
 
-
-	const handleTitleClick = useCallback(() => {
-		if (item) history.push(Routes.item(item._id))
-	}, [ item ])
+	const handleTitleClick = useCallback(() => { if (item) props.onItemClick?.(item) }, [item, props.onItemClick])
+	const handleChildClick = useCallback((item: Item) => { props.onItemClick?.(item) }, [props.onItemClick])
 
 	if (!item) return null;
 
@@ -45,7 +42,7 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 					{ item.description ? <ReactMarkdown>{ item.description }</ReactMarkdown> : null }
 					<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderNewItemInputForm } props={{ itemId: item._id }} />
 				</div>
-				<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderChildList } props={{ itemId: item._id, selectedItemId: props.selected }} />
+				<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderChildList } props={{ itemId: item._id, selectedItemId: props.selected, onClick: handleChildClick }} />
 			</Flex>
 
 		</Flex>

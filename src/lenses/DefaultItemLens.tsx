@@ -22,9 +22,9 @@ export const DefaultItemLens : ItemLens = {
                 return <TrText bold mediumLarge onClick={ onClick } style={{ cursor: 'pointer' }}>{ item?.title }</TrText>
             },
             RenderNewItemInputForm: (props: { itemId: string }) => <ItemInputForm darker itemId={ props.itemId } style={{ margin: '20px 0' }} />,
-            RenderChildList: (props: { itemId: string, selectedItemId: string }) => {
+            RenderChildList: (props: { itemId: string, selectedItemId: string, onClick: (item: Item) => void }) => {
                 const { children } = useItem(props.itemId)
-                return <ItemList selected={ props.selectedItemId } items={ children } parentId={ props.itemId } display='compact-list' navOnClick />
+                return <ItemList selected={ props.selectedItemId } items={ children } parentId={ props.itemId } display='compact-list' onClick={ props.onClick } />
             },
         },
 
@@ -35,9 +35,9 @@ export const DefaultItemLens : ItemLens = {
                 const { isMobile } = useWindowSize()
                 return <ItemInputForm itemId={ props.itemId } style={{ marginTop: 20, marginBottom: isMobile ? 20 : 60 }} />
             },
-            RenderChildList: (props: { itemId: string }) => {
+            RenderChildList: (props: { itemId: string, onClick: (item: Item) => void }) => {
                 const { children } = useItem(props.itemId)
-                return <ItemList items={ children } parentId={ props.itemId } navOnClick />
+                return <ItemList items={ children } parentId={ props.itemId } onClick={ props.onClick } />
             }
         },
 

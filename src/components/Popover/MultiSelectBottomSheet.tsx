@@ -72,21 +72,21 @@ export const MultiSelectBottomSheet = React.memo(() => {
                 <Flex row align='center'>
                     <TrText small bold>Select</TrText>
                     <Bump w={ 10 } />
-                    <Button onClick={ handleClickSelectAll }>All</Button>
+                    <Button onClick={ handleClickSelectAll } label='All' />
                     <Bump w={ 10 } />
-                    <Button onClick={ handleClickDeselectAll }>None</Button>
+                    <Button onClick={ handleClickDeselectAll } label='None' />
                     <Bump w={ 10 } />
-                    <Button onClick={ handleClickSelectChecked }>Checked</Button>
+                    <Button onClick={ handleClickSelectChecked } label='Checked' />
                     <Bump w={ 10 } />
-                    <Button onClick={ handleClickSelectUnchecked }>Unchecked</Button>
+                    <Button onClick={ handleClickSelectUnchecked } label='Unchecked' />
                 </Flex>
 
                 <Bump h={ 20 } />
 
                 <Flex row>
-                    <Button onClick={ handleClickMove } variant='submit'>Move</Button>
+                    <Button onClick={ handleClickMove } variant='submit' label='Move' />
                     <Bump w={ 10 } />
-                    <Button onClick={ handleClickDelete } variant='danger'>Delete</Button>
+                    <Button onClick={ handleClickDelete } variant='danger' label='Delete' />
                 </Flex>
 
             </Flex>

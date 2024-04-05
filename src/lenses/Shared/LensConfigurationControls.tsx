@@ -5,7 +5,6 @@ import { TrText } from "../../components/Text/Text";
 import { Bump } from "../../components/Bump/Bump";
 import { TextInput } from "../../components/TextInput/TextInput";
 import { useItemEditor } from "../../stores/useItemEditor";
-import { Button } from "../../components/Button/Button";
 
 export const LensConfigurationControls = React.memo((props: {
     config: LensConfiguration,

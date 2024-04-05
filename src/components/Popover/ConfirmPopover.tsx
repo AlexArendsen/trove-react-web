@@ -28,9 +28,9 @@ export const ConfirmPopover = React.memo(() => {
             <Flex column>
                 { confirm.subtitle ? <TrText style={{ marginBottom: 20 }} medium>{ confirm.subtitle }</TrText> : null }
                 <Flex row>
-                    <Button onClick={ handleConfirm } variant='submit' disabled={ loading }>{ confirm.confirmLabel || 'Yes, Confirm' }</Button>
+                    <Button onClick={handleConfirm} variant='submit' disabled={loading} label={confirm.confirmLabel || 'Yes, Confirm'} />
                     <Bump w={ 20 } />
-                    <Button onClick={ () => { confirm.close(); } }>{ confirm.cancelLabel || 'Cancel' }</Button>
+                    <Button onClick={ () => { confirm.close(); } } label={ confirm.cancelLabel || 'Cancel' } />
                 </Flex>
             </Flex>
         </BottomSheetPopover>

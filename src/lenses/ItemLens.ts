@@ -30,5 +30,5 @@ export interface ItemLensDisplaySpec {
     RenderHeader?: (props: { itemId: string, onClick: () => void, config: LensConfiguration }) => El,
     RenderEditor?: (props: { itemId: string, onDone: () => void, config: LensConfiguration }) => El,
     RenderNewItemInputForm?: (props: { itemId: string, config: LensConfiguration }) => El,
-    RenderChildList?: (props: { itemId: string, selectedItemId: string, config: LensConfiguration }) => El,
+    RenderChildList?: (props: { itemId: string, selectedItemId: string, onClick: (item: Item) => void, config: LensConfiguration }) => El,
 }

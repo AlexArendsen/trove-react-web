@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Bump } from "../../../components/Bump/Bump";
 import { Flex } from "../../../components/Flex/Flex";
 import { LensConfiguration } from "../../../components/ItemEditor/ItemEditorNewLensPage";
@@ -17,9 +17,13 @@ import { LensedComponent } from "../../../lenses/LensedComponent";
 import { ItemLensPillList } from "../../../lenses/Shared/ItemLensPillLIst";
 import { useItemEditor } from "../../../stores/useItemEditor";
 import './SelectedItemDisplay.css';
+import { useHistory } from "react-router";
+import { Routes } from "../../../constants/Routes";
+import { Item } from "../../../redux/models/Items/Item";
 
 export const SelectedItemDisplay = React.memo(() => {
 
+	const history = useHistory()
 	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
 
@@ -30,6 +34,10 @@ export const SelectedItemDisplay = React.memo(() => {
 		const selectedLens = allLenses.find(l => lensConfig?.type === l.TypeId)?.Self || DefaultItemLens.Default
 		return { selectedLens, anyLenses: lenses.length, lensConfig }
 	}, [ lensId, item ])
+
+	const handleItemClick = useCallback((item: Item) => {
+		history.push(Routes.item(item?._id))
+	}, [])
 
 	const narrow = !selectedLens?.FullWidthSelected;
 
@@ -84,7 +92,7 @@ export const SelectedItemDisplay = React.memo(() => {
 					<div className={ classNames({
 						'selected-item-children': true
 					}) }>
-						<LensedComponent lens={ selectedLens } selector={ l => l.AsSelected?.RenderChildList } props={{ itemId: item?._id, config: lensConfig }} />
+						<LensedComponent lens={ selectedLens } selector={ l => l.AsSelected?.RenderChildList } props={{ itemId: item?._id, config: lensConfig, onClick: handleItemClick }} />
 					</div>
 				</Flex>
 			</Flex>

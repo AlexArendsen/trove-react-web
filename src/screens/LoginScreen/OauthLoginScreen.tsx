@@ -10,24 +10,23 @@ export const OauthLoginScreen = React.memo(() => {
 
     const auth = useAuth0()
 
-	return (
-		<Flex column center className='login-screen'>
+    return (
+        <Flex column center className='login-screen'>
 
             <div style={{ maxWidth: 600, backgroundColor: 'white', padding: 50 }}>
                 <Logo large variant='gradient' />
-                <Bump h={ 120 } />
+                <Bump h={120} />
                 <Button
-                    variant={ auth.isLoading ? undefined : 'submit' }
+                    variant={auth.isLoading ? undefined : 'submit'}
                     fullWidth
                     large
-                    onClick={ () => auth.loginWithRedirect({  }) }
-                >
-                    { auth.isLoading ? 'Loading...' : 'Log In' }
-                </Button>
+                    onClick={() => auth.loginWithRedirect({})}
+                    label={auth.isLoading ? 'Loading...' : 'Log In'}
+                />
             </div>
 
-		</Flex>
-	)
+        </Flex>
+    )
 
 
 })

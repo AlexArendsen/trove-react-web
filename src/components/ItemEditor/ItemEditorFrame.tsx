@@ -80,19 +80,15 @@ export const ItemEditorFrame = React.memo((props: {
 			</div>
 			<Bump h={ 20 } />
 			<Flex row={ !isMobile } column={ isMobile } align={ isMobile ? 'stretch' : 'center' }>
-				{ ed.item?.isRoot ? null : <Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }}>Delete</Button> }
+				{ ed.item?.isRoot ? null : <Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }} label='Delete' /> }
 				<Bump w={ 20 } h={ 10 } />
-				{ ed.item?.isRoot ? null : <Button onClick={ () => move.open(ed.item?._id || '') }>Move</Button> }
+				{ ed.item?.isRoot ? null : <Button onClick={ () => move.open(ed.item?._id || '') } label='Move' /> }
 				<div style={{ flex: 1 }}></div>
 				{ isMobile ? null : <TrText small faded>Ctrl+Enter</TrText> }
 				<Bump w={ 20 } h={ 10 } />
-				<Button variant='submit' disabled={ canSave === false } onClick={ handleSave }>
-					Save Changes
-				</Button>
+				<Button variant='submit' disabled={ canSave === false } onClick={ handleSave } label='Save Changes' />
 				<Bump w={ 20 } h={ 10 } />
-				<Button onClick={ handleDone }>
-					Cancel
-				</Button>
+				<Button onClick={ handleDone } label='Cancel' />
 			</Flex>
 		</Flex>
 	)

@@ -63,9 +63,9 @@ export const MoveEditorModal = React.memo(() => {
 
                     <div style={{ flex: 1 }}></div>
 
-                    <Button onClick={ ed.close }>Cancel</Button>
+                    <Button onClick={ ed.close } label='Cancel' />
                     <Bump w={ 20 } />
-                    <Button variant="submit" onClick={ handleSubmit } disabled={ ed.isLoading }>Move</Button>
+                    <Button variant="submit" onClick={ handleSubmit } disabled={ ed.isLoading } label='Move' />
 
                 </Flex>
 

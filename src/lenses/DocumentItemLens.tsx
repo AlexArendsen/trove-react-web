@@ -136,7 +136,7 @@ const DocumentCard = React.memo((props: { itemId: string }) => {
             <Markdown src={ item?.description } />
 
             <Flex row justify='flex-end'>
-                <Button onClick={ handleCopy }>Copy</Button>
+                <Button onClick={ handleCopy } label='Copy' />
             </Flex>
 
         </div>

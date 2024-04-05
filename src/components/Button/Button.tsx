@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import { Text } from "../Text/Text";
+import { TrText } from "../Text/Text";
 import './Button.css';
 
 export interface ButtonProps {
@@ -8,7 +8,8 @@ export interface ButtonProps {
 	submitForm?: boolean
 	fullWidth?: boolean
 	onClick?: (e: React.MouseEvent) => void
-	children: string
+	label?: string
+	children?: any
 	large?: boolean
 	style?: React.CSSProperties
 	textStyle?: React.CSSProperties
@@ -30,7 +31,8 @@ export const Button = React.memo((props: ButtonProps) => {
 				'button-large': props.large
 			})}
 			style={ props.style }>
-			<Text style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.children }</Text>
+			<TrText style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.label }</TrText>
+			{ props.children }
 		</button>
 	)
 
