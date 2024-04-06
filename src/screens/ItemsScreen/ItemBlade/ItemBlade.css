@@ -8,11 +8,25 @@
 	filter: brightness(0.8);
 }
 
+.item-blade-header {
+	padding: 0 15px;
+}
+
+.item-blade-leading-space {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-start;
+	padding: 10px 0;
+	margin-bottom: 10px;
+	min-height: 40px;
+}
+
 .item-blade-content {
 	max-height: calc(100vh - 120x);
 	overflow-y: scroll;
 	overflow-x: hidden;
-	padding: 30px 15px;
+	padding: 0 15px 30px 15px;
 	flex: 1 1 0%;
 	box-sizing: border-box;
 	width: 100%;

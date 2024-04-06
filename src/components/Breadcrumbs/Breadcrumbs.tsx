@@ -24,29 +24,40 @@ export const SelectedItemBreadcrumbs = React.memo(() => {
 
 export const Breadcrumbs = React.memo((props: {
 	itemId?: string
+	reverse?: boolean
 	onSelectCrumb: (item: Item | null) => void
 }) => {
 
-	const { itemId, onSelectCrumb } = props
+	const { itemId, reverse, onSelectCrumb } = props
 
 	const item = useItem(itemId)?.item;
 
 	const lineage = useMemo(() => {
 		if (!item) return [];
 		const lookup = useItemStore.getState().byId
-		let l: Item[] = [ item ]
+		let l: Item[] = [item]
 		let i = item
 		while (!!i?.parent_id) {
 			l.unshift(lookup[i.parent_id])
 			i = lookup[i.parent_id]
 		}
-		return l;
-	}, [ item ])
+		return reverse ? l.reverse() : l
+	}, [item, reverse])
 
 	return (
 		<div style={{ overflow: 'scroll' }}>
 			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }}>
-				{ lineage.map((l, idx) => <Crumb title={ l?.title || 'UNKNOWN' } item={ l } isLast={ (idx + 1) === lineage.length } onClick={ () => onSelectCrumb(l) } />) }
+				{lineage.map((l, idx) => {
+					const isLast = (idx + 1) === lineage.length
+					const caretChar = reverse ? '‹' : '›'
+					//const caretChar = '/'
+					//const isFirst = idx === 0
+					//let caretChar = 
+					//if (reverse) caretChar = isFirst ? '' : '<'
+					//caretChar = isLast ? '' : '>'
+					return <Crumb title={l?.title || 'UNKNOWN'} item={l} caret={ isLast ? '' : caretChar } onClick={() => onSelectCrumb(l)} />
+				})
+				}
 			</Flex>
 		</div>
 	)
@@ -56,19 +67,21 @@ export const Breadcrumbs = React.memo((props: {
 interface CrumbProps {
 	title: string
 	item?: Item | null
-	isLast?: boolean
+	caret?: string
 	onClick: () => void
 }
 
 const Crumb = React.memo((props: CrumbProps) => {
 
 	return (
-		<ItemDropZone itemId={ props.item?._id || null }>
-			<Flex row align='center' className='crumb' onClick={ props.onClick }>
-					<TrText style={{ marginRight: 12 }} bold>{ props.title }</TrText>
-					<TrText medium>›</TrText>
-			</Flex>
-		</ItemDropZone>
+		<Flex row align='center'>
+			<ItemDropZone itemId={props.item?._id || null}>
+				<Flex row align='center' className='crumb' onClick={props.onClick}>
+					<TrText bold>{props.title}</TrText>
+				</Flex>
+			</ItemDropZone>
+			{props.caret ? <TrText medium faded>{props.caret}</TrText> : null}
+		</Flex>
 	)
 
 })
