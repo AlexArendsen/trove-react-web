@@ -1,5 +1,10 @@
 const GetEnvironment = () => {
-    return /localhost/.test(window.location.href) ? 'local' : 'production'
+    if (/(localhost|192\.168\..*)/.test(window.location.href)) {
+        if (window.location.protocol === 'https:') return 'local-secure'
+        else return 'local'
+    } else {
+        return 'production'
+    }
 }
 
 export const Environment = {
@@ -8,8 +13,11 @@ export const Environment = {
 
     getApiBaseUrl: () => {
         const env = GetEnvironment()
-        if (env === 'local') return 'http://192.168.0.21:8118/api'
-        else return 'https://trove-api-n5wur.ondigitalocean.app/api'
+        switch (env) {
+            case 'local': return 'http://192.168.0.169:8118/api'
+            case 'local-secure': return 'https://192.168.0.169:8118/api'
+            default: return 'https://trove-api-b8e4ae538477.herokuapp.com/api'
+        }
     }
 
 }
