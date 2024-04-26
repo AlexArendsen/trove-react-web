@@ -20,6 +20,7 @@ import './SelectedItemDisplay.css';
 import { useHistory } from "react-router";
 import { Routes } from "../../../constants/Routes";
 import { Item } from "../../../redux/models/Items/Item";
+import { useLayout } from "../../../stores/useLayout";
 
 export const SelectedItemDisplay = React.memo(() => {
 
@@ -43,6 +44,10 @@ export const SelectedItemDisplay = React.memo(() => {
 
 	const ed = useItemEditor()
 
+	const layout = useLayout()
+	const showGrandparent = grandparent && layout.generationsToShow >= 2
+	const showParent = parent && layout.generationsToShow >= 1
+
 	const paddingTop = useMemo(() => {
 		if (isMobile) return 20
 		if (anyLenses) return 40
@@ -53,9 +58,9 @@ export const SelectedItemDisplay = React.memo(() => {
 
 	const displayClasses = classNames({
 		'selected-item-display': true,
-		'selected-item-display-no-parent': (!parent && !grandparent) || isMobile,
-		'selected-item-display-with-parent': !!parent && !grandparent && !isMobile,
-		'selected-item-display-with-grandparent': !!grandparent && !isMobile,
+		'selected-item-display-no-parent': !showParent || isMobile,
+		'selected-item-display-with-parent': showParent && !showGrandparent && !isMobile,
+		'selected-item-display-with-grandparent': showGrandparent && !isMobile,
 	})
 
 	const contentClasses = classNames({

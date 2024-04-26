@@ -1,4 +1,4 @@
-import { faColumns, faRightLeft } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesLeft, faAnglesRight, faColumns, faRightLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useMemo } from "react";
 import { useHistory } from "react-router";
@@ -20,6 +20,10 @@ export const ItemsScreen = React.memo(() => {
 	const { item, parent, grandparent } = useSelectedItem();
 	const { isMobile } = useWindowSize()
 	const layout = useLayout()
+
+	const showGrandparent = grandparent && layout.generationsToShow >= 2
+	const showParent = parent && layout.generationsToShow >= 1
+	const showParentButton = !!parent
 
 	const handleBladeItemClick = useCallback((item: Item) => { history.push(Routes.item(item._id)) }, [])
 
@@ -54,13 +58,33 @@ export const ItemsScreen = React.memo(() => {
 				</Flex>
 			</Flex>
 			<Flex row style={{ height: 'calc(100vh - 112px)', maxHeight: 'calc(100vh - 115px)', overflow: 'hidden' }}>
-				{ grandparent ? <ItemBlade darken itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} onItemClick={ handleBladeItemClick } /> : null }
-				{ parent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: grandparent ? -250 : 0, zIndex: 200 }} onItemClick={ handleBladeItemClick } /> : null }
+				{ showGrandparent ? <ItemBlade darken itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} onItemClick={ handleBladeItemClick } /> : null }
+				{ showParent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: showGrandparent ? -250 : 0, zIndex: 200 }} onItemClick={ handleBladeItemClick } /> : null }
+				{ showParentButton ? <ParentsFloatingButton pushRight={ layout.generationsToShow <= 0 } /> : null }
 				<SelectedItemDisplay />
 				<SidebarFloatingButton />
 				<Sidebar />
 			</Flex>
 		</Flex>
+	)
+
+})
+
+export const ParentsFloatingButton = React.memo((props: {
+	pushRight?: boolean
+}) => {
+
+	const layout = useLayout()
+
+	const handleClick = useCallback(() => {
+		const n = layout.generationsToShow <= 0 ? 2 : layout.generationsToShow - 1
+		layout.setGenerationsToShow(n)
+	}, [layout.generationsToShow])
+
+	return (
+		<FloatingButton onClick={ handleClick } style={{ position: 'relative', left: props.pushRight ? 80 : undefined }}>
+			<FontAwesomeIcon icon={ layout.generationsToShow > 0 ? faAnglesLeft : faAnglesRight } />
+		</FloatingButton>
 	)
 
 })
@@ -92,10 +116,11 @@ export const SidebarFloatingButton = React.memo(() => {
 const FloatingButton = React.memo((props: {
 	onClick: () => void
 	children: JSX.Element
+	style?: React.CSSProperties
 }) => {
 
 	return (
-		<Flex column align='center' style={{ width: 0 }}>
+		<Flex column align='center' style={{ width: 0, ...props.style }}>
 			<div style={{ flex: 10 }}></div>
 			<Button style={{ zIndex: 500, backgroundColor: '#ccc' }} onClick={ props.onClick }>
 				{ props.children }
