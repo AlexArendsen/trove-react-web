@@ -15,6 +15,7 @@ import { ItemsScreen } from "./ItemsScreen/ItemsScreen";
 import { LoadingScreen } from "./LoadingScreen/LoadingScreen";
 import { OauthLoginScreen } from "./LoginScreen/OauthLoginScreen";
 import { SearchScreen } from "./SearchScreen/SearchScreen";
+import './BaseScreen.css';
 
 export const BaseScreen = React.memo(() => {
 
@@ -29,7 +30,7 @@ export const BaseScreen = React.memo(() => {
 	const itemsLoading = useItemStore(s => s.isLoading);
 	const showHeader = useMemo(() => !itemsLoading && loggedIn, [ itemsLoading, loggedIn ])
 
-	const { view, edit } = useQueryParams();
+	const { view } = useQueryParams();
 	const screen = useMemo(() => {
 
 		if (!loggedIn) return <OauthLoginScreen />
@@ -42,7 +43,7 @@ export const BaseScreen = React.memo(() => {
 	}, [ view, loggedIn, itemsLoading ])
 
 	return (
-		<Flex column>
+		<Flex column className='container'>
 			{ showHeader ? <Header /> : null }
 			{ screen }
 			<GlobalEventController />

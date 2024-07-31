@@ -50,11 +50,6 @@ export const Breadcrumbs = React.memo((props: {
 				{lineage.map((l, idx) => {
 					const isLast = (idx + 1) === lineage.length
 					const caretChar = reverse ? '‹' : '›'
-					//const caretChar = '/'
-					//const isFirst = idx === 0
-					//let caretChar = 
-					//if (reverse) caretChar = isFirst ? '' : '<'
-					//caretChar = isLast ? '' : '>'
 					return <Crumb title={l?.title || 'UNKNOWN'} item={l} caret={ isLast ? '' : caretChar } onClick={() => onSelectCrumb(l)} />
 				})
 				}
@@ -77,7 +72,7 @@ const Crumb = React.memo((props: CrumbProps) => {
 		<Flex row align='center'>
 			<ItemDropZone itemId={props.item?._id || null}>
 				<Flex row align='center' className='crumb' onClick={props.onClick}>
-					<TrText bold>{props.title}</TrText>
+					<TrText small bold style={{ color: 'inherit' }}>{props.title}</TrText>
 				</Flex>
 			</ItemDropZone>
 			{props.caret ? <TrText medium faded>{props.caret}</TrText> : null}

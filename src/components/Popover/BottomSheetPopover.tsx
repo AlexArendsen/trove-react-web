@@ -6,6 +6,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { PopoverOverlay } from "./PopoverOverlay";
 import { Bump } from "../Bump/Bump";
 import { useWindowSize } from "../../hooks/UseWindowSize";
+import './Popover.css';
 
 export const BottomSheetPopover = React.memo((props: {
     open: boolean
@@ -39,18 +40,14 @@ export const BottomSheetPopover = React.memo((props: {
                 bottom: 0,
                 left: 0
             }}>
-                <div style={{
+                <div className='bottom-sheet' style={{
                     maxWidth: isMobile ? '100%' : 640,
                     minWidth: isMobile ? '100%' : 640,
-                    backgroundColor: 'white',
                     boxShadow: withoutOverlay ? '0 -8px 16px rgba(0,0,0,0.15)' : undefined,
-                    borderRadius,
-                    minHeight: 120
+                    borderRadius
                 }}>
 
-                    <div style={{
-                        background: effectBar,
-                        height: 10,
+                    <div className='header-bar' style={{
                         borderRadius
                     }}>
                     </div>

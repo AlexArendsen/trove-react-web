@@ -8,6 +8,7 @@ import { ItemStoreCheckItem, ItemStoreUncheckItem } from "./ItemStore.CheckItem"
 import { ItemStoreMoveManyItems, ItemStoreMoveOneItem } from "./ItemStore.MoveItem"
 import { ItemStoreDeleteManyItem, ItemStoreDeleteOneItem } from "./ItemStore.DeleteItem"
 import { ItemStoreSortItems } from "./ItemStore.Sorting"
+import { useTheme } from "../../hooks/UseTheme"
 
 export type ItemStoreState = {
 
@@ -53,7 +54,12 @@ export const useItemStore = create<ItemStoreState>((set, get) => {
 
         create: async (title: string, parentId: string, extras?: Partial<Item>) => await ItemStoreCreateItem({ set, get }, title, parentId, extras),
 
-        updateOne: async (update: Partial<Item>) => await ItemStoreUpdateOneItem({ set, get }, update),
+        updateOne: async (update: Partial<Item>) => {
+            console.log({update})
+            if (update.isRoot && update.description)
+                useTheme.getState().set(update.description.includes('#dark') ? 'dark' : 'light')
+            await ItemStoreUpdateOneItem({ set, get }, update)
+        },
 
         checkOne: async (itemId: string) => await ItemStoreCheckItem({ set, get }, itemId),
 

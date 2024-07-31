@@ -8,6 +8,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { PopoverOverlay } from "./PopoverOverlay";
 import { Bump } from "../Bump/Bump";
 import { useWindowSize } from "../../hooks/UseWindowSize";
+import './Popover.css';
 
 export const ModalPopover = React.memo((props: {
     open: boolean,
@@ -38,17 +39,11 @@ export const ModalPopover = React.memo((props: {
                 height: '100%'
             }}>
 
-                <Flex column style={{
-                    maxWidth: '100vw', width: 800,
+                <Flex column className='modal' style={{
                     height: isMobile ? '100%' : 800,
-                    backgroundColor: 'white',
                     borderRadius: isMobile ? 0 : 8,
-                    overflow: 'hidden'
                 }}>
-                    <div style={{
-                        background: 'linear-gradient(90deg, rgba(74,50,172,1) 0%, rgba(156,34,158,1) 50%, rgba(0,194,255,1) 100%)',
-                        height: 8
-                    }}>
+                    <div className='header-bar'>
                     </div>
                     <Bump h={ 15 } />
                         <div style={{ padding: `0 30px` }}>

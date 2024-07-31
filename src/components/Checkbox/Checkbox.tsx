@@ -72,8 +72,8 @@ export const Checkbox = React.memo((props: CheckboxProps) => {
 			>
 				<div
 					style={{
-						background: showProgress ? `linear-gradient(45deg, #4931AB ${progress * 100}%, transparent ${progress * 100}%)` : undefined,
-						borderColor: showProgress && progress > 0 ? '#4931AB' : undefined
+						background: showProgress ? `linear-gradient(45deg, var(--accent-primary) ${progress * 100}%, transparent ${progress * 100}%)` : undefined,
+						borderColor: showProgress && progress > 0 ? 'var(--accent-primary)' : undefined
 					}}
 					className={classNames({
 						'checkbox': true,

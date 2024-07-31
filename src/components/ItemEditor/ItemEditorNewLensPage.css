@@ -1,0 +1,14 @@
+.new-lens-card {
+    border: solid 1px var(--divider-primary);
+    padding: 20px;
+    max-width: 100vw;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+}
+
+.badge {
+    background-color: var(--background-accent1);
+    padding: 2px 8px 2px 8px;
+    border-radius: 6px
+}

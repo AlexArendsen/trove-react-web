@@ -11,15 +11,16 @@ import { CreateStore } from './redux/store';
 import { BaseScreen } from './screens/BaseScreen';
 import { useItemStore } from './stores/ItemStore/useItemStore';
 import { useLoginInitState } from './stores/useLoginInitState';
+import { useTheme } from './hooks/UseTheme';
 
 export const App = React.memo(() => {
 
   const store = useMemo(() => CreateStore(), [])
   const auth0 = useAuth0();
   const login = useLoginInitState()
+  const theme = useTheme()
 
   const init = useCallback(async () => {
-    console.log('Setting')
     login.setStatus('Loading')
     await Initialize({ auth0, store })
     login.setStatus('Ready')
@@ -34,7 +35,9 @@ export const App = React.memo(() => {
       <DndProvider backend={ HTML5Backend }>
         <Provider store={ store }>
           <Router history={TrHistory}>
-            <BaseScreen />
+            <div className='theme-root' data-theme={ theme.theme } data-lol='fa'>
+              <BaseScreen />
+            </div>
           </Router>
         </Provider>
       </DndProvider>

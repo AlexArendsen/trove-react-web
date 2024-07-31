@@ -1,11 +1,12 @@
 .item-blade {
-	background-color: #e8e8e8;
+	background-color: var(--background-accent1);
 	width: 400px;
 	min-width: 400px;
 }
 
 .item-blade-darken {
-	filter: brightness(0.8);
+	filter: brightness(var(--grandparent-brightness-shift));
+	/* background-color: var(--background-accent2); */
 }
 
 .item-blade-header {

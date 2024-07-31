@@ -1,0 +1,17 @@
+.trtext {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--foreground-primary);
+}
+
+.trtext-bold { font-weight: 700; }
+.trtext-light { font-weight: unset; }
+
+.trtext-large { font-size: 36px; }
+.trtext-medium-large { font-size: 24px; }
+.trtext-medium { font-size: 18px; }
+.trtext-small { font-size: 14px; }
+
+.trtext-faded { color: var(--foreground-secondary) }
+.trtext-accent { color: var(--accent-primary) }
+.trtext-inverse { color: var(--foreground-inverse) }

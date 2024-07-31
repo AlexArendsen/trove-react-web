@@ -8,7 +8,6 @@ import { Auth0Constants } from './constants/Auth0';
 
 const getRedirectUrl = () => {
   const r = window.location.origin
-  console.log(`Setting redirect to ${r}`)
   return r
 }
 
@@ -23,7 +22,7 @@ ReactDOM.render(
         scope: 'read:items write:items'
       }}
       >
-      <App />
+        <App />
     </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')

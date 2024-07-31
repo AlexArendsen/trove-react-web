@@ -1,5 +1,5 @@
 .progress-bar-background {
-	background-color: #c9c9c9;
+	background-color: var(--background-transparent-accent);
 	height: 7px;
 	width: 100%;
 }
@@ -7,12 +7,12 @@
 .progress-bar-contents {
 	transition: width 500ms;
 	transition-timing-function: cubic-bezier(.63,0,0,1.4);
-	background-color: #4931ab;
+	background-color: var(--accent-primary);
 	height: 7px;
 }
 
 .progress-bar-contents.multiselect {
-	background-color: #3061aa;
+	background-color: var(--accent-secondary);
 }
 
 .progress-bar-floating {

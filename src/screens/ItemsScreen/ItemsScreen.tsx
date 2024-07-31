@@ -122,7 +122,7 @@ const FloatingButton = React.memo((props: {
 	return (
 		<Flex column align='center' style={{ width: 0, ...props.style }}>
 			<div style={{ flex: 10 }}></div>
-			<Button style={{ zIndex: 500, backgroundColor: '#ccc' }} onClick={ props.onClick }>
+			<Button style={{ zIndex: 500 }} variant='accent' onClick={ props.onClick }>
 				{ props.children }
 			</Button>
 			<div style={{ flex: 1 }}></div>

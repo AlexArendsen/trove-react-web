@@ -1,5 +1,6 @@
 import React from "react";
 import ReactMarkdown from 'react-markdown';
+import './Markdown.css';
 
 interface MarkdownProps {
 	src?: string
@@ -12,7 +13,7 @@ interface MarkdownProps {
 export const Markdown = React.memo((props: MarkdownProps) => {
 
 	return (
-		<div onClick={ props.onClick } style={{ fontSize: 18 }}>
+		<div onClick={ props.onClick } className='container'>
 			<ReactMarkdown>{ props.src || '' }</ReactMarkdown>
 		</div>
 	)

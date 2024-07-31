@@ -1,12 +1,13 @@
 .text-input {
 
 	font-family: unset;
-	background-color: rgba(0,0,0,0.04);
+	background-color: var(--background-transparent-accent);
 	box-sizing: border-box;
 	font-size: 15px;
 	font-weight: 700;
 	border-radius: 30px;
 	width: 100%;
+	color: var(--foreground-primary);
 	border: 0;
 
 }
@@ -15,7 +16,7 @@
 .text-input-small { padding: 6px 12px; font-size: 13px; }
 .text-input-normal { padding: 9px 12px; }
 
-.text-input-darker { background-color: #c9c9c9; }
+.text-input-darker { background-color: var(--background-transparent-accent-more); }
 
 .text-input-transparent {
 	background-color: transparent;
@@ -25,7 +26,7 @@
 
 .text-input:focus-visible {
 	outline-width: 1px;
-	outline-color: rgb(74, 50, 172);
+	outline-color: var(--accent-primary)
 }
 
 .text-input-transparent:focus-visible {

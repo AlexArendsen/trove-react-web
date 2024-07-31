@@ -1,8 +1,8 @@
 .crumb:hover {
 
 	transition: background 200ms;
-	background-color: #4931AB;
-	color: white;
+	background-color: var(--accent-primary);
+	color: var(--foreground-inverse) !important;
 
 }
 

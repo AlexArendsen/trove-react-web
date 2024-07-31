@@ -1,10 +1,7 @@
 import React, { useMemo } from "react";
 import { ItemList } from "../../components/ItemList/ItemList";
 import { useQueryParams } from "../../hooks/UseQueryParams";
-import { useStore } from "../../hooks/UseStore";
 import { useItemStore } from "../../stores/ItemStore/useItemStore";
-import { TrText } from "../../components/Text/Text";
-import { TimeDisplay } from "../../components/TimeDisplay/TimeDisplay";
 
 export const SearchScreen = React.memo(() => {
 
@@ -26,7 +23,7 @@ export const SearchScreen = React.memo(() => {
 	}, [ items, query ])
 
 	return (
-		<div style={{ margin: 20 }}>
+		<div className='container' style={{ margin: 20 }}>
 			<ItemList display='gallery' items={ results } navOnClick noSort />
 		</div>
 	)

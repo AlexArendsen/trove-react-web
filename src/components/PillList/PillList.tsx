@@ -1,8 +1,9 @@
 import React from "react";
 import { Flex } from "../Flex/Flex";
 import { TrText } from "../Text/Text";
-import { Colors } from "../../constants/Colors";
 import { Bump } from "../Bump/Bump";
+import classNames from "classnames";
+import './PillList.css'
 
 export interface PillListProps {
     options: { label: string, value: any, icon?: JSX.Element }[],
@@ -42,17 +43,13 @@ const Pill = React.memo((props: {
 
     const { label, onClick, selected, icon } = props
 
+    const classes = classNames({
+        'pill': true,
+        'pill-selected': selected
+    })
+
     return (
-        <Flex row style={{
-            borderRadius: 30,
-            marginRight: 10,
-            height: 25,
-            whiteSpace: 'nowrap',
-            padding: '5px 20px 9px 20px',
-            backgroundColor: selected ? Colors.Accent1 : '#efefef',
-            color: selected ? 'white' : undefined,
-            cursor: 'pointer'
-        }} onClick={ onClick } align='center'>
+        <Flex row className={ classes } onClick={ onClick } align='center'>
             <TrText medium bold white={ selected }>{label}</TrText>
             { icon ? (<><Bump w={ 20 } />{icon}</>) : null }
         </Flex>

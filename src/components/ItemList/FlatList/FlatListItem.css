@@ -7,14 +7,11 @@
 }
 
 .flat-list-item:hover {
-	background-color: rgba(0,0,0,0.07);
+	background-color: var(--background-transparent-accent);
 }
 
 .flat-list-item-selected {
-	background-color: rgba(0,0,0,0.04);
+	background-color: var(--background-transparent-accent-more);
 }
 
-.flat-list-item-checked .flat-list-item-title { color: #4931AB; }
-.flat-list-item-right-clicked .flat-list-item-title { color: #C32986; }
-.flat-list-item-right-clicked .checkbox { border-color: #C32986; }
-.flat-list-item-right-clicked .checkbox-checked { background-color: #C32986; }
+.flat-list-item-checked .flat-list-item-title { color: var(--accent-primary); }

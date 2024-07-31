@@ -7,6 +7,7 @@ import { Button } from "../Button/Button";
 import { Flex } from "../Flex/Flex";
 import { Logo } from "../Logo/Logo";
 import { TextInput } from "../TextInput/TextInput";
+import './Header.css';
 
 export const Header = React.memo(() => {
 
@@ -19,7 +20,7 @@ export const Header = React.memo(() => {
 
 
 	return (
-		<Flex row style={{ padding: '15px 20px' }} align='stretch' justify='space-between'>
+		<Flex row style={{ padding: '15px 20px' }} className='container' align='stretch' justify='space-between'>
 			<div style={{ cursor: 'pointer'}} onClick={ () => history.push(Routes.item('')) }>
 				<Logo variant='gradient' />
 			</div>

@@ -10,6 +10,7 @@ import { UniqueName } from "../../utils/UniqueName";
 import { Bump } from "../Bump/Bump";
 import { Flex } from "../Flex/Flex";
 import { TrText } from "../Text/Text";
+import './ItemEditorNewLensPage.css';
 
 // TODO -- Move this somewhere
 export type LensConfiguration = {
@@ -109,14 +110,8 @@ const NewLensCard = React.memo((props: {
     const { isMobile } = useWindowSize()
 
     return (
-        <Flex onClick={ onClick } style={{
-            border: 'solid 1px #ccc',
-            padding: 20,
-            width: isMobile ? '100%' : 185,
-            maxWidth: '100vw',
-            borderRadius: 15,
-            marginBottom: 20,
-            marginRight: 10
+        <Flex onClick={ onClick } className='new-lens-card' style={{
+            width: isMobile ? '100%' : 185
         }} column>
             <Flex row justify='space-between' align='center'>
                 <TrText mediumLarge bold>{ model.label }</TrText>
@@ -137,11 +132,7 @@ const Badge = React.memo((props: {
     label: string
 }) => {
     return (
-        <div style={{
-            backgroundColor: '#efefef',
-            padding: '2px 8px 2px 8px',
-            borderRadius: 6
-        }}>
+        <div className='badge'>
             <TrText small bold style={{ opacity: 0.5, textTransform: 'uppercase' }}>{ props.label }</TrText>
         </div>
     )

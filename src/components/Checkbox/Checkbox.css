@@ -7,7 +7,7 @@
 	box-sizing: border-box;
 	border-style: solid;
 	border: solid 2px;
-	border-color: #ADADAD;
+	border-color: var(--divider-primary);
 	border-radius: 6px;
 	transition: border-radius 100ms;
 	opacity: 1;
@@ -18,17 +18,17 @@
 }
 
 .checkbox-checked {
-	background-color: #4931AB;
-	border-color: #4931AB;
+	background-color: var(--accent-primary);
+	border-color: var(--accent-primary);
 }
 
 .checkbox.multiselect {
-	border-color: #3061aa;
+	border-color: var(--accent-secondary);
 	border-radius: 50%;
 }
 
 .checkbox-checked.multiselect {
-	background-color: #3061aa;
+	background-color: var(--accent-secondary);
 }
 
 .checkbox-small {

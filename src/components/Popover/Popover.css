@@ -1,0 +1,16 @@
+.modal {
+    max-width: 100vw;
+    width: 800px;
+    overflow: hidden;
+    background-color: var(--background-primary);
+}
+
+.bottom-sheet {
+    min-height: 120px;
+    background-color: var(--background-primary);
+}
+
+.header-bar {
+    background: var(--gradient-vibrant);
+    height: 10px;
+}
