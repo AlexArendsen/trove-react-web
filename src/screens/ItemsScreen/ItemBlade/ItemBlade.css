@@ -1,12 +1,15 @@
 .item-blade {
-	background-color: var(--background-accent1);
+	background-color: var(--background-primary);
 	width: 400px;
 	min-width: 400px;
 }
 
-.item-blade-darken {
+.item-blade-grandparent {
 	filter: brightness(var(--grandparent-brightness-shift));
-	/* background-color: var(--background-accent2); */
+}
+
+.item-blade-parent {
+	filter: brightness(var(--parent-brightness-shift));
 }
 
 .item-blade-header {

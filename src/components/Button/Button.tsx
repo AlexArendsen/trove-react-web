@@ -32,7 +32,13 @@ export const Button = React.memo((props: ButtonProps) => {
 				'button-large': props.large
 			})}
 			style={ props.style }>
-			<TrText white={ props.variant === 'submit' } style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.label }</TrText>
+			<TrText className={
+				classNames({
+					'button-label': true,
+					'button-label-large': props.large,
+					'button-label-primary': props.variant === 'submit'
+				})
+			} style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.label }</TrText>
 			{ props.children }
 		</button>
 	)

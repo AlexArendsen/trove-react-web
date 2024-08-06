@@ -9,6 +9,7 @@
 	width: 100%;
 	color: var(--foreground-primary);
 	border: 0;
+	outline: 0;
 
 }
 
@@ -24,9 +25,9 @@
 	padding: 0;
 }
 
-.text-input:focus-visible {
-	outline-width: 1px;
-	outline-color: var(--accent-primary)
+.text-input:focus {
+	outline: 3px solid var(--accent-primary);
+	outline-offset: 0;
 }
 
 .text-input-transparent:focus-visible {

@@ -11,3 +11,7 @@
 .pill-selected {
     background-color: var(--accent-primary);
 }
+
+.pill-label-selected {
+    color: var(--foreground-accent);
+}

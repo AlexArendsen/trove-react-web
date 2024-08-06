@@ -1,5 +1,5 @@
 .button {
-	padding: 12px 30px;
+	padding: 12px 18px;
 	border: 0;
 	border-radius: 30px;
 	cursor: pointer;
@@ -27,4 +27,16 @@
 
 .button-large {
 	padding: 16px 16px;
+}
+
+.button-label {
+	font-size: 14;
+}
+
+.button-label-large {
+	font-size: 20;
+}
+
+.button-label-primary {
+	color: var(--foreground-accent);
 }

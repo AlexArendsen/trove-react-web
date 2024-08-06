@@ -17,7 +17,7 @@ interface ItemBladeProps {
 	style?: React.CSSProperties
 	onBack?: () => void
 	onItemClick?: (item: Item) => void
-	darken?: boolean
+	shadeLevel?: 0 | 1
 }
 
 export const ItemBlade = React.memo((props: ItemBladeProps) => {
@@ -32,7 +32,8 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 	return (
 		<Flex column className={classNames({
 			'item-blade': true,
-			'item-blade-darken': props.darken
+			'item-blade-parent': !props.shadeLevel,
+			'item-blade-grandparent': props.shadeLevel === 1
 		})} style={ props.style }>
 
 			<ProgressBar item={ item } />

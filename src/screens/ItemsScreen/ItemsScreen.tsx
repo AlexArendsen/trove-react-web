@@ -58,7 +58,7 @@ export const ItemsScreen = React.memo(() => {
 				</Flex>
 			</Flex>
 			<Flex row style={{ height: 'calc(100vh - 112px)', maxHeight: 'calc(100vh - 115px)', overflow: 'hidden' }}>
-				{ showGrandparent ? <ItemBlade darken itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} onItemClick={ handleBladeItemClick } /> : null }
+				{ showGrandparent ? <ItemBlade shadeLevel={1} itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} onItemClick={ handleBladeItemClick } /> : null }
 				{ showParent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: showGrandparent ? -250 : 0, zIndex: 200 }} onItemClick={ handleBladeItemClick } /> : null }
 				{ showParentButton ? <ParentsFloatingButton pushRight={ layout.generationsToShow <= 0 } /> : null }
 				<SelectedItemDisplay />

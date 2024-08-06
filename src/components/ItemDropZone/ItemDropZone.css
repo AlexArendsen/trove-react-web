@@ -21,7 +21,7 @@
 
 .sort-zone > .sort-zone-line {
 	height: 2px;
-	background-color: rgba(73, 48, 170, 1);
+	background-color: var(--accent-primary);
 }
 
 .sort-zone-short {

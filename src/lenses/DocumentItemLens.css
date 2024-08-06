@@ -1,0 +1,19 @@
+.document-card {
+    border: solid 3px var(--divider-secondary);
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 15px;
+    margin: 15px;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+.document-folder-card {
+    width: 300px;
+    min-width: 300px;
+}
+
+.document-item-card {
+    width: 600px;
+    min-width: 600px;
+}

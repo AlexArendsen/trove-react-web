@@ -50,7 +50,9 @@ const Pill = React.memo((props: {
 
     return (
         <Flex row className={ classes } onClick={ onClick } align='center'>
-            <TrText medium bold white={ selected }>{label}</TrText>
+            <TrText medium bold className={classNames({
+                'pill-label-selected': selected
+            })}>{label}</TrText>
             { icon ? (<><Bump w={ 20 } />{icon}</>) : null }
         </Flex>
     )

@@ -1,13 +1,3 @@
-*::-webkit-scrollbar {
-  display: none
-}
-
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-p { margin: 0 0 12px 0; }
 
 .theme-root[data-theme=light] {
 
@@ -21,18 +11,22 @@ p { margin: 0 0 12px 0; }
   --foreground-primary: #282828;
   --foreground-secondary: #949494;
   --foreground-inverse: #ffffff;
+  --foreground-accent: var(--foreground-inverse);
   --foreground-negative: #ff1b1b;
 
   --divider-primary: #949494;
+  --divider-secondary: rgba(0,0,0,0.08);
 
-  --accent-primary: #4931ab;
+  --accent-primary: #3412b9;
   --accent-secondary: #2b56a5;
 
   --gradient-vibrant: linear-gradient(90deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
   --gradient-subtle: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
-  --grandparent-brightness-shift: 0.8;
+  --shadow: rgba(0,0,0,0.1);
 
+  --parent-brightness-shift: 0.9;
+  --grandparent-brightness-shift: 0.8;
 
 }
 
@@ -40,7 +34,7 @@ p { margin: 0 0 12px 0; }
 
   --background-primary: #202026;
   --background-accent1: #262630;
-  --background-accent2: #2f2f36;
+  --background-accent2: #303036;
   --background-transparent-accent: rgba(255,255,255,0.08);
   --background-transparent-accent-more: rgba(255,255,255,0.12);
   --background-negative: #ff4d4d;
@@ -48,17 +42,22 @@ p { margin: 0 0 12px 0; }
   --foreground-primary: #ffffff;
   --foreground-secondary: #b0b0b0;
   --foreground-inverse: #282828;
+  --foreground-accent: var(--foreground-primary);
   --foreground-negative: #ff9999;
 
   --divider-primary: #777777;
+  --divider-secondary: rgba(255,255,255,0.08);
 
   --accent-primary: #7a40ff;
-  --accent-secondary: #2b56a5;
+  --accent-secondary: #2099fc;
 
   --gradient-vibrant: linear-gradient(90deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
   --gradient-subtle: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
-  --grandparent-brightness-shift: 1.2;
+  --shadow: #7a40ff66;
+
+  --parent-brightness-shift: 1.15;
+  --grandparent-brightness-shift: 1.3;
 }
 
 .theme-root {
@@ -68,4 +67,28 @@ p { margin: 0 0 12px 0; }
 
 .svg-inline--fa {
   color: var(--foreground-primary);
+}
+
+*::-webkit-scrollbar {
+  display: none
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+p { margin: 0 0 12px 0; }
+
+a {
+  color: var(--accent-secondary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  color: var(--accent-primary)
 }

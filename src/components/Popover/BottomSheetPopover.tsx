@@ -20,10 +20,6 @@ export const BottomSheetPopover = React.memo((props: {
     const { isMobile } = useWindowSize()
     const { open, onClose, title, children, withoutOverlay, variant } = props
 
-    const effectBar = variant === 'multiselect'
-        ? '#3061aa'
-        : 'linear-gradient(90deg, rgba(74,50,172,1) 0%, rgba(156,34,158,1) 50%, rgba(0,194,255,1) 100%)';
-    
     const borderRadius = isMobile ? undefined : '10px 10px 0 0'
 
     if (!open) return null
@@ -43,7 +39,7 @@ export const BottomSheetPopover = React.memo((props: {
                 <div className='bottom-sheet' style={{
                     maxWidth: isMobile ? '100%' : 640,
                     minWidth: isMobile ? '100%' : 640,
-                    boxShadow: withoutOverlay ? '0 -8px 16px rgba(0,0,0,0.15)' : undefined,
+                    boxShadow: withoutOverlay ? '0 -8px 16px var(--shadow)' : undefined,
                     borderRadius
                 }}>
 
