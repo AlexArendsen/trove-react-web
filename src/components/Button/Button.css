@@ -20,6 +20,10 @@
 	background: var(--background-accent2);
 }
 
+.button-primary {
+	background: var(--background-primary);
+}
+
 .button-danger {
 	background: var(--background-negative);
 	color: var(--foreground-negative);
@@ -37,6 +41,10 @@
 	font-size: 20;
 }
 
-.button-label-primary {
+.button-label-accent {
 	color: var(--foreground-accent);
+}
+
+.button-label-primary {
+	color: var(--foreground-primary);
 }

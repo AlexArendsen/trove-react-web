@@ -158,4 +158,4 @@ const ConvertAxiosResponse = <TData>(response: AxiosResponse<TData>): ItemStoreS
     return { data: response.data }
 }
 
-export const ItemStoreDefaultStorageDriver = ItemStoreApiStorageDriver;
+export const ItemStoreDefaultStorageDriver = ItemStoreDebuggingLocalStorageDriver;

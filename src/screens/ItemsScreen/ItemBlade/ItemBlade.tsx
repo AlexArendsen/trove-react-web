@@ -10,6 +10,7 @@ import { Item } from "../../../redux/models/Items/Item";
 import './ItemBlade.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "../../../components/Button/Button";
 
 interface ItemBladeProps {
 	itemId: string
@@ -45,7 +46,11 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 				<div className='item-blade-header'>
 
 					<div className='item-blade-leading-space'>
-						{ props.onBack ? <FontAwesomeIcon icon={ faChevronLeft } size='lg' onClick={ props.onBack } /> : null }
+						{ props.onBack ? (
+							<Button onClick={ props.onBack }>
+								<FontAwesomeIcon icon={ faChevronLeft } size='lg' />
+							</Button>
+						) : null }
 					</div>
 
 					<ItemDropZone itemId={ item._id }>

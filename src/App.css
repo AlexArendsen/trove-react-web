@@ -15,12 +15,15 @@
   --foreground-negative: #ff1b1b;
 
   --divider-primary: #949494;
-  --divider-secondary: rgba(0,0,0,0.08);
+  --divider-secondary: rgba(0,0,0,0.12);
 
-  --accent-primary: #3412b9;
-  --accent-secondary: #2b56a5;
+  /* --accent-primary: #4c29d8;
+  --accent-secondary: #1a82d8; */
+  --accent-primary: #5b26d8;
+  --accent-secondary: #157bce;
 
   --gradient-vibrant: linear-gradient(90deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
+  --gradient-vibrant-angled: linear-gradient(135deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
   --gradient-subtle: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
   --shadow: rgba(0,0,0,0.1);
@@ -40,7 +43,7 @@
   --background-negative: #ff4d4d;
 
   --foreground-primary: #ffffff;
-  --foreground-secondary: #b0b0b0;
+  --foreground-secondary: #969696;
   --foreground-inverse: #282828;
   --foreground-accent: var(--foreground-primary);
   --foreground-negative: #ff9999;
@@ -52,12 +55,13 @@
   --accent-secondary: #2099fc;
 
   --gradient-vibrant: linear-gradient(90deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
+  --gradient-vibrant-angled: linear-gradient(135deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);
   --gradient-subtle: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
   --shadow: #7a40ff66;
 
-  --parent-brightness-shift: 1.15;
-  --grandparent-brightness-shift: 1.3;
+  --parent-brightness-shift: 1.25;
+  --grandparent-brightness-shift: 1.5;
 }
 
 .theme-root {

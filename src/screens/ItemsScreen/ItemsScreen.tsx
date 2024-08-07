@@ -53,7 +53,7 @@ export const ItemsScreen = React.memo(() => {
 				<Flex row align='center'>
 					{ layout.sidebarVisible ? <Breadcrumbs reverse itemId={ layout.sidebarItemId || '' } onSelectCrumb={ i => layout.setSidebarItemId(i?._id || null) } /> : null }
 					<Button onClick={ layout.toggleSidebar } style={{ margin: '0 10px', padding: 8 }} variant={ layout.sidebarVisible ? 'submit' : undefined }>
-						<FontAwesomeIcon icon={ faColumns } />
+						<FontAwesomeIcon icon={ faColumns } style={{ color: 'var(--foregrond-accent)' }} />
 					</Button>
 				</Flex>
 			</Flex>

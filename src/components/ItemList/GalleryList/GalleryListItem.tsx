@@ -36,7 +36,7 @@ export const GalleryListItem = React.memo((props: GalleryListItemProps) => {
 				<Text small faded>{ props.showParent ? parent?.title : null }</Text>
 				<Flex row style={{ margin: '8px 0 8px 0' }}>
 					<Checkbox checked={ item?.checked } itemId={ item?._id } />
-					<Text bold medium style={{ flex: 1, marginLeft: 12, color: (item?.checked ? Colors.Accent1 : undefined) }}>{ item?.title }</Text>
+					<Text bold medium style={{ flex: 1, marginLeft: 12, color: (item?.checked ? 'var(--accent-primary)' : undefined) }}>{ item?.title }</Text>
 				</Flex>
 				<Text small faded>{ item?.description }</Text>
 			</div>

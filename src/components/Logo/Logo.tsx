@@ -4,7 +4,7 @@ import { Text } from "../Text/Text";
 import './Logo.css'
 
 interface LogoProps {
-	variant?: 'white' | 'gradient',
+	variant?: 'white' | 'gradient' | 'primary' | 'accent',
 	large?: boolean
 }
 
@@ -18,6 +18,8 @@ export const Logo = React.memo((props: LogoProps) => {
 			'trove-logo-large': large,
 			'trove-logo-small': !large,
 			'trove-logo-white': variant === 'white',
+			'trove-logo-primary': variant === 'primary',
+			'trove-logo-accent': variant === 'accent',
 			'trove-logo-black': !variant,
 			'trove-logo-gradient': variant === 'gradient'
 		})}>Trove</Text>

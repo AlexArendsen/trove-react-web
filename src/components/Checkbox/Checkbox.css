@@ -6,8 +6,8 @@
 	min-height: 22px;
 	box-sizing: border-box;
 	border-style: solid;
-	border: solid 2px;
-	border-color: var(--divider-primary);
+	border: solid 3px;
+	border-color: var(--background-transparent-accent);
 	border-radius: 6px;
 	transition: border-radius 100ms;
 	opacity: 1;

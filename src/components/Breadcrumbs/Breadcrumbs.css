@@ -2,7 +2,7 @@
 
 	transition: background 200ms;
 	background-color: var(--accent-primary);
-	color: var(--foreground-inverse) !important;
+	color: var(--foreground-accent) !important;
 
 }
 

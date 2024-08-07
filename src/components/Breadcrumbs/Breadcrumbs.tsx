@@ -9,6 +9,8 @@ import { Flex } from "../Flex/Flex";
 import { ItemDropZone } from "../ItemDropZone/ItemDropZone";
 import { TrText } from "../Text/Text";
 import './Breadcrumbs.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export const SelectedItemBreadcrumbs = React.memo(() => {
 
@@ -35,10 +37,11 @@ export const Breadcrumbs = React.memo((props: {
 	const lineage = useMemo(() => {
 		if (!item) return [];
 		const lookup = useItemStore.getState().byId
-		let l: Item[] = [item]
+		let l: { type: 'separator' | 'item', data?: Item }[] = [{ type: 'item', data: item }]
 		let i = item
 		while (!!i?.parent_id) {
-			l.unshift(lookup[i.parent_id])
+			l.unshift({ type: 'separator' })
+			l.unshift({type: 'item', data: lookup[i.parent_id] })
 			i = lookup[i.parent_id]
 		}
 		return reverse ? l.reverse() : l
@@ -46,11 +49,11 @@ export const Breadcrumbs = React.memo((props: {
 
 	return (
 		<div style={{ overflow: 'scroll' }}>
-			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }}>
+			<Flex row style={{ margin: '4px 0', whiteSpace: 'nowrap' }} align='center'>
 				{lineage.map((l, idx) => {
 					const isLast = (idx + 1) === lineage.length
-					const caretChar = reverse ? '‹' : '›'
-					return <Crumb title={l?.title || 'UNKNOWN'} item={l} caret={ isLast ? '' : caretChar } onClick={() => onSelectCrumb(l)} />
+					if (l.type === 'separator') return <FontAwesomeIcon icon={ faChevronRight } size='sm' style={{ color: 'var(--foreground-secondary)' }} />
+					else return <Crumb title={l?.data?.title || 'UNKNOWN'} item={l?.data} onClick={() => onSelectCrumb(l.data!)} />
 				})
 				}
 			</Flex>

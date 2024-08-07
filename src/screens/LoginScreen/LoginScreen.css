@@ -4,13 +4,17 @@
 	width: 100vw;
 	box-sizing: border-box;
 	background: rgb(35,0,177);
-	background: linear-gradient(135deg, rgba(35,0,177,0.68) 0%, rgba(156,34,158,0.68) 50%, rgba(0,194,255,0.68) 100%);
+	background: var(--background-primary)
 }
 
 .login-card {
-	background: white;
+	background: var(--gradient-vibrant-angled);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
 	border-radius: 12px;
 	padding: 55px;
-	height: 380px;
-	width: 520px;
+	height: 360px;
+	width: 300px;
 }

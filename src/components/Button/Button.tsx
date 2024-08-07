@@ -4,7 +4,7 @@ import { TrText } from "../Text/Text";
 import './Button.css';
 
 export interface ButtonProps {
-	variant?: 'submit' | 'danger' | 'accent'
+	variant?: 'submit' | 'danger' | 'accent' | 'primary'
 	submitForm?: boolean
 	fullWidth?: boolean
 	onClick?: (e: React.MouseEvent) => void
@@ -28,6 +28,7 @@ export const Button = React.memo((props: ButtonProps) => {
 				'button-accent': props.variant === 'accent',
 				'button-submit': props.variant === 'submit',
 				'button-danger': props.variant === 'danger',
+				'button-primary': props.variant === 'primary',
 				'button-full-width': props.fullWidth,
 				'button-large': props.large
 			})}
@@ -36,7 +37,8 @@ export const Button = React.memo((props: ButtonProps) => {
 				classNames({
 					'button-label': true,
 					'button-label-large': props.large,
-					'button-label-primary': props.variant === 'submit'
+					'button-label-submit': props.variant === 'submit',
+					'button-label-primary': props.variant === 'primary'
 				})
 			} style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.label }</TrText>
 			{ props.children }
