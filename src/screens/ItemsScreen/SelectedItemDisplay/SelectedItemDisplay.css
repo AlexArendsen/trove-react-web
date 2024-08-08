@@ -31,7 +31,7 @@
 }
 
 .selected-item-display-content-narrow {
-	max-width: 800px;
+	max-width: var(--selected-item-width-standard);
 }
 
 .selected-item-title {

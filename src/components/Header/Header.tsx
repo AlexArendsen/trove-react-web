@@ -26,7 +26,7 @@ export const Header = React.memo(() => {
 			</div>
 			<Bump w={ 10 } />
 			<div style={{ flex: 1, maxWidth: 600 }}>
-				<TextInput placeholder='Search' large onEnter={ handleSearch } />
+				<TextInput placeholder='Search' onEnter={ handleSearch } />
 			</div>
 			<Bump w={ 10 } />
 			<Button onClick={ handleAvatarClick } label='Log Out' />

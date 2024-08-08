@@ -1,16 +1,16 @@
 .trtext {
-    font-weight: 400;
-    font-size: 14px;
+    font-weight: var(--font-weight-default);
+    font-size: var(--font-size-default);
     color: var(--foreground-primary);
 }
 
 .trtext-bold { font-weight: 700; }
 .trtext-light { font-weight: unset; }
 
-.trtext-large { font-size: 36px; }
-.trtext-medium-large { font-size: 24px; }
-.trtext-medium { font-size: 18px; }
-.trtext-small { font-size: 14px; }
+.trtext-large { font-size: var(--font-size-large); }
+.trtext-medium-large { font-size: var(--font-size-medium-large); }
+.trtext-medium { font-size: var(--font-size-medium); }
+.trtext-small { font-size: var(--font-size-small); }
 
 .trtext-faded { color: var(--foreground-secondary) }
 .trtext-accent { color: var(--accent-primary) }

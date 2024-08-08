@@ -15,6 +15,7 @@ import { Button } from "../../../components/Button/Button";
 interface ItemBladeProps {
 	itemId: string
 	selected?: string
+	className?: string
 	style?: React.CSSProperties
 	onBack?: () => void
 	onItemClick?: (item: Item) => void
@@ -35,10 +36,9 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 			'item-blade': true,
 			'item-blade-parent': !props.shadeLevel,
 			'item-blade-grandparent': props.shadeLevel === 1
-		})} style={ props.style }>
+		}) + ' ' +  props.className} style={ props.style }>
 
 			<ProgressBar item={ item } />
-
 
 			<Flex column className='item-blade-content'>
 
@@ -47,8 +47,8 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 
 					<div className='item-blade-leading-space'>
 						{ props.onBack ? (
-							<Button onClick={ props.onBack }>
-								<FontAwesomeIcon icon={ faChevronLeft } size='lg' />
+							<Button onClick={ props.onBack } small>
+								<FontAwesomeIcon icon={ faChevronLeft } size='1x' />
 							</Button>
 						) : null }
 					</div>

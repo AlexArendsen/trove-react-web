@@ -1,0 +1,13 @@
+.item-container {
+    height: calc(100vh - var(--header-height));
+    max-height: calc(100vh - var(--header-height));
+    overflow: hidden;
+}
+
+.parent {
+    z-index: 200;
+}
+
+.parent-grandparent-visible {
+    margin-left: var(--grandparent-reveal-width);
+}

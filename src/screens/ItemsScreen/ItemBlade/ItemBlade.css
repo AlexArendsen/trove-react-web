@@ -1,7 +1,7 @@
 .item-blade {
 	background-color: var(--background-primary);
-	width: 400px;
-	min-width: 400px;
+	width: var(--item-blade-width);
+	min-width: var(--item-blade-width);
 }
 
 .item-blade-grandparent {
@@ -23,14 +23,14 @@
 	align-items: flex-start;
 	padding: 0;
 	margin-bottom: 10px;
-	min-height: 80px;
+	min-height: 64px;
 }
 
 .item-blade-content {
 	max-height: calc(100vh - 120x);
 	overflow-y: scroll;
 	overflow-x: hidden;
-	padding: 0 15px 30px 15px;
+	padding: 0 var(--spacing-large) 30px var(--spacing-large);
 	flex: 1 1 0%;
 	box-sizing: border-box;
 	width: 100%;

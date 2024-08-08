@@ -1,4 +1,4 @@
 .container {
     color: var(--foreground-primary);
-    font-size: 18px
+    font-size: var(--font-size-medium);
 }

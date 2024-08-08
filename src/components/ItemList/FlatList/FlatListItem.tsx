@@ -49,7 +49,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 				<Flex row align='center'>
 
 					{ props.withouthCheckboxes ? <Bump w={ 25 } /> : (
-						<Flex row justify='center' style={{ width: 50, marginRight: 15 }}>
+						<Flex row justify='center' style={{ width: 40, marginRight: 12 }}>
 							<Checkbox checked={ checked } itemId={ item?._id } hitSlop='full' />
 						</Flex>
 					) }

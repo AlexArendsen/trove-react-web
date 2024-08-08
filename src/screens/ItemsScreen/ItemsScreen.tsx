@@ -13,6 +13,8 @@ import { useLayout } from "../../stores/useLayout";
 import { ItemBlade } from "./ItemBlade/ItemBlade";
 import { SelectedItemDisplay } from "./SelectedItemDisplay/SelectedItemDisplay";
 import { Sidebar } from "./Sidebar";
+import './ItemsScreen.css';
+import classNames from "classnames";
 
 export const ItemsScreen = React.memo(() => {
 
@@ -57,9 +59,18 @@ export const ItemsScreen = React.memo(() => {
 					</Button>
 				</Flex>
 			</Flex>
-			<Flex row style={{ height: 'calc(100vh - 112px)', maxHeight: 'calc(100vh - 115px)', overflow: 'hidden' }}>
+			<Flex row className='item-container'>
 				{ showGrandparent ? <ItemBlade shadeLevel={1} itemId={ grandparent?._id } selected={ parent?._id } style={{ zIndex: 100 }} onItemClick={ handleBladeItemClick } /> : null }
-				{ showParent ? <ItemBlade itemId={ parent?._id } selected={ item?._id } style={{ marginLeft: showGrandparent ? -250 : 0, zIndex: 200 }} onItemClick={ handleBladeItemClick } /> : null }
+				{ showParent ? <ItemBlade
+						itemId={ parent?._id }
+						selected={ item?._id }
+						className={ classNames({
+							'parent': true,
+							'parent-grandparent-visible': showGrandparent
+						}) }
+						// style={{ marginLeft: showGrandparent ? -250 : 0, zIndex: 200 }}
+						onItemClick={ handleBladeItemClick } />
+					: null }
 				{ showParentButton ? <ParentsFloatingButton pushRight={ layout.generationsToShow <= 0 } /> : null }
 				<SelectedItemDisplay />
 				<SidebarFloatingButton />

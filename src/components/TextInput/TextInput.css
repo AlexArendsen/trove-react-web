@@ -3,8 +3,8 @@
 	font-family: unset;
 	background-color: var(--background-transparent-accent);
 	box-sizing: border-box;
-	font-size: 15px;
-	font-weight: 700;
+	font-size: var(--font-size-medium);
+	font-weight: var(--font-weight-bold);
 	border-radius: 30px;
 	width: 100%;
 	color: var(--foreground-primary);
@@ -13,9 +13,9 @@
 
 }
 
-.text-input-large { padding: 12px; }
-.text-input-small { padding: 6px 12px; font-size: 13px; }
-.text-input-normal { padding: 9px 12px; }
+.text-input-large { padding: 15px; }
+.text-input-small { padding: 4px var(--font-size-small); font-size: var(--font-size-small); }
+.text-input-normal { padding: 6px 12px; }
 
 .text-input-darker { background-color: var(--background-transparent-accent-more); }
 
@@ -26,7 +26,7 @@
 }
 
 .text-input:focus {
-	outline: 3px solid var(--accent-primary);
+	outline: var(--border-width-chunky) solid var(--accent-primary);
 	outline-offset: 0;
 }
 

@@ -1,4 +1,27 @@
 
+.theme-root {
+
+  --font-size-large: 30px;
+  --font-size-medium-large: 20px;
+  --font-size-medium: 15px;
+  --font-size-small: 12px;
+  --font-size-default: 12px;
+
+  --font-weight-bold: 700;
+  --font-weight-default: 400;
+  --font-weight-light: unset;
+
+  --spacing-large: 12px;
+  --border-width-chunky: 2px;
+
+  --selected-item-width-standard: 640px;
+  --button-height: 30px;
+  --header-height: 115px;
+  --item-blade-width: 350px;
+  --grandparent-reveal-width: calc(var(--item-blade-width) * -0.5);
+
+}
+
 .theme-root[data-theme=light] {
 
   --background-primary: #ffffff;
@@ -30,6 +53,7 @@
 
   --parent-brightness-shift: 0.9;
   --grandparent-brightness-shift: 0.8;
+
 
 }
 

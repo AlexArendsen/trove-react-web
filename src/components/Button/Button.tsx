@@ -10,6 +10,7 @@ export interface ButtonProps {
 	onClick?: (e: React.MouseEvent) => void
 	label?: string
 	children?: any
+	small?: boolean
 	large?: boolean
 	style?: React.CSSProperties
 	textStyle?: React.CSSProperties
@@ -30,7 +31,8 @@ export const Button = React.memo((props: ButtonProps) => {
 				'button-danger': props.variant === 'danger',
 				'button-primary': props.variant === 'primary',
 				'button-full-width': props.fullWidth,
-				'button-large': props.large
+				'button-large': props.large,
+				'button-small': props.small
 			})}
 			style={ props.style }>
 			<TrText className={
