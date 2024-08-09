@@ -42,7 +42,7 @@ export const Button = React.memo((props: ButtonProps) => {
 					'button-label-submit': props.variant === 'submit',
 					'button-label-primary': props.variant === 'primary'
 				})
-			} style={{ fontSize: props.large ? 20 : 14, fontWeight: 'bold' }}>{ props.label }</TrText>
+			}>{ props.label }</TrText>
 			{ props.children }
 		</button>
 	)

@@ -18,6 +18,7 @@ interface TextInputProps {
 	onKeyDown?: (event: InputEvent) => void
 	clearOnEnter?: boolean
 	style?: React.CSSProperties
+	className?: string
 	multiline?: boolean
 	rows?: number
 	secret?: boolean
@@ -25,7 +26,10 @@ interface TextInputProps {
 
 export const TextInput = React.memo((props: TextInputProps) => {
 
-	const { onBlur, onChange, onKeyDown, onEnter, clearOnEnter, large, small, darker, transparent, multiline, secret, style, rows } = props;
+	const {
+		onBlur, onChange, onKeyDown, onEnter, clearOnEnter, large, small, darker, transparent, multiline, secret, style, rows,
+		className
+	} = props;
 	const [ value, setValue ] = useState('')
 
 	const elRef = useRef<HTMLTextAreaElement | HTMLInputElement>()
@@ -58,7 +62,7 @@ export const TextInput = React.memo((props: TextInputProps) => {
 		'text-input-normal': !small && !large && !transparent,
 		'text-input-darker': darker,
 		'text-input-transparent': transparent,
-	}), [ large, small, darker ])
+	}) + ' ' + className, [ large, small, darker, className ])
 
 	if (multiline) return (
 		<textarea ref={ elRef as any } rows={ rows || 10 } value={ value } onBlur={ handleBlur } onChange={ handleChange } onKeyDown={ handleKeyDown } className={ classString } style={ style }>

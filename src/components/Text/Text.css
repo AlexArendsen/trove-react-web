@@ -4,7 +4,7 @@
     color: var(--foreground-primary);
 }
 
-.trtext-bold { font-weight: 700; }
+.trtext-bold { font-weight: var(--font-weight-bold); }
 .trtext-light { font-weight: unset; }
 
 .trtext-large { font-size: var(--font-size-large); }

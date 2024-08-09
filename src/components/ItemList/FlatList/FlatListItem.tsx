@@ -46,7 +46,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 					'flat-list-item-selected': props.selected,
 				})} onClick={ props.onClick } onContextMenu={ handleRightClick }>
 
-				<Flex row align='center'>
+				<Flex row align='flex-start'>
 
 					{ props.withouthCheckboxes ? <Bump w={ 25 } /> : (
 						<Flex row justify='center' style={{ width: 40, marginRight: 12 }}>
@@ -54,34 +54,41 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 						</Flex>
 					) }
 
-					<Flex column style={{ flex: 2 }}>
-						<TrText medium bold className='flat-list-item-title'>{ item?.title }</TrText>
-					</Flex>
+					<Flex column style={{ width: '100%' }}>
 
-					{ isNaN(pct) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
-						<ProgressBar floating item={ item } />
-						{
-							((props.figures || 'visible') === 'visible') ? (<Flex row>
-								<TrText small accent>{ FormatNumber.withCommas(item?.completed || 0) }</TrText>
-								<TrText small faded style={{ marginLeft: 5, marginRight: 20, whiteSpace: 'nowrap' }}> / { FormatNumber.withCommas(item?.descendants || 0) }</TrText>
-								<TrText small accent bold>{ FormatNumber.toPercent(pct) }</TrText>
-							</Flex>) : null
-						}
-					</Flex>) }
+						<Flex row align='center'>
+							<div style={{ flex: 2 }}>
+								<TrText medium bold className='flat-list-item-title'>{ item?.title }</TrText>
+							</div>
 
-					{ (props.figures === 'on-end' && item?.descendants) ? (
-						<Flex row justify='flex-end' align='center' style={{ width: 40 }}>
-							<TrText small faded style={{ opacity: 0.8 }}>{ FormatNumber.withCommas(item?.descendants || 0) }</TrText>
+							{ isNaN(pct) ? null : (<Flex column style={{ marginLeft: 15, flex: 1 }} align='flex-end'>
+								<ProgressBar floating item={ item } />
+								{
+									((props.figures || 'visible') === 'visible') ? (<Flex row>
+										<TrText small accent>{ FormatNumber.withCommas(item?.completed || 0) }</TrText>
+										<TrText small faded style={{ marginLeft: 5, marginRight: 20, whiteSpace: 'nowrap' }}> / { FormatNumber.withCommas(item?.descendants || 0) }</TrText>
+										<TrText small accent bold>{ FormatNumber.toPercent(pct) }</TrText>
+									</Flex>) : null
+								}
+							</Flex>) }
+
+							{ (props.figures === 'on-end' && item?.descendants) ? (
+								<Flex row justify='flex-end' align='center' style={{ width: 40 }}>
+									<TrText small faded style={{ opacity: 0.8 }}>{ FormatNumber.withCommas(item?.descendants || 0) }</TrText>
+								</Flex>
+							) : null }
 						</Flex>
-					) : null }
+
+						{ item?.description ? (<div style={{ maxHeight: 40, overflow: 'hidden' }}>
+							<TrText small faded>{ item?.description }</TrText>
+						</div>) : null }
+
+					</Flex>
 
 					{/* TODO -- Image */}
 
 				</Flex>
 
-				{ item?.description ? (<div style={{ maxHeight: 40, marginLeft: 65, overflow: 'hidden' }}>
-					<TrText small faded>{ item?.description }</TrText>
-				</div>) : null }
 
 			</Flex>
 

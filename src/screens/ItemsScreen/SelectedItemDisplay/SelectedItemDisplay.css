@@ -45,3 +45,18 @@
 
 .selected-item-children { transition: opacity 200ms; }
 .selected-item-children-disabled { opacity: 0.25; }
+
+.modal-title-field {
+	font-size: var(--font-size-large);
+	font-weight: var(--font-weight-bold);
+	margin-top: 1px;
+}
+
+.modal-description-field {
+	font-size: var(--font-size-medium);
+	font-weight: var(--font-weight-default);
+	max-height: 50vh;
+	padding: var(--spacing-large);
+	border-radius: 18px;
+	max-width: 800px;
+}

@@ -136,7 +136,7 @@ export const DefaultItemEditorControls = React.memo((props: { itemId: string, on
 			<Bump h={ 5 } />
 			<TextInput
 				value={ ed.item?.title }
-				style={{ fontSize: 24, fontWeight: 700, marginTop: 1 }}
+				className='modal-title-field'
 				key='title'
 				onKeyDown={ ed.handleKeyDown }
 				onChange={ v => ed.updateItem({ title: v }) }
@@ -146,11 +146,12 @@ export const DefaultItemEditorControls = React.memo((props: { itemId: string, on
 			<Bump h={ 5 } />
 			<TextInput
 				value={ ed.item?.description }
+				className='modal-description-field'
 				multiline
 				key='description'
 				onKeyDown={ ed.handleKeyDown }
 				onChange={ v => ed.updateItem({ description: v }) } 
-				style={{ height: isMobile ? '50%' : 400, maxHeight: '50vh', padding: 15, borderRadius: 18, maxWidth: 800, fontWeight: 'normal' }}
+				style={{ height: isMobile ? '50%' : 400 }}
 				/>
 		</Flex>
 	)

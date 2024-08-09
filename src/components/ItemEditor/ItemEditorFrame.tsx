@@ -80,7 +80,7 @@ export const ItemEditorFrame = React.memo((props: {
 			</div>
 			<Bump h={ 20 } />
 			<Flex row={ !isMobile } column={ isMobile } align={ isMobile ? 'stretch' : 'center' }>
-				{ ed.item?.isRoot ? null : <Button onClick={ handleDelete } style={{ color: 'red', backgroundColor: '#ff000033' }} label='Delete' /> }
+				{ ed.item?.isRoot ? null : <Button onClick={ handleDelete } style={{ color: 'var(--foreground-negative)', backgroundColor: 'var(--background-negative)' }} label='Delete' /> }
 				<Bump w={ 20 } h={ 10 } />
 				{ ed.item?.isRoot ? null : <Button onClick={ () => move.open(ed.item?._id || '') } label='Move' /> }
 				<div style={{ flex: 1 }}></div>

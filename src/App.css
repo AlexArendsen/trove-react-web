@@ -1,6 +1,9 @@
 
 .theme-root {
 
+  --preferred-font-family: 'DM Sans';
+  font-family: var(--preferred-font-family), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
   --font-size-large: 30px;
   --font-size-medium-large: 20px;
   --font-size-medium: 15px;
@@ -9,7 +12,7 @@
 
   --font-weight-bold: 700;
   --font-weight-default: 400;
-  --font-weight-light: unset;
+  --font-weight-light: 200;
 
   --spacing-large: 12px;
   --border-width-chunky: 2px;
