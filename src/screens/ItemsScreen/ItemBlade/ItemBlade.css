@@ -23,7 +23,7 @@
 	align-items: flex-start;
 	padding: 0;
 	margin-bottom: 10px;
-	min-height: 64px;
+	min-height: var(--item-header-leading-space);
 }
 
 .item-blade-content {

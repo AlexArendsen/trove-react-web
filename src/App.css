@@ -17,6 +17,7 @@
   --spacing-large: 12px;
   --border-width-chunky: 2px;
 
+  --item-header-leading-space: 64px;
   --selected-item-width-standard: 640px;
   --button-height: 30px;
   --header-height: 115px;
@@ -43,8 +44,6 @@
   --divider-primary: #949494;
   --divider-secondary: rgba(0,0,0,0.12);
 
-  /* --accent-primary: #4c29d8;
-  --accent-secondary: #1a82d8; */
   --accent-primary: #5b26d8;
   --accent-secondary: #157bce;
 
@@ -78,7 +77,7 @@
   --divider-primary: #777777;
   --divider-secondary: rgba(255,255,255,0.08);
 
-  --accent-primary: #7a40ff;
+  --accent-primary: #7f40ff;
   --accent-secondary: #2099fc;
 
   --gradient-vibrant: linear-gradient(90deg, rgb(74, 50, 172) 0%, rgb(156, 34, 158) 50%, rgb(0, 194, 255) 100%);

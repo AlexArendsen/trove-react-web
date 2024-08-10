@@ -21,6 +21,7 @@ import { useHistory } from "react-router";
 import { Routes } from "../../../constants/Routes";
 import { Item } from "../../../redux/models/Items/Item";
 import { useLayout } from "../../../stores/useLayout";
+import { format, isValid } from "date-fns";
 
 export const SelectedItemDisplay = React.memo(() => {
 
@@ -153,10 +154,20 @@ export const DefaultItemEditorControls = React.memo((props: { itemId: string, on
 				onChange={ v => ed.updateItem({ description: v }) } 
 				style={{ height: isMobile ? '50%' : 400 }}
 				/>
+			<Bump h={ 5 } />
+			<Flex column align='flex-end'>
+				<TrText faded>{ maybeTimeDisplay('Created', ed.item?.created_at) }</TrText>
+				<TrText faded>{ maybeTimeDisplay('Updated', ed.item?.updated_at) }</TrText>
+			</Flex>
 		</Flex>
 	)
 
 })
+
+const maybeTimeDisplay = (prefix: string, dt: any) => {
+	if (isValid(dt)) return `${prefix} ${format(dt!, 'dd MMM yyyy, hh:mm aa')}`
+	return `${prefix} at unknown date`
+}
 
 
 export const DefaultItemEditorDisplay = React.memo((props: { itemId: string, onClick: () => void }) => {
@@ -165,10 +176,10 @@ export const DefaultItemEditorDisplay = React.memo((props: { itemId: string, onC
 
 	return (
 		<Flex column style={{ maxWidth: 800 }}>
-			<Text bold large className='selected-item-title' onClick={ props.onClick }>{ item?.title }</Text>
+			<TrText bold large className='selected-item-title' onClick={ props.onClick }>{ item?.title }</TrText>
 			<Markdown src={ item?.description } />
 			<Flex row>
-				<Text faded style={{ marginRight: 5 }}>Created</Text>
+				<TrText faded style={{ marginRight: 5 }}>Created</TrText>
 				<TimeDisplay time={ item?.created_at } long />
 			</Flex>
 		</Flex>

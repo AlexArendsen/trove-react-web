@@ -1,5 +1,6 @@
 .selected-item-display {
 	flex: 1;
+	margin: 0 10px;
 }
 
 .selected-item-display-no-parent {

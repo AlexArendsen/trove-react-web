@@ -1,7 +1,9 @@
 .modal {
     max-width: 100vw;
+    max-height: 95vh;
     width: 800px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     background-color: var(--background-primary);
 }
 

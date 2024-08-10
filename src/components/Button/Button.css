@@ -1,3 +1,4 @@
+/* Base */
 .button {
 	padding: 10px 12px;
 	border: 0;
@@ -8,6 +9,12 @@
 	min-width: 80px;
 }
 
+.button-label {
+	font-weight: var(--font-weight-bold);
+	font-size: var(--font-size-small);
+}
+
+/* Small */
 .button-small {
 	padding: 8px;
 	min-height: 0px;
@@ -18,37 +25,42 @@
 	width: 100%;
 }
 
-.button-submit {
-	background: var(--gradient-subtle);
-	color: var(--foreground-inverse);
-}
-
-.button-accent {
-	background: var(--background-accent2);
-}
-
-.button-primary {
-	background: var(--background-primary);
-}
-
-.button-danger {
-	background: var(--background-negative);
-	color: var(--foreground-negative);
-}
-
-.button-label {
-	font-weight: var(--font-weight-bold);
-	font-size: var(--font-size-small);
-}
-
+/* Large */
 .button-label-large {
 	font-size: var(--font-size-large);
+}
+
+/* Submit */
+.button-submit {
+	background: var(--gradient-subtle);
+	color: var(--foreground-inverse) !important;
+}
+
+.button-label-submit {
+	color: var(--foreground-accent);
+}
+
+/* Accent */
+.button-accent {
+	background: var(--background-accent2);
+	color: var(--foreground-account);
 }
 
 .button-label-accent {
 	color: var(--foreground-accent);
 }
 
+/* Primary */
+.button-primary {
+	background: var(--background-primary);
+}
+
 .button-label-primary {
 	color: var(--foreground-primary);
+}
+
+/* Danger */
+.button-danger {
+	background: var(--background-negative);
+	color: var(--foreground-negative);
 }

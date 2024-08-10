@@ -25,6 +25,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 	const checked = useMemo(() => item?.checked, [ item ])
 
 	const handleRightClick = (e: React.MouseEvent) => {
+		if(e.ctrlKey) return;
 		e.preventDefault();
 		e.stopPropagation();
 		if (!!item) useItemEditor.getState().open(item._id)
@@ -80,7 +81,7 @@ export const FlatListItem = React.memo((props: FlatListItemProps) => {
 						</Flex>
 
 						{ item?.description ? (<div style={{ maxHeight: 40, overflow: 'hidden' }}>
-							<TrText small faded>{ item?.description }</TrText>
+							<TrText small faded style={{ wordBreak: 'break-word' }}>{ item?.description }</TrText>
 						</div>) : null }
 
 					</Flex>

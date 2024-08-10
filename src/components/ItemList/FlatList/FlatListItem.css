@@ -15,3 +15,5 @@
 }
 
 .flat-list-item-checked .flat-list-item-title { color: var(--accent-primary); }
+
+.flat-list-item-title { margin-top: 3px; }
