@@ -43,7 +43,7 @@ export const BaseScreen = React.memo(() => {
 	}, [ view, loggedIn, itemsLoading ])
 
 	return (
-		<Flex column className='container'>
+		<Flex column className='base-screen'>
 			{ showHeader ? <Header /> : null }
 			{ screen }
 			<GlobalEventController />

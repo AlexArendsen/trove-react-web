@@ -75,7 +75,7 @@ const Crumb = React.memo((props: CrumbProps) => {
 		<Flex row align='center'>
 			<ItemDropZone itemId={props.item?._id || null}>
 				<Flex row align='center' className='crumb' onClick={props.onClick}>
-					<TrText small bold style={{ color: 'inherit' }}>{props.title}</TrText>
+					<TrText small bold>{props.title}</TrText>
 				</Flex>
 			</ItemDropZone>
 			{props.caret ? <TrText medium faded>{props.caret}</TrText> : null}

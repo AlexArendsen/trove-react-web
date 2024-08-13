@@ -20,7 +20,7 @@ export const Header = React.memo(() => {
 
 
 	return (
-		<Flex row style={{ padding: '15px 20px' }} className='container' align='stretch' justify='space-between'>
+		<Flex row className='header' align='stretch' justify='space-between'>
 			<div style={{ cursor: 'pointer'}} onClick={ () => history.push(Routes.item('')) }>
 				<Logo variant='gradient' />
 			</div>

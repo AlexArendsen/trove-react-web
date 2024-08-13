@@ -1,6 +1,6 @@
 .progress-bar-background {
 	background-color: var(--background-transparent-accent);
-	height: 7px;
+	height: var(--progress-bar-height);
 	width: 100%;
 }
 

@@ -50,7 +50,7 @@ export const ItemsScreen = React.memo(() => {
 
 	return (
 		<Flex column>
-			<Flex row justify='space-between' align='center'>
+			<Flex row justify='space-between' align='center' className='breadcrumb-container'>
 				<SelectedItemBreadcrumbs />
 				<Flex row align='center'>
 					{ layout.sidebarVisible ? <Breadcrumbs reverse itemId={ layout.sidebarItemId || '' } onSelectCrumb={ i => layout.setSidebarItemId(i?._id || null) } /> : null }

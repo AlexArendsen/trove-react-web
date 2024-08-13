@@ -59,9 +59,7 @@ export const SelectedItemDisplay = React.memo(() => {
 
 	const displayClasses = classNames({
 		'selected-item-display': true,
-		'selected-item-display-no-parent': !showParent || isMobile,
-		'selected-item-display-with-parent': showParent && !showGrandparent && !isMobile,
-		'selected-item-display-with-grandparent': showGrandparent && !isMobile,
+		'selected-item-display-no-parent': !showParent || isMobile
 	})
 
 	const contentClasses = classNames({

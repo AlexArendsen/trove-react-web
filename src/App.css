@@ -20,7 +20,11 @@
   --item-header-leading-space: 64px;
   --selected-item-width-standard: 640px;
   --button-height: 30px;
-  --header-height: 115px;
+  --header-height: 64px;
+  --breadcrumb-height: 32px;
+  --progress-bar-height: 6px;
+  --item-viewport-header: calc(var(--header-height) + var(--breadcrumb-height) + var(--progress-bar-height));
+  --item-viewport-height: calc(100vh - var(--item-viewport-header));
   --item-blade-width: 350px;
   --grandparent-reveal-width: calc(var(--item-blade-width) * -0.5);
 

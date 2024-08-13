@@ -13,7 +13,7 @@ interface MarkdownProps {
 export const Markdown = React.memo((props: MarkdownProps) => {
 
 	return (
-		<div onClick={ props.onClick } className='container'>
+		<div onClick={ props.onClick } className='markdown'>
 			<ReactMarkdown>{ props.src || '' }</ReactMarkdown>
 		</div>
 	)

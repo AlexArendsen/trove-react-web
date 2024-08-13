@@ -1,3 +1,6 @@
-.container {
+.header {
     background-color: var(--background-primary);
+    padding: var(--spacing-large) 20px;
+    max-height: calc(var(--header-height) - (2 * var(--spacing-large)));
+    min-height: calc(var(--header-height) - (2 * var(--spacing-large)));
 }

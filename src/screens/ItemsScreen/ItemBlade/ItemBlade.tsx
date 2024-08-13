@@ -11,6 +11,7 @@ import './ItemBlade.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../../components/Button/Button";
+import { Markdown } from "../../../components/Markdown/Markdown";
 
 interface ItemBladeProps {
 	itemId: string
@@ -56,7 +57,7 @@ export const ItemBlade = React.memo((props: ItemBladeProps) => {
 					<ItemDropZone itemId={ item._id }>
 						<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderHeader } props={{ itemId: item._id, onClick: handleTitleClick }} />
 					</ItemDropZone>
-					{ item.description ? <ReactMarkdown>{ item.description }</ReactMarkdown> : null }
+					{ item.description ? <Markdown src={ item.description } /> : null }
 					<LensedComponent itemId={ item._id } selector={ l => l.AsAncestor?.RenderNewItemInputForm } props={{ itemId: item._id }} />
 				</div>
 

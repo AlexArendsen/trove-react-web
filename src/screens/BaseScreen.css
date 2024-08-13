@@ -1,3 +1,5 @@
-.container {
+.base-screen {
     background-color: var(--background-primary);
+    max-height: 100vh;
+    overflow: hidden;
 }

@@ -2,6 +2,7 @@
 	background-color: var(--background-primary);
 	width: var(--item-blade-width);
 	min-width: var(--item-blade-width);
+	max-height: var(--item-viewport-height);
 }
 
 .item-blade-grandparent {
@@ -27,7 +28,8 @@
 }
 
 .item-blade-content {
-	max-height: calc(100vh - 120x);
+	/* max-height: calc(100vh - 120px); */
+	max-height: 100%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	padding: 0 var(--spacing-large) 30px var(--spacing-large);
