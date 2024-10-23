@@ -13,7 +13,7 @@ import { useTheme } from "../../hooks/UseTheme"
 export type ItemStoreState = {
 
     isLoading: boolean
-    //items: Item[]
+    startupPhase: 'unloaded' | 'loading' | 'organizing' | 'done'
     byId: Record<string, Item>
     byParent: Record<string, Item[]>
     root?: Item
@@ -46,6 +46,7 @@ export const useItemStore = create<ItemStoreState>((set, get) => {
     return {
 
         isLoading: false,
+        startupPhase: 'unloaded',
         byId: {},
         byParent: {},
         root: undefined,

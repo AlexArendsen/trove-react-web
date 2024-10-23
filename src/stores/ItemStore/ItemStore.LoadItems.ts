@@ -6,33 +6,35 @@ import { Item } from "../../redux/models/Items/Item";
 import { MoreMath } from "../../utils/MoreMath";
 import { ItemStoreDefaultStorageDriver } from "./ItemStore.StorageDriver";
 
+
 export const ItemStoreLoadItems = async (store: ItemStoreAccess) => {
+
 
     // If already loading, don't do anything
     if (store.get().isLoading) return
 
     // Loading = true
-    store.set({ isLoading: true })
+    store.set({ isLoading: true, startupPhase: 'loading' })
 
     // Get items from API
     const response = await ItemStoreDefaultStorageDriver.load()
 
     // Loading = false
-    store.set({ isLoading: false })
+    store.set({ isLoading: false, startupPhase: 'organizing' })
 
     // Remove orphans, tabulate stats
     const itemsRaw = [ ...response.data ]
     let byParent = GroupBy(itemsRaw, i => i.parent_id || '')
-    const items = RetabEntireTree(RemoveOrphansAndLoops(itemsRaw, byParent))
+    const cleaned = RemoveOrphansAndLoops(itemsRaw, byParent);
+    const items = RetabEntireTree(cleaned)
 
     // Create byId, byParent lookups
     const byId = GroupByFirst(items, i => i._id)
     byParent = GroupBy(items, i => i.parent_id || '')
     const root = items.find(i => i.isRoot)
-    console.log({ byId, root, items, response })
 
     //store.set({ items, byId, byParent, root })
-    store.set({ byId, byParent, root })
+    store.set({ byId, byParent, root, startupPhase: 'done' })
 
 }
 
@@ -41,7 +43,6 @@ export const ItemStoreLoadItems = async (store: ItemStoreAccess) => {
 // take care of this problem.
 const RemoveOrphansAndLoops = (items: Item[], byParent: Record<string, Item[]>): Item[] => {
 
-    console.log({ items, byParent }) 
     const looped = new Set<string>();
     const found = new Set<string>();
     const topLevelItems = items.filter(i => i.isRoot);

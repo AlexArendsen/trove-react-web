@@ -11,8 +11,17 @@ export const GroupBy = <TItem>(list: TItem[], keySelector: (item: TItem) => stri
 	return lookup as { [key: string]: TItem[] };
 }
 
-export const GroupByFirst = <TItem>(list: TItem[], keySelector: (item: TItem) => string) => Object.entries(GroupBy(list, keySelector))
-	.reduce((lookup, next) => ({ ...lookup, [ next[0] ]: next[1][0] }), {}) as { [key: string]: TItem }
+export const GroupByFirst = <TItem>(list: TItem[], keySelector: (item: TItem) => string) =>
+{
+	const out: Record<string, TItem> = {}
+	for(const i of list)
+	{
+		const key = keySelector(i)
+		if (key in out) continue
+		out[key] = i
+	}
+	return out
+}
 
 export const Unique = <TItem>(list: TItem[]): TItem[] => Array.from(new Set(list))
 
@@ -22,3 +31,5 @@ export const Chunk = <TItem>(list: TItem[], chunkSize: number): TItem[][] => {
 	for(let i = 0; i < nChunks; ++i) out.push(list.slice(i * chunkSize, (i + 1) * chunkSize))
 	return out
 }
+
+export const PickOne = <TItem>(options: TItem[]) => options[Math.floor(Math.random() * options.length) % options.length]

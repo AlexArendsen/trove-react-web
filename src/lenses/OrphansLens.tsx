@@ -12,8 +12,9 @@ import { ItemLens } from "./ItemLens";
 import { Button } from "../components/Button/Button";
 import { ItemStoreDefaultStorageDriver } from "../stores/ItemStore/ItemStore.StorageDriver";
 import { useItemStore } from "../stores/ItemStore/useItemStore";
+import { MoreMath } from "../utils/MoreMath";
 
-const MAX_DELETE_BATCH_SIZE = 2000
+const MAX_DELETE_BATCH_SIZE = 500
 
 export const OrphansLens: ItemLens = {
 
@@ -23,6 +24,7 @@ export const OrphansLens: ItemLens = {
     Self: {
         AsSelected: {
             RenderHeader: (props) => <OrphansItemHeader {...props} />,
+            RenderNewItemInputForm: () => null,
             RenderChildList: (props) => <OrphansChildList {...props} />
         }
     }
@@ -34,44 +36,26 @@ const OrphansItemHeader = React.memo((props: {
     onClick: () => void
 }) => {
 
-    const { allItems, orphans, load, cleanUpLeaves, leafOrphans, topLevelOrphans } = useOrphansStore()
-    const nToDelete = Math.min(MAX_DELETE_BATCH_SIZE, leafOrphans?.length || Infinity)
+    const { allItems, orphans, load, crunch, loading, cleanUpOrphans } = useOrphansStore()
+    const nDeleting = MoreMath.Clamp(orphans.length, MAX_DELETE_BATCH_SIZE, 0);
 
     useEffect(() => { load() }, [])
 
+    if (loading) return <TrText large>Loading...</TrText>
+
     return (
         <Flex column>
+            <TrText small>Total Items</TrText>
+            <TrText medium bold>{ allItems.length }</TrText>
+            <Bump h={ 15 } />
+            <TrText small>Total Orphans</TrText>
+            <TrText medium bold>{ orphans.length }</TrText>
 
-            <DefaultItemEditorDisplay {...props} />
+            <Bump h={ 50 } />
 
-            <Bump h={ 20 } />
-
-            <Flex row>
-
-                <Flex row style={{ border: 'solid 1px #ccc', padding: 20, marginRight: 10, borderRadius: 30, flex: 1 }}>
-                    <TrText medium style={{ flex: 1 }}>Total Items</TrText>
-                    <TrText medium bold>{ allItems?.length || 'Loading...' }</TrText>
-                </Flex>
-
-                <Flex row style={{ border: 'solid 1px #ccc', padding: 20, marginRight: 10, borderRadius: 30, flex: 1 }}>
-                    <TrText medium style={{ flex: 1 }}>Total Orphans</TrText>
-                    <TrText medium bold>{ orphans?.length || '...' }</TrText>
-                </Flex>
-
-                <Flex row style={{ border: 'solid 1px #ccc', padding: 20, marginRight: 10, borderRadius: 30, flex: 1 }}>
-                    <TrText medium style={{ flex: 1 }}>Leaves</TrText>
-                    <TrText medium bold>{ leafOrphans?.length || '...' }</TrText>
-                </Flex>
-
-                <Flex row style={{ border: 'solid 1px #ccc', padding: 20, marginRight: 10, borderRadius: 30, flex: 1 }}>
-                    <TrText medium style={{ flex: 1 }}>Top</TrText>
-                    <TrText medium bold>{ topLevelOrphans?.length || '...' }</TrText>
-                </Flex>
-
-                <Button onClick={ cleanUpLeaves } label={`Clean Up (${nToDelete})`} />
-
-            </Flex>
-
+            <Button onClick={ load } style={{ maxWidth: 300 }}>Reload</Button>
+            <Bump h={ 5 } />
+            <Button onClick={ cleanUpOrphans } variant='danger' style={{ maxWidth: 300 }}>Delete {nDeleting} Orphan Items</Button>
         </Flex>
     )
 
@@ -79,9 +63,21 @@ const OrphansItemHeader = React.memo((props: {
 
 const OrphansChildList = React.memo((props: { itemId: string }) => {
 
-    const { topLevelOrphans } = useOrphansStore()
+    const { orphans } = useOrphansStore()
 
-    return <ItemList items={ topLevelOrphans } navOnClick />
+    return (
+        <Flex column style={{ margin: 10 }}>
+            {orphans.map(o =>
+                (
+                    <Flex column>
+                        <TrText small>{o.title}</TrText>
+                        <TrText small faded>{o.description}</TrText>
+                    </Flex>
+                )
+            )
+            }
+        </Flex>
+    )
 
 })
 
@@ -90,11 +86,11 @@ type OrphansStore = {
     allItems: Item[],
     orphans: Item[],
     topLevelOrphans: Item[],
-    leafOrphans: Item[],
 
+    loading: boolean,
     load: () => Promise<void>,
     crunch: () => void,
-    cleanUpLeaves: () => Promise<void>
+    cleanUpOrphans: () => Promise<void>
 
 }
 
@@ -105,55 +101,52 @@ const useOrphansStore = create<OrphansStore>((set, get) => ({
     topLevelOrphans: [],
     leafOrphans: [],
 
+    loading: false,
     load: async () => {
+        set({ loading: true })
         set({ allItems: (await ItemStoreDefaultStorageDriver.load()).data })
         get().crunch()
+        set({ loading: false })
     },
 
     crunch: () => {
+        // An orphan is an item which cannot be accessed via the root item
+        // A "top-level" orphan is one whose parent is not an orphan
 
+        // 0. Create the item tree
         const itemsFlat = get().allItems
-
-        //const nItems = itemsFlat.data?.length || 0
-        const topLevelItems = itemsFlat.filter(i => !i.parent_id)
+        const allItemIds = new Set<string>(itemsFlat.map(i => i._id));
+        const root = itemsFlat.find(i => !!i.isRoot);
+        if (!root)
+        {
+            alert('Unable to locate root, cannot continue')
+            return;
+        }
         const itemsByParent = GroupBy(itemsFlat, i => i.parent_id || '_NULL')
 
-        // Locate Orphans
-        const embodiedIds = new Set<string>()
-        const addIds = (items: Item[]) => {
+        // 1. Create a set of item IDs that are found
+        const linkedItems = new Set<string>();
 
-            items?.forEach(i => {
+        // 2. Flood fill the item tree, starting with the root
+        const floodFillTree = (startId: string) => {
 
-                // Loop prevention: if already added, skip it
-                if (embodiedIds.has(i._id)) return;
-
-                // Count supplied item...
-                embodiedIds.add(i._id)
-
-                // ...and its children
-                addIds(itemsByParent[i._id] || [])
-            })
-
+            // Add this item and any unindexed, undeleted children
+            linkedItems.add(startId);
+            itemsByParent[startId]?.filter(i => !linkedItems.has(i._id))
+                .forEach(i => floodFillTree(i._id))
         }
-        addIds(topLevelItems)
+        floodFillTree(root._id);
 
-        const orphans = itemsFlat.filter(i => !embodiedIds.has(i._id))
-        console.log({ orphans })
-        const orphanIds = new Set(orphans?.map(o => o._id) || [])
-        const orphanParentIds = new Set(get().orphans.map(o => o.parent_id || '_NULL'))
+        // 3. All items whose ID is not in the set are orphans
+        const orphans = itemsFlat.filter(i => !linkedItems.has(i._id))
+        const topLevelOrphans = orphans.filter(o => o.parent_id && !allItemIds.has(o.parent_id));
+        set({ orphans, topLevelOrphans });
 
-        // Locate top-level orphans, ordered by number of descendants
-        const topLevelOrphans = orphans?.filter(o => !!o.parent_id && !orphanIds.has(o.parent_id))
-
-        // Note leaf orphans too
-        const leafOrphans = orphans?.filter(o => !orphanParentIds.has(o._id))
-
-        set({ orphans, topLevelOrphans, leafOrphans })
     },
 
-    cleanUpLeaves: async () => {
+    cleanUpOrphans: async () => {
 
-        const toDelete = get().leafOrphans.slice(0, MAX_DELETE_BATCH_SIZE)
+        const toDelete = get().orphans.slice(0, MAX_DELETE_BATCH_SIZE)
         const deletedIds = new Set(toDelete.map(x => x._id))
         const chunks = Chunk(toDelete, 50)
 
@@ -164,6 +157,7 @@ const useOrphansStore = create<OrphansStore>((set, get) => ({
                 total += c.length
                 console.log(`Deleted ${c.length} (total)...`)
             } catch (e) {
+                alert('Failed to delete chunk')
                 console.log(`[!] Failed to delete chunk`)
                 console.error(e)
             }
